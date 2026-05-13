@@ -1,0 +1,22 @@
+{
+  "name": "AsisteUHD",
+  "short_name": "AsisteUHD",
+  "description": "Gestión de Hospitalización Domiciliaria",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F7F8FA",
+  "theme_color": "#185FA5",
+  "icons": [
+    {
+      "src": "icon1.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
