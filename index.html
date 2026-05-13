@@ -1,249 +1,1873 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>AsisteUHD</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>AsisteUHD — Unidad de Hospitalización Domiciliaria</title>
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="AsisteUHD">
-    <link rel="apple-touch-icon" href="logo.png">
+  <!-- ═══════════════════════════════════════════════════════════
+       FUENTES
+  ════════════════════════════════════════════════════════════ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Iconos Tabler (outline) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.3.0/tabler-icons.min.css" />
 
-    <link rel="manifest" href="manifest.json">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.3.0/tabler-icons.min.css" />
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       RESET & VARIABLES
+    ════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <style>
-        :root {
-            --blue-500: #185FA5;
-            --blue-50: #E6F1FB;
-            --gray-50: #F7F8FA;
-            --gray-100: #EEF0F4;
-            --gray-400: #9BA3B2;
-            --gray-800: #2C3142;
-            --white: #FFFFFF;
-            --radius-lg: 18px;
-            --transition: 0.2s ease;
-            
-            /* Ajuste automático para el notch y la barra inferior del iPhone */
-            --safe-top: env(safe-area-inset-top);
-            --safe-bottom: env(safe-area-inset-bottom);
-        }
+    :root {
+      --blue-50:  #E6F1FB;
+      --blue-100: #B5D4F4;
+      --blue-300: #378ADD;
+      --blue-500: #185FA5;
+      --blue-700: #0C447C;
 
-        /* Bloqueo de scroll global para evitar efecto "web" */
-        html, body {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            overflow: hidden; 
-            font-family: 'DM Sans', sans-serif;
-            background: var(--gray-50);
-            position: fixed; 
-        }
+      --green-50:  #EAF3DE;
+      --green-300: #639922;
+      --green-500: #3B6D11;
 
-        #app-wrapper {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding-top: var(--safe-top);
-        }
+      --purple-50:  #EEEDFE;
+      --purple-300: #7F77DD;
+      --purple-500: #534AB7;
 
-        /* HEADER CON FLECHA DE VOLVER */
-        .app-header {
-            background: var(--white);
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid var(--gray-100);
-            height: 60px;
-        }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex: 1;
-        }
-        .back-btn {
-            font-size: 24px;
-            color: var(--blue-500);
-            cursor: pointer;
-            display: none; /* Se activa por JS */
-            padding: 5px;
-        }
-        .app-title { font-weight: 600; font-size: 19px; }
+      --amber-50:  #FAEEDA;
+      --amber-300: #EF9F27;
+      --amber-500: #854F0B;
 
-        /* CONTENIDO DESLIZABLE */
-        .content-scroll {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
-        }
+      --red-50:  #FCEBEB;
+      --red-300: #E24B4A;
+      --red-500: #A32D2D;
 
-        /* BOTONES CON ICONOS (Cajas que antes estaban vacías) */
-        .grid-menu {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 10px;
-        }
-        .card-btn {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 22px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: 1px solid var(--gray-100);
-            transition: var(--transition);
-            cursor: pointer;
-        }
-        .card-btn:active { transform: scale(0.95); background: var(--blue-50); }
-        .card-btn i {
-            display: block;
-            font-size: 35px;
-            color: var(--blue-500);
-            margin-bottom: 12px;
-        }
-        .card-btn span { font-size: 14px; font-weight: 500; color: var(--gray-800); }
+      --gray-50:  #F7F8FA;
+      --gray-100: #EEF0F4;
+      --gray-200: #DDE1E9;
+      --gray-400: #9BA3B2;
+      --gray-600: #5C6474;
+      --gray-800: #2C3142;
+      --gray-900: #181D2C;
 
-        /* TAB BAR INFERIOR (ESTILO IPHONE) */
-        .tab-bar {
-            background: var(--white);
-            border-top: 1px solid var(--gray-100);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding-bottom: calc(10px + var(--safe-bottom)); /* Espacio para iPhone */
-            padding-top: 10px;
-        }
-        .tab-item {
-            flex: 1;
-            text-align: center;
-            color: var(--gray-400);
-            font-size: 11px;
-            cursor: pointer;
-        }
-        .tab-item i { font-size: 24px; display: block; margin-bottom: 2px; }
-        
-        /* Botón Central Resaltado */
-        .tab-center {
-            position: relative;
-            top: -15px;
-        }
-        .center-circle {
-            width: 58px; height: 58px;
-            background: var(--blue-500);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 4px;
-            box-shadow: 0 4px 15px rgba(24, 95, 165, 0.3);
-            color: white;
-        }
-        .active-tab { color: var(--blue-500); font-weight: 600; }
+      --white: #FFFFFF;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.09);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+      --transition: 0.18s cubic-bezier(0.4,0,0.2,1);
+      --font: 'DM Sans', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
 
-        /* GESTIÓN DE PÁGINAS */
-        .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    html, body {
+      height: 100%;
+      font-family: var(--font);
+      background: var(--gray-50);
+      color: var(--gray-800);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
 
-    </style>
+    /* ═══════════════════════════════════════════════════════════
+       LAYOUT PRINCIPAL — SIMULACIÓN MÓVIL EN ESCRITORIO
+    ════════════════════════════════════════════════════════════ */
+    #app-shell {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px 16px 40px;
+      background: #e8ecf2;
+      background-image:
+        radial-gradient(circle at 20% 20%, #dce8f8 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, #d8e8d0 0%, transparent 50%);
+    }
+
+    #phone {
+      width: 390px;
+      min-height: 844px;
+      background: var(--gray-50);
+      border-radius: 44px;
+      box-shadow: var(--shadow-lg), 0 0 0 8px #c8cfd8, 0 0 0 10px #b8bfc8;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* barra de estado */
+    .status-bar {
+      background: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gray-600);
+      flex-shrink: 0;
+    }
+    .status-icons { display: flex; gap: 6px; align-items: center; }
+
+    /* ═══════════════════════════════════════════════════════════
+       PANTALLAS — la activa tiene display:flex
+    ════════════════════════════════════════════════════════════ */
+    .screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      overflow: hidden;
+    }
+    .screen.active { display: flex; }
+
+    /* contenedor scrollable de cada pantalla */
+    .screen-body {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .screen-body::-webkit-scrollbar { display: none; }
+
+    /* ═══════════════════════════════════════════════════════════
+       CABECERA INTERNA (pantallas secundarias)
+    ════════════════════════════════════════════════════════════ */
+    .inner-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+      padding: 14px 20px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .back-btn {
+      width: 34px; height: 34px;
+      border-radius: var(--radius-sm);
+      background: var(--gray-100);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gray-600);
+      font-size: 18px;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+    .back-btn:hover { background: var(--gray-200); }
+    .inner-title { font-size: 16px; font-weight: 600; color: var(--gray-800); flex: 1; }
+    .header-badge {
+      font-size: 11px; font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       NAV BAR INFERIOR
+    ════════════════════════════════════════════════════════════ */
+    .nav-bar {
+      background: var(--white);
+      border-top: 1px solid var(--gray-100);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 14px;
+      flex-shrink: 0;
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 6px 14px; border-radius: var(--radius-md);
+      cursor: pointer; font-size: 11px; color: var(--gray-400);
+      transition: var(--transition);
+    }
+    .nav-item i { font-size: 22px; }
+    .nav-item.active { color: var(--blue-500); }
+    .nav-item:hover { background: var(--gray-50); color: var(--blue-300); }
+
+    /* ═══════════════════════════════════════════════════════════
+       TARJETAS GENÉRICAS
+    ════════════════════════════════════════════════════════════ */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-100);
+      box-shadow: var(--shadow-sm);
+    }
+    .card-pad { padding: 14px 16px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       BOTONES
+    ════════════════════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 10px 18px; border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      background: var(--white); color: var(--gray-600);
+      font-family: var(--font); font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: var(--transition);
+    }
+    .btn:hover { background: var(--gray-50); border-color: var(--gray-300, #c0c7d4); }
+    .btn-primary {
+      background: var(--blue-500); color: var(--white);
+      border-color: var(--blue-500);
+    }
+    .btn-primary:hover { background: var(--blue-700); border-color: var(--blue-700); }
+    .btn-block { width: 100%; }
+
+    /* ═══════════════════════════════════════════════════════════
+       SECCIÓN LABEL
+    ════════════════════════════════════════════════════════════ */
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.7px;
+      text-transform: uppercase; color: var(--gray-400);
+      padding: 0 20px;
+      margin: 18px 0 10px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       ── PANTALLA HOME ──
+    ════════════════════════════════════════════════════════════ */
+    #screen-home .home-header {
+      background: var(--white);
+      padding: 16px 20px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      flex-shrink: 0;
+    }
+    .logo-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    }
+    .logo-icon {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: var(--blue-500);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon i { font-size: 20px; color: var(--white); }
+    .logo-name { font-size: 18px; font-weight: 600; color: var(--gray-800); }
+    .logo-unit { font-size: 11px; color: var(--gray-400); font-weight: 400; }
+
+    /* saludo editable */
+    .greeting-line { font-size: 14px; color: var(--gray-600); margin-bottom: 8px; }
+    .greeting-name-wrap {
+      display: inline-flex; align-items: center; gap: 6px;
+      position: relative;
+    }
+    .greeting-name {
+      font-weight: 600; color: var(--gray-800);
+      cursor: pointer; border-bottom: 2px dashed var(--blue-300);
+      padding-bottom: 1px;
+      transition: var(--transition);
+    }
+    .greeting-name:hover { color: var(--blue-500); }
+    /* dropdown del nombre */
+    .name-dropdown {
+      position: absolute; top: calc(100% + 6px); left: 0;
+      background: var(--white); border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md); box-shadow: var(--shadow-md);
+      min-width: 220px; z-index: 100; overflow: hidden;
+      display: none;
+    }
+    .name-dropdown.open { display: block; }
+    .dropdown-section { padding: 6px 0; border-bottom: 1px solid var(--gray-100); }
+    .dropdown-section:last-child { border-bottom: none; }
+    .dropdown-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.6px;
+      text-transform: uppercase; color: var(--gray-400);
+      padding: 6px 14px 2px;
+    }
+    .dropdown-option {
+      padding: 8px 14px; font-size: 13px; font-weight: 500;
+      cursor: pointer; color: var(--gray-700, #384052);
+      display: flex; align-items: center; gap: 8px;
+      transition: var(--transition);
+    }
+    .dropdown-option:hover { background: var(--blue-50); color: var(--blue-500); }
+    .dropdown-input-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px;
+    }
+    .dropdown-input-row input {
+      flex: 1; border: 1px solid var(--gray-200); border-radius: var(--radius-sm);
+      padding: 6px 10px; font-family: var(--font); font-size: 13px;
+      outline: none; color: var(--gray-800);
+    }
+    .dropdown-input-row input:focus { border-color: var(--blue-300); }
+    .dropdown-input-row button {
+      background: var(--blue-500); color: var(--white); border: none;
+      border-radius: var(--radius-sm); padding: 6px 10px;
+      cursor: pointer; font-size: 12px; font-weight: 500;
+    }
+
+    .date-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--blue-50); color: var(--blue-500);
+      border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 500;
+    }
+
+    /* tarjetas principales home */
+    .main-cards { padding: 4px 16px 8px; display: flex; flex-direction: column; gap: 10px; }
+    .main-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 16px;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-100);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .main-card:hover { border-color: var(--blue-100); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .main-card:active { transform: translateY(0); box-shadow: var(--shadow-sm); }
+    .card-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .icon-blue  { background: var(--blue-50);   color: var(--blue-500); }
+    .icon-green { background: var(--green-50);  color: var(--green-500); }
+    .icon-purple{ background: var(--purple-50); color: var(--purple-500); }
+    .card-body { flex: 1; }
+    .card-title { font-size: 15px; font-weight: 600; color: var(--gray-800); }
+    .card-sub   { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+    .card-arrow { color: var(--gray-200); font-size: 18px; }
+
+    /* stats rápidas */
+    .stat-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; padding: 0 16px;
+    }
+    .stat-card {
+      background: var(--white); border-radius: var(--radius-md);
+      border: 1px solid var(--gray-100); padding: 12px 14px;
+    }
+    .stat-num { font-size: 26px; font-weight: 600; color: var(--gray-800); }
+    .stat-lbl { font-size: 11px; color: var(--gray-400); margin-top: 2px; display: flex; align-items: center; gap: 5px; }
+    .stat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .dot-blue   { background: var(--blue-300); }
+    .dot-green  { background: var(--green-300); }
+    .dot-amber  { background: var(--amber-300); }
+    .dot-red    { background: var(--red-300); }
+
+    /* ═══════════════════════════════════════════════════════════
+       ── PANTALLA RUTA DIARIA ──
+    ════════════════════════════════════════════════════════════ */
+    .map-container {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #e8eedd;
+    }
+    .map-container iframe {
+      width: 100%; height: 100%;
+      border: none;
+    }
+    .map-overlay-btns {
+      position: absolute; bottom: 10px; right: 10px;
+      display: flex; gap: 6px; z-index: 5;
+    }
+    .map-btn {
+      background: var(--white); border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm); padding: 7px 10px;
+      font-size: 12px; font-weight: 500; color: var(--gray-700, #384052);
+      cursor: pointer; display: flex; align-items: center; gap: 5px;
+      box-shadow: var(--shadow-sm); transition: var(--transition);
+    }
+    .map-btn:hover { background: var(--gray-50); }
+    .fab-add {
+      position: absolute; bottom: 10px; left: 10px;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--blue-500); color: var(--white);
+      border: none; cursor: pointer; font-size: 22px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(24,95,165,0.35);
+      transition: var(--transition); z-index: 5;
+    }
+    .fab-add:hover { background: var(--blue-700); transform: scale(1.06); }
+
+    /* info ruta */
+    .route-info-bar {
+      background: var(--blue-50); border-bottom: 1px solid var(--blue-100);
+      padding: 8px 20px; display: flex; gap: 18px; align-items: center;
+      font-size: 12px; color: var(--blue-500); font-weight: 500;
+      flex-shrink: 0;
+    }
+    .route-info-bar span { display: flex; align-items: center; gap: 5px; }
+
+    /* lista visitas */
+    .visits-list { padding: 0 16px 12px; }
+    .visit-item {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-100);
+      padding: 11px 14px;
+      margin-bottom: 8px;
+      transition: var(--transition);
+    }
+    .visit-item:hover { border-color: var(--gray-200); box-shadow: var(--shadow-sm); }
+    .visit-num {
+      width: 26px; height: 26px; border-radius: 8px;
+      background: var(--blue-50); color: var(--blue-500);
+      font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .visit-info { flex: 1; min-width: 0; }
+    .visit-addr { font-size: 13px; font-weight: 500; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .visit-obs  { font-size: 11px; color: var(--gray-400); }
+    .visit-actions { display: flex; gap: 6px; }
+    .icon-btn {
+      width: 28px; height: 28px; border-radius: 7px;
+      border: none; background: var(--gray-100);
+      cursor: pointer; font-size: 14px; color: var(--gray-600);
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .icon-btn:hover { background: var(--gray-200); }
+    .priority-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .p-alta  { background: var(--red-300); }
+    .p-media { background: var(--amber-300); }
+    .p-baja  { background: var(--green-300); }
+
+    /* visitas lejanas */
+    .distant-section {
+      margin: 4px 16px 16px;
+      background: var(--amber-50);
+      border: 1px solid #F5C4B3;
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+    }
+    .distant-header {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 600; color: var(--amber-500);
+      margin-bottom: 10px;
+    }
+    .distant-item {
+      background: var(--white); border-radius: var(--radius-md);
+      border: 1px solid var(--gray-100);
+      padding: 10px 12px; margin-bottom: 7px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .distant-item:last-child { margin-bottom: 0; }
+
+    /* acciones de ruta */
+    .route-action-bar {
+      background: var(--white);
+      border-top: 1px solid var(--gray-100);
+      padding: 10px 16px;
+      display: flex; gap: 8px;
+      flex-shrink: 0;
+    }
+    .route-action-bar .btn { flex: 1; font-size: 12px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       ── PANTALLA CURAS IA ──
+    ════════════════════════════════════════════════════════════ */
+    .patient-selector {
+      padding: 10px 16px 4px;
+      display: flex; gap: 8px; overflow-x: auto;
+      scrollbar-width: none; flex-shrink: 0;
+    }
+    .patient-selector::-webkit-scrollbar { display: none; }
+    .patient-chip {
+      padding: 6px 14px; border-radius: 20px;
+      font-size: 12px; font-weight: 500;
+      background: var(--gray-100); color: var(--gray-600);
+      white-space: nowrap; cursor: pointer; border: 1.5px solid transparent;
+      transition: var(--transition);
+    }
+    .patient-chip.active {
+      background: var(--blue-50); color: var(--blue-500);
+      border-color: var(--blue-300);
+    }
+
+    /* timeline de curas */
+    .timeline { padding: 8px 16px 12px; }
+    .tl-date-label {
+      font-size: 11px; font-weight: 600; color: var(--gray-400);
+      letter-spacing: 0.5px; margin: 12px 0 8px;
+      text-transform: uppercase;
+    }
+    .tl-entry {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-100);
+      overflow: hidden; margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .tl-photo {
+      width: 100%; height: 110px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; color: var(--blue-300);
+      background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
+      cursor: pointer; position: relative;
+    }
+    .tl-photo.warning { background: linear-gradient(135deg, var(--amber-50) 0%, #F5C4B3 100%); color: var(--amber-500); }
+    .tl-photo-overlay {
+      position: absolute; inset: 0; background: rgba(0,0,0,0);
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .tl-photo:hover .tl-photo-overlay { background: rgba(0,0,0,0.12); }
+    .tl-meta { padding: 10px 12px 4px; }
+    .tl-meta-row { display: flex; justify-content: space-between; align-items: center; }
+    .tl-title { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+    .tl-badge {
+      font-size: 10px; font-weight: 600; padding: 3px 9px;
+      border-radius: 20px; letter-spacing: 0.3px;
+    }
+    .badge-mejora { background: var(--green-50); color: var(--green-500); }
+    .badge-alerta { background: var(--amber-50); color: var(--amber-500); }
+    .badge-critico { background: var(--red-50); color: var(--red-500); }
+    .tl-obs { font-size: 12px; color: var(--gray-600); margin: 4px 0; }
+    .ai-analysis {
+      margin: 0 12px 12px;
+      background: var(--blue-50); border-radius: var(--radius-sm);
+      padding: 8px 10px; font-size: 12px; color: var(--blue-700);
+      display: flex; align-items: flex-start; gap: 7px;
+    }
+    .ai-analysis i { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+    .tl-quick-actions {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; border-top: 1px solid var(--gray-100);
+    }
+    .tl-action {
+      padding: 9px 0; text-align: center;
+      font-size: 11px; font-weight: 500; color: var(--gray-600);
+      cursor: pointer; background: var(--white); border: none;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      transition: var(--transition);
+    }
+    .tl-action:hover { background: var(--gray-50); color: var(--blue-500); }
+    .tl-action i { font-size: 16px; }
+
+    /* botón añadir foto */
+    .add-photo-bar {
+      padding: 10px 16px;
+      background: var(--white);
+      border-top: 1px solid var(--gray-100);
+      display: flex; gap: 8px;
+      flex-shrink: 0;
+    }
+    .add-photo-bar .btn { flex: 1; }
+
+    /* ═══════════════════════════════════════════════════════════
+       ASISTENTE IA (modal / overlay dentro del teléfono)
+    ════════════════════════════════════════════════════════════ */
+    .ai-overlay {
+      position: absolute; inset: 0; z-index: 50;
+      background: var(--white);
+      display: none; flex-direction: column;
+    }
+    .ai-overlay.open { display: flex; }
+    .ai-chat-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+      padding: 12px 18px;
+      display: flex; align-items: center; gap: 12px;
+      flex-shrink: 0;
+    }
+    .ai-badge {
+      background: var(--green-50); color: var(--green-500);
+      border-radius: 20px; padding: 3px 10px;
+      font-size: 11px; font-weight: 600; margin-left: auto;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .ai-badge::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--green-300); border-radius: 50%;
+    }
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 10px;
+      scrollbar-width: none;
+    }
+    .chat-messages::-webkit-scrollbar { display: none; }
+    .bubble {
+      max-width: 88%; padding: 10px 13px;
+      border-radius: 16px; font-size: 13px; line-height: 1.55;
+    }
+    .bubble.user {
+      align-self: flex-end;
+      background: var(--blue-500); color: var(--white);
+      border-bottom-right-radius: 4px;
+    }
+    .bubble.ai {
+      align-self: flex-start;
+      background: var(--gray-100); color: var(--gray-800);
+      border-bottom-left-radius: 4px;
+    }
+    .bubble.ai b { color: var(--blue-700); font-weight: 600; }
+    .bubble.ai ul { padding-left: 16px; margin-top: 4px; }
+    .bubble.ai li { margin-bottom: 3px; }
+    .chat-input-bar {
+      background: var(--white); border-top: 1px solid var(--gray-100);
+      padding: 10px 14px; display: flex; align-items: center; gap: 8px;
+      flex-shrink: 0;
+    }
+    .chat-input {
+      flex: 1; background: var(--gray-100);
+      border: 1px solid transparent; border-radius: 22px;
+      padding: 9px 14px; font-family: var(--font); font-size: 13px;
+      color: var(--gray-800); outline: none; resize: none;
+      max-height: 80px;
+    }
+    .chat-input:focus { border-color: var(--blue-300); background: var(--white); }
+    .chat-send-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--blue-500); color: var(--white);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+      transition: var(--transition);
+    }
+    .chat-send-btn:hover { background: var(--blue-700); }
+    .chat-mic-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--gray-100); color: var(--gray-600);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+      transition: var(--transition);
+    }
+    .chat-mic-btn.recording { background: var(--red-50); color: var(--red-300); animation: pulse 1s infinite; }
+    .chat-mic-btn:hover { background: var(--gray-200); }
+
+    /* ═══════════════════════════════════════════════════════════
+       ── PANTALLA EVOLUTIVO IA ──
+    ════════════════════════════════════════════════════════════ */
+    .evol-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+    /* botón grabar grande */
+    .record-area {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-100);
+      padding: 20px 16px;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+    }
+    .record-btn-big {
+      width: 70px; height: 70px; border-radius: 50%;
+      background: var(--blue-500); color: var(--white);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 4px 16px rgba(24,95,165,0.35);
+      transition: var(--transition);
+    }
+    .record-btn-big:hover { background: var(--blue-700); transform: scale(1.05); }
+    .record-btn-big.recording {
+      background: var(--red-300);
+      box-shadow: 0 4px 16px rgba(226,75,74,0.40);
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    .record-hint { font-size: 12px; color: var(--gray-400); font-weight: 500; }
+
+    /* waveform animado */
+    .waveform {
+      display: flex; align-items: center; gap: 3px;
+      height: 36px; opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .waveform.active { opacity: 1; }
+    .wave-bar {
+      width: 3px; border-radius: 2px; background: var(--blue-300);
+      animation: waveAnim 1.1s ease-in-out infinite;
+    }
+    @keyframes waveAnim {
+      0%, 100% { height: 5px; }
+      50% { height: 28px; }
+    }
+
+    /* transcripción en tiempo real */
+    .transcript-box {
+      background: var(--white); border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-100); padding: 12px 14px;
+    }
+    .box-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.6px;
+      text-transform: uppercase; color: var(--gray-400);
+      display: flex; align-items: center; gap: 5px; margin-bottom: 6px;
+    }
+    .transcript-text {
+      font-size: 13px; color: var(--gray-600); font-style: italic;
+      line-height: 1.6; min-height: 32px;
+    }
+
+    /* evolutivo generado */
+    .evolutivo-box {
+      background: var(--white); border-radius: var(--radius-lg);
+      border: 1.5px solid var(--blue-300); padding: 14px 14px;
+    }
+    .evolutivo-text {
+      font-size: 13px; color: var(--gray-800); line-height: 1.7;
+      min-height: 48px;
+    }
+    /* textarea de edición */
+    .evolutivo-edit {
+      width: 100%; border: none; outline: none; resize: none;
+      font-family: var(--font); font-size: 13px; color: var(--gray-800);
+      line-height: 1.7; background: transparent; display: none;
+    }
+    .evolutivo-edit.active { display: block; }
+    .evolutivo-text.hidden { display: none; }
+
+    .evol-actions {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    }
+    .evol-btn {
+      padding: 10px 0; border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200); background: var(--white);
+      font-family: var(--font); font-size: 12px; font-weight: 500;
+      color: var(--gray-600); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      transition: var(--transition);
+    }
+    .evol-btn:hover { background: var(--gray-50); border-color: var(--gray-200); }
+    .evol-btn.primary { background: var(--blue-500); color: var(--white); border-color: var(--blue-500); }
+    .evol-btn.primary:hover { background: var(--blue-700); }
+
+    /* voz para editar evolutivo */
+    .evol-voice-bar {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--purple-50); border-radius: var(--radius-md);
+      padding: 10px 14px; font-size: 12px; color: var(--purple-500);
+    }
+    .evol-voice-bar i { font-size: 18px; }
+    .voice-edit-btn {
+      margin-left: auto; background: var(--purple-500); color: var(--white);
+      border: none; border-radius: var(--radius-sm); padding: 5px 12px;
+      font-size: 11px; font-weight: 600; cursor: pointer;
+      transition: var(--transition);
+    }
+    .voice-edit-btn:hover { background: var(--purple-300); }
+
+    /* ═══════════════════════════════════════════════════════════
+       MODALES GENÉRICOS (dialogs)
+    ════════════════════════════════════════════════════════════ */
+    .modal-backdrop {
+      position: absolute; inset: 0; z-index: 60;
+      background: rgba(0,0,0,0.35);
+      display: none; align-items: flex-end;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-sheet {
+      background: var(--white); width: 100%;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      padding: 20px 20px 30px;
+      animation: slideUp 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to   { transform: translateY(0); }
+    }
+    .modal-handle {
+      width: 36px; height: 4px; background: var(--gray-200);
+      border-radius: 2px; margin: 0 auto 18px;
+    }
+    .modal-title { font-size: 16px; font-weight: 600; color: var(--gray-800); margin-bottom: 14px; }
+    .modal-input {
+      width: 100%; border: 1px solid var(--gray-200); border-radius: var(--radius-md);
+      padding: 11px 14px; font-family: var(--font); font-size: 14px;
+      color: var(--gray-800); outline: none; margin-bottom: 10px;
+    }
+    .modal-input:focus { border-color: var(--blue-300); }
+    .modal-actions { display: flex; gap: 8px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       TOAST NOTIFICACIONES
+    ════════════════════════════════════════════════════════════ */
+    .toast {
+      position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(10px);
+      background: var(--gray-800); color: var(--white);
+      padding: 9px 18px; border-radius: 22px;
+      font-size: 12px; font-weight: 500; white-space: nowrap;
+      opacity: 0; transition: all 0.3s; z-index: 200;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ═══════════════════════════════════════════════════════════
+       ANIMACIONES UTILIDAD
+    ════════════════════════════════════════════════════════════ */
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(226,75,74,0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(226,75,74,0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.25s ease forwards; }
+
+    /* typing indicator */
+    .typing-dots span {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 50%; background: var(--gray-400);
+      animation: dot 1.2s ease-in-out infinite;
+      margin-right: 3px;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dot {
+      0%, 100% { transform: translateY(0); opacity: 0.5; }
+      50% { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* estado vacío */
+    .empty-state {
+      text-align: center; padding: 40px 20px;
+      color: var(--gray-400); font-size: 13px;
+    }
+    .empty-state i { font-size: 40px; display: block; margin-bottom: 10px; }
+
+    /* responsive: en pantallas anchas se ve bien */
+    @media (max-width: 440px) {
+      #app-shell { padding: 0; background: var(--gray-50); }
+      #phone {
+        width: 100%; min-height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div id="app-wrapper">
-    <header class="app-header">
-        <div class="header-left">
-            <i class="ti ti-chevron-left back-btn" id="btn-volver" onclick="irA('inicio')"></i>
-            <span class="app-title" id="txt-header">Inicio</span>
-        </div>
-        <i class="ti ti-dots-vertical" style="color: var(--gray-400); font-size: 20px;"></i>
-    </header>
+<!-- ════════════════════════════════════════════════════════════
+     CONTENEDOR PRINCIPAL
+════════════════════════════════════════════════════════════ -->
+<div id="app-shell">
+<div id="phone">
 
-    <main class="content-scroll">
-        
-        <div id="page-inicio" class="page active">
-            <h2 style="margin-bottom: 5px;">Hola de nuevo</h2>
-            <p style="color: var(--gray-400); font-size: 14px; margin-bottom: 25px;">Gestiona tus tareas de hoy</p>
-            
-            <div class="grid-menu">
-                <div class="card-btn" onclick="navegar('ruta', 'Mi Ruta Hoy')">
-                    <i class="ti ti-map-2"></i>
-                    <span>Ver Ruta</span>
-                </div>
-                <div class="card-btn" onclick="navegar('tareas', 'Tareas Pendientes')">
-                    <i class="ti ti-checkbox"></i>
-                    <span>Tareas</span>
-                </div>
-                <div class="card-btn" onclick="navegar('evolutivo', 'Nuevo Evolutivo')">
-                    <i class="ti ti-microphone"></i>
-                    <span>Evolutivo</span>
-                </div>
-                <div class="card-btn" onclick="navegar('pacientes', 'Mis Pacientes')">
-                    <i class="ti ti-users"></i>
-                    <span>Pacientes</span>
-                </div>
+  <!-- BARRA DE ESTADO -->
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="status-icons">
+      <i class="ti ti-wifi"></i>
+      <i class="ti ti-battery-2"></i>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PANTALLA: HOME
+  ═══════════════════════════════════════════ -->
+  <div id="screen-home" class="screen active">
+    <div class="home-header">
+
+      <!-- Logo -->
+      <div class="logo-row">
+        <div class="logo-icon"><i class="ti ti-stethoscope"></i></div>
+        <div>
+          <div class="logo-name">AsisteUHD</div>
+          <div class="logo-unit">Unidad de Hospitalización Domiciliaria</div>
+        </div>
+      </div>
+
+      <!-- Saludo editable -->
+      <div class="greeting-line">
+        Buenos días,
+        <span class="greeting-name-wrap">
+          <!-- Al hacer click abre el dropdown -->
+          <span id="greeting-display" class="greeting-name" onclick="toggleNameDropdown(event)">
+            Dra. García
+          </span>
+          <!-- Dropdown de selección / edición de nombre -->
+          <div id="name-dropdown" class="name-dropdown">
+            <div class="dropdown-section">
+              <div class="dropdown-label">Título profesional</div>
+              <div class="dropdown-option" onclick="setTitle('Dra.')"><i class="ti ti-user-check"></i> Dra.</div>
+              <div class="dropdown-option" onclick="setTitle('Dr.')"><i class="ti ti-user-check"></i> Dr.</div>
+              <div class="dropdown-option" onclick="setTitle('Enfermera')"><i class="ti ti-nurse"></i> Enfermera</div>
+              <div class="dropdown-option" onclick="setTitle('Enfermero')"><i class="ti ti-nurse"></i> Enfermero</div>
             </div>
-        </div>
-
-        <div id="page-ruta" class="page">
-            <p>Cargando mapa de ruta...</p>
-            <div style="width: 100%; height: 200px; background: #eee; border-radius: 15px;"></div>
-        </div>
-
-        <div id="page-evolutivo" class="page">
-            <div style="text-align: center; margin-top: 50px;">
-                <i class="ti ti-player-record-filled" style="font-size: 60px; color: red;"></i>
-                <h3>Grabando audio...</h3>
+            <div class="dropdown-section">
+              <div class="dropdown-label">Nombre</div>
+              <div class="dropdown-input-row">
+                <input id="name-input" type="text" placeholder="Tu nombre..." value="García" />
+                <button onclick="applyName()">OK</button>
+              </div>
             </div>
+          </div>
+        </span>
+      </div>
+
+      <!-- Fecha dinámica -->
+      <div style="margin-top:8px">
+        <span class="date-pill">
+          <i class="ti ti-calendar" style="font-size:13px"></i>
+          <span id="today-date"></span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Cuerpo scrollable del home -->
+    <div class="screen-body">
+      <div class="section-label">Acceso rápido</div>
+      <div class="main-cards">
+
+        <!-- Ruta diaria -->
+        <div class="main-card" onclick="showScreen('screen-rutas')">
+          <div class="card-icon icon-blue"><i class="ti ti-map-2"></i></div>
+          <div class="card-body">
+            <div class="card-title">Ruta diaria</div>
+            <div class="card-sub">7 visitas · 34 km estimados</div>
+          </div>
+          <i class="ti ti-chevron-right card-arrow"></i>
         </div>
 
-    </main>
-
-    <nav class="tab-bar">
-        <div class="tab-item" onclick="irA('inicio')">
-            <i class="ti ti-calendar-event"></i>
-            <span>Agenda</span>
-        </div>
-        
-        <div class="tab-item tab-center" onclick="irA('inicio')">
-            <div class="center-circle">
-                <i class="ti ti-smart-home" style="font-size: 28px;"></i>
-            </div>
-            <span class="active-tab">INICIO</span>
+        <!-- Curas IA -->
+        <div class="main-card" onclick="showScreen('screen-curas')">
+          <div class="card-icon icon-green"><i class="ti ti-bandage"></i></div>
+          <div class="card-body">
+            <div class="card-title">Curas IA</div>
+            <div class="card-sub">3 pacientes en seguimiento</div>
+          </div>
+          <i class="ti ti-chevron-right card-arrow"></i>
         </div>
 
-        <div class="tab-item">
-            <i class="ti ti-user-circle"></i>
-            <span>Mi Perfil</span>
+        <!-- Evolutivo IA -->
+        <div class="main-card" onclick="showScreen('screen-evolutivo')">
+          <div class="card-icon icon-purple"><i class="ti ti-microphone"></i></div>
+          <div class="card-body">
+            <div class="card-title">Evolutivo IA</div>
+            <div class="card-sub">Dictado clínico inteligente</div>
+          </div>
+          <i class="ti ti-chevron-right card-arrow"></i>
         </div>
-    </nav>
-</div>
+      </div>
 
+      <div class="section-label">Resumen de hoy</div>
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-num">7</div>
+          <div class="stat-lbl"><span class="stat-dot dot-blue"></span>Visitas pendientes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2</div>
+          <div class="stat-lbl"><span class="stat-dot dot-green"></span>Curas programadas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">1</div>
+          <div class="stat-lbl"><span class="stat-dot dot-red"></span>Prioridad alta</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">34</div>
+          <div class="stat-lbl"><span class="stat-dot dot-amber"></span>km estimados</div>
+        </div>
+      </div>
+      <div style="height:20px"></div>
+    </div>
+
+    <!-- Nav bar -->
+    <div class="nav-bar">
+      <div class="nav-item active"><i class="ti ti-home"></i>Inicio</div>
+      <div class="nav-item" onclick="showScreen('screen-rutas')"><i class="ti ti-map-2"></i>Ruta</div>
+      <div class="nav-item" onclick="showScreen('screen-curas')"><i class="ti ti-bandage"></i>Curas</div>
+      <div class="nav-item"><i class="ti ti-user-circle"></i>Perfil</div>
+    </div>
+  </div><!-- /screen-home -->
+
+
+  <!-- ══════════════════════════════════════════
+       PANTALLA: RUTA DIARIA
+  ═══════════════════════════════════════════ -->
+  <div id="screen-rutas" class="screen">
+
+    <!-- Cabecera -->
+    <div class="inner-header">
+      <button class="back-btn" onclick="showScreen('screen-home')"><i class="ti ti-arrow-left"></i></button>
+      <span class="inner-title">Ruta diaria</span>
+      <span class="header-badge" style="background:var(--blue-50);color:var(--blue-500);">
+        <i class="ti ti-route" style="font-size:13px"></i>Optimizada
+      </span>
+    </div>
+
+    <!-- Mapa con Google Maps iframe -->
+    <div class="map-container">
+      <iframe
+        id="map-iframe"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50000!2d-0.49!3d38.34!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6235da7ab2a89d%3A0x3016e0bf562c4c37!2sAlicante!5e0!3m2!1ses!2ses!4v1715600000000"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+      <!-- Botón añadir visita -->
+      <button class="fab-add" onclick="openAddVisitModal()" title="Añadir dirección">
+        <i class="ti ti-plus"></i>
+      </button>
+      <!-- Botones overlay -->
+      <div class="map-overlay-btns">
+        <button class="map-btn" onclick="printMap()"><i class="ti ti-printer"></i>Imprimir</button>
+        <button class="map-btn" onclick="recalcRoute()"><i class="ti ti-refresh"></i>Recalcular</button>
+      </div>
+    </div>
+
+    <!-- Barra info ruta -->
+    <div class="route-info-bar">
+      <span><i class="ti ti-map-pin"></i><span id="visit-count">3</span> paradas</span>
+      <span><i class="ti ti-clock"></i><span id="route-time">52 min</span> estimados</span>
+      <span><i class="ti ti-road"></i><span id="route-km">18.4 km</span></span>
+    </div>
+
+    <!-- Lista scrollable -->
+    <div class="screen-body">
+      <div class="section-label">Visitas del recorrido</div>
+      <div class="visits-list" id="visits-list">
+        <!-- generadas por JS -->
+      </div>
+
+      <!-- Visitas lejanas / independientes -->
+      <div class="section-label">Ubicaciones lejanas</div>
+      <div class="distant-section">
+        <div class="distant-header">
+          <i class="ti ti-alert-triangle" style="font-size:18px"></i>
+          Estas visitas no se incluyen en el mapa porque alterarían la ruta optimizada
+        </div>
+        <div id="distant-list">
+          <!-- generadas por JS -->
+        </div>
+        <button class="btn btn-block" style="margin-top:8px;font-size:12px"
+          onclick="openAddDistantModal()">
+          <i class="ti ti-plus"></i> Añadir ubicación lejana
+        </button>
+      </div>
+      <div style="height:10px"></div>
+    </div>
+
+    <!-- Barra de acciones -->
+    <div class="route-action-bar">
+      <button class="btn" onclick="exportRoutePDF()"><i class="ti ti-file-export"></i>PDF</button>
+      <button class="btn" onclick="shareRoute()"><i class="ti ti-share"></i>Compartir</button>
+      <button class="btn btn-primary" onclick="startNavigation()"><i class="ti ti-navigation"></i>Iniciar ruta</button>
+    </div>
+
+    <!-- Modal añadir visita -->
+    <div id="modal-visit" class="modal-backdrop" onclick="closeModal('modal-visit')">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title"><i class="ti ti-map-pin" style="color:var(--blue-500)"></i> Nueva visita</div>
+        <input id="visit-addr-input" class="modal-input" type="text" placeholder="Calle y número..." />
+        <input id="visit-obs-input" class="modal-input" type="text" placeholder="Observaciones (opcional)" />
+        <div style="margin-bottom:10px">
+          <label style="font-size:12px;color:var(--gray-600);font-weight:500">Prioridad</label>
+          <select id="visit-priority" class="modal-input" style="margin-top:5px;margin-bottom:0">
+            <option value="alta">🔴 Alta</option>
+            <option value="media" selected>🟡 Media</option>
+            <option value="baja">🟢 Baja</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button class="btn" style="flex:1" onclick="closeModal('modal-visit')">Cancelar</button>
+          <button class="btn btn-primary" style="flex:1" onclick="addVisit()">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal añadir visita lejana -->
+    <div id="modal-distant" class="modal-backdrop" onclick="closeModal('modal-distant')">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title"><i class="ti ti-alert-triangle" style="color:var(--amber-500)"></i> Ubicación lejana</div>
+        <input id="distant-addr-input" class="modal-input" type="text" placeholder="Dirección..." />
+        <input id="distant-obs-input" class="modal-input" type="text" placeholder="Motivo o notas..." />
+        <div class="modal-actions">
+          <button class="btn" style="flex:1" onclick="closeModal('modal-distant')">Cancelar</button>
+          <button class="btn btn-primary" style="flex:1" onclick="addDistant()">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /screen-rutas -->
+
+
+  <!-- ══════════════════════════════════════════
+       PANTALLA: CURAS IA
+  ═══════════════════════════════════════════ -->
+  <div id="screen-curas" class="screen">
+
+    <!-- Cabecera -->
+    <div class="inner-header">
+      <button class="back-btn" onclick="showScreen('screen-home')"><i class="ti ti-arrow-left"></i></button>
+      <span class="inner-title">Curas IA</span>
+      <!-- Botón Asistente IA -->
+      <button class="header-badge"
+        style="background:var(--green-50);color:var(--green-500);border:none;cursor:pointer;font-weight:600;font-size:11px;padding:5px 12px;border-radius:20px"
+        onclick="openAI()">
+        <i class="ti ti-sparkles" style="font-size:13px"></i> Asistente IA
+      </button>
+    </div>
+
+    <!-- Selector de paciente -->
+    <div class="patient-selector">
+      <div class="patient-chip active" onclick="selectPatient(this,'García M.')">García M.</div>
+      <div class="patient-chip" onclick="selectPatient(this,'López R.')">López R.</div>
+      <div class="patient-chip" onclick="selectPatient(this,'Martínez A.')">Martínez A.</div>
+    </div>
+
+    <!-- Timeline scrollable -->
+    <div class="screen-body">
+      <div class="timeline" id="wound-timeline">
+        <!-- generado por JS -->
+      </div>
+    </div>
+
+    <!-- Barra inferior -->
+    <div class="add-photo-bar">
+      <button class="btn" onclick="simulatePhoto('gallery')"><i class="ti ti-photo"></i>Galería</button>
+      <button class="btn btn-primary" style="flex:1" onclick="simulatePhoto('camera')">
+        <i class="ti ti-camera"></i>Añadir foto de hoy
+      </button>
+    </div>
+
+    <!-- ── OVERLAY ASISTENTE IA ── -->
+    <div id="ai-overlay" class="ai-overlay">
+      <div class="ai-chat-header">
+        <button class="back-btn" onclick="closeAI()"><i class="ti ti-x"></i></button>
+        <div>
+          <div style="font-size:15px;font-weight:600;color:var(--gray-800)">Asistente clínico IA</div>
+          <div style="font-size:11px;color:var(--gray-400)">Basado en evidencia clínica</div>
+        </div>
+        <div class="ai-badge">Online</div>
+      </div>
+
+      <!-- Mensajes del chat -->
+      <div class="chat-messages" id="chat-messages">
+        <div class="bubble ai fade-in">
+          Hola, soy tu asistente clínico. Puedo ayudarte con protocolos de curas, elección de apósitos, signos de infección y seguimiento de heridas. Descríbeme la cura por texto o por voz.
+        </div>
+      </div>
+
+      <!-- Barra de entrada -->
+      <div class="chat-input-bar">
+        <button class="chat-mic-btn" id="ai-mic-btn" onclick="toggleAIMic()" title="Dictado por voz">
+          <i class="ti ti-microphone"></i>
+        </button>
+        <textarea class="chat-input" id="ai-chat-input"
+          placeholder="Describe la cura o pregunta al asistente..."
+          rows="1"
+          onkeydown="handleChatKey(event)"></textarea>
+        <button class="chat-send-btn" onclick="sendChatMessage()">
+          <i class="ti ti-send"></i>
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /screen-curas -->
+
+
+  <!-- ══════════════════════════════════════════
+       PANTALLA: EVOLUTIVO IA
+  ═══════════════════════════════════════════ -->
+  <div id="screen-evolutivo" class="screen">
+
+    <div class="inner-header">
+      <button class="back-btn" onclick="showScreen('screen-home')"><i class="ti ti-arrow-left"></i></button>
+      <span class="inner-title">Evolutivo IA</span>
+      <span class="header-badge" style="background:var(--purple-50);color:var(--purple-500)">
+        <i class="ti ti-sparkles" style="font-size:12px"></i>Whisper + GPT
+      </span>
+    </div>
+
+    <div class="screen-body">
+      <div class="evol-body">
+
+        <!-- Área de grabación -->
+        <div class="record-area">
+          <button id="record-btn" class="record-btn-big" onclick="toggleRecording()">
+            <i class="ti ti-microphone"></i>
+          </button>
+          <p class="record-hint" id="record-hint">Mantén pulsado para grabar</p>
+          <!-- Waveform animado (visible al grabar) -->
+          <div class="waveform" id="waveform">
+            <div class="wave-bar" style="animation-delay:0s"></div>
+            <div class="wave-bar" style="animation-delay:0.1s"></div>
+            <div class="wave-bar" style="animation-delay:0.2s"></div>
+            <div class="wave-bar" style="animation-delay:0.3s"></div>
+            <div class="wave-bar" style="animation-delay:0.4s"></div>
+            <div class="wave-bar" style="animation-delay:0.5s"></div>
+            <div class="wave-bar" style="animation-delay:0.6s"></div>
+            <div class="wave-bar" style="animation-delay:0.7s"></div>
+            <div class="wave-bar" style="animation-delay:0.8s"></div>
+            <div class="wave-bar" style="animation-delay:0.9s"></div>
+            <div class="wave-bar" style="animation-delay:1.0s"></div>
+          </div>
+        </div>
+
+        <!-- Transcripción en tiempo real -->
+        <div class="transcript-box">
+          <div class="box-label">
+            <i class="ti ti-microphone" style="font-size:12px;color:var(--blue-300)"></i>
+            Transcripción en tiempo real
+          </div>
+          <div class="transcript-text" id="transcript-display">
+            Pulsa el botón para comenzar a dictar...
+          </div>
+        </div>
+
+        <!-- Evolutivo generado -->
+        <div class="evolutivo-box">
+          <div class="box-label" style="color:var(--blue-500)">
+            <i class="ti ti-sparkles" style="font-size:12px"></i>
+            Evolutivo clínico generado por IA
+          </div>
+          <!-- Texto de solo lectura -->
+          <div class="evolutivo-text" id="evol-text">
+            El evolutivo aparecerá aquí tras el dictado...
+          </div>
+          <!-- Textarea editable (se activa al pulsar "Editar") -->
+          <textarea class="evolutivo-edit" id="evol-edit" rows="6"
+            placeholder="Edita el evolutivo aquí..."></textarea>
+        </div>
+
+        <!-- Barra de voz para ampliar / corregir -->
+        <div class="evol-voice-bar">
+          <i class="ti ti-microphone-2"></i>
+          <span>Amplía o corrige el evolutivo por voz</span>
+          <button class="voice-edit-btn" id="voice-edit-btn" onclick="toggleVoiceEdit()">
+            Dictar corrección
+          </button>
+        </div>
+
+        <!-- Acciones sobre el evolutivo -->
+        <div class="evol-actions">
+          <button class="evol-btn" onclick="copyEvolutivo()">
+            <i class="ti ti-copy"></i> Copiar
+          </button>
+          <button class="evol-btn" id="edit-toggle-btn" onclick="toggleEditMode()">
+            <i class="ti ti-edit"></i> Editar
+          </button>
+          <button class="evol-btn" onclick="shareEvolutivo()">
+            <i class="ti ti-share"></i> Compartir
+          </button>
+          <button class="evol-btn primary" onclick="saveEvolutivo()">
+            <i class="ti ti-device-floppy"></i> Guardar
+          </button>
+        </div>
+
+      </div><!-- /evol-body -->
+    </div><!-- /screen-body -->
+  </div><!-- /screen-evolutivo -->
+
+
+  <!-- TOAST global -->
+  <div id="toast" class="toast"></div>
+
+</div><!-- /phone -->
+</div><!-- /app-shell -->
+
+
+<!-- ════════════════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════════════ -->
 <script>
-    // Función para navegar a una subpágina
-    function navegar(pageId, titulo) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('page-' + pageId).classList.add('active');
-        
-        document.getElementById('txt-header').innerText = titulo;
-        document.getElementById('btn-volver').style.display = 'block'; // Mostrar flecha
-    }
+/* ─────────────────────────────────────────────
+   ESTADO GLOBAL DE LA APLICACIÓN
+───────────────────────────────────────────── */
+const State = {
+  title: 'Dra.',
+  name: 'García',
+  isRecording: false,
+  isVoiceEditing: false,
+  editMode: false,
+  evolText: '',
+  transcript: '',
+  visits: [
+    { id:1, addr:'C/ Ramón y Cajal, 14 – 2ºA', obs:'Cura úlcera grado III', priority:'alta' },
+    { id:2, addr:'Av. Constitución, 88 – 4ºC',  obs:'Control PICC',          priority:'media' },
+    { id:3, addr:'C/ San Vicente, 33 – 1ºB',     obs:'Seguimiento IV',        priority:'baja'  },
+  ],
+  distants: [
+    { id:1, addr:'Urb. La Cantera, 12 – Bungalow 5', obs:'Fuera de zona – 22 km extra' },
+  ],
+  woundRecords: [
+    { id:1, date:'13 mayo 2026', label:'Úlcera sacra G-III', obs:'Exudado reducido. Granulación visible.', badge:'mejora', ai:'IA: Reducción de tamaño estimada ~15%. Sin signos de infección activa.' },
+    { id:2, date:'10 mayo 2026', label:'Úlcera sacra G-III', obs:'Bordes macerados. Incremento de exudado.', badge:'alerta', ai:'IA: Posible inicio de infección local. Revisar apósito y considerar cultivo.' },
+    { id:3, date:'6 mayo 2026',  label:'Úlcera sacra G-III', obs:'Lesión estabilizada. Sin cambios.',        badge:'alerta', ai:'IA: Sin cambios significativos respecto a visita anterior.' },
+  ],
+  nextVisitId: 4,
+  nextDistantId: 2,
+  nextWoundId: 4,
+  currentPatient: 'García M.',
+  aiMicActive: false,
+  recognition: null,
+  evolRecognition: null,
+};
 
-    // Función para volver al inicio
-    function irA(pageId) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('page-inicio').classList.add('active');
-        
-        document.getElementById('txt-header').innerText = 'Inicio';
-        document.getElementById('btn-volver').style.display = 'none'; // Ocultar flecha
-    }
+/* ─────────────────────────────────────────────
+   RELOJ Y FECHA
+───────────────────────────────────────────── */
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+}
+function setTodayDate() {
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  document.getElementById('today-date').textContent =
+    new Date().toLocaleDateString('es-ES', opts);
+}
+updateClock();
+setTodayDate();
+setInterval(updateClock, 30000);
 
-    // Registro del Service Worker para que sea PWA
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.log("SW no registrado", err));
+/* ─────────────────────────────────────────────
+   NAVEGACIÓN ENTRE PANTALLAS
+───────────────────────────────────────────── */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // inicializar contenido dinámico
+  if (id === 'screen-rutas')   renderVisits();
+  if (id === 'screen-curas')   renderTimeline();
+}
+
+/* ─────────────────────────────────────────────
+   NOMBRE / SALUDO EDITABLE
+───────────────────────────────────────────── */
+function toggleNameDropdown(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('name-dropdown');
+  dd.classList.toggle('open');
+  // pre-rellenar input
+  document.getElementById('name-input').value = State.name;
+}
+document.addEventListener('click', () => {
+  document.getElementById('name-dropdown').classList.remove('open');
+});
+function setTitle(t) {
+  State.title = t;
+  updateGreeting();
+  document.getElementById('name-dropdown').classList.remove('open');
+  showToast('Título actualizado: ' + t);
+}
+function applyName() {
+  const val = document.getElementById('name-input').value.trim();
+  if (val) { State.name = val; updateGreeting(); }
+  document.getElementById('name-dropdown').classList.remove('open');
+}
+function updateGreeting() {
+  document.getElementById('greeting-display').textContent = State.title + ' ' + State.name;
+}
+
+/* ─────────────────────────────────────────────
+   PANTALLA RUTA DIARIA — renderizado
+───────────────────────────────────────────── */
+function renderVisits() {
+  const list = document.getElementById('visits-list');
+  const dlist = document.getElementById('distant-list');
+  // recalcular estadísticas
+  const count = State.visits.length;
+  const km = (count * 6.1 + 0.3).toFixed(1);
+  const mins = Math.round(count * 17.5);
+  document.getElementById('visit-count').textContent = count;
+  document.getElementById('route-time').textContent = mins + ' min';
+  document.getElementById('route-km').textContent = km + ' km';
+
+  // visitas de ruta
+  list.innerHTML = State.visits.length ? State.visits.map((v,i) => `
+    <div class="visit-item fade-in" id="visit-${v.id}">
+      <div class="visit-num">${i+1}</div>
+      <div class="visit-info">
+        <div class="visit-addr">${v.addr}</div>
+        <div class="visit-obs">${v.obs}</div>
+      </div>
+      <div class="visit-actions">
+        <button class="icon-btn" onclick="editVisit(${v.id})" title="Editar"><i class="ti ti-edit"></i></button>
+        <button class="icon-btn" onclick="deleteVisit(${v.id})" title="Eliminar"><i class="ti ti-trash"></i></button>
+      </div>
+      <div class="priority-dot p-${v.priority}" title="Prioridad ${v.priority}"></div>
+    </div>
+  `).join('') : '<div class="empty-state"><i class="ti ti-map-pin-off"></i>Sin visitas añadidas</div>';
+
+  // visitas lejanas
+  dlist.innerHTML = State.distants.map(d => `
+    <div class="distant-item fade-in">
+      <i class="ti ti-map-pin-exclamation" style="font-size:18px;color:var(--amber-500);flex-shrink:0"></i>
+      <div class="visit-info">
+        <div class="visit-addr">${d.addr}</div>
+        <div class="visit-obs">${d.obs}</div>
+      </div>
+      <div class="visit-actions">
+        <button class="icon-btn" onclick="deleteDistant(${d.id})"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>
+  `).join('') || '<div style="font-size:12px;color:var(--gray-400);text-align:center;padding:8px 0">Sin ubicaciones lejanas</div>';
+}
+
+/* modales visitas */
+function openAddVisitModal() {
+  document.getElementById('visit-addr-input').value = '';
+  document.getElementById('visit-obs-input').value = '';
+  openModal('modal-visit');
+}
+function addVisit() {
+  const addr = document.getElementById('visit-addr-input').value.trim();
+  if (!addr) { showToast('Introduce una dirección'); return; }
+  const obs  = document.getElementById('visit-obs-input').value.trim() || 'Sin observaciones';
+  const prio = document.getElementById('visit-priority').value;
+  State.visits.push({ id: State.nextVisitId++, addr, obs, priority: prio });
+  closeModal('modal-visit');
+  renderVisits();
+  showToast('Visita añadida al recorrido ✓');
+}
+function deleteVisit(id) {
+  State.visits = State.visits.filter(v => v.id !== id);
+  renderVisits();
+  showToast('Visita eliminada');
+}
+function editVisit(id) {
+  const v = State.visits.find(v => v.id === id);
+  if (!v) return;
+  document.getElementById('visit-addr-input').value = v.addr;
+  document.getElementById('visit-obs-input').value  = v.obs;
+  document.getElementById('visit-priority').value   = v.priority;
+  openModal('modal-visit');
+  // reemplazar al guardar
+  const btn = document.querySelector('#modal-visit .btn-primary');
+  btn.onclick = () => {
+    const addr = document.getElementById('visit-addr-input').value.trim();
+    if (!addr) return;
+    v.addr     = addr;
+    v.obs      = document.getElementById('visit-obs-input').value.trim() || 'Sin observaciones';
+    v.priority = document.getElementById('visit-priority').value;
+    closeModal('modal-visit');
+    renderVisits();
+    showToast('Visita actualizada ✓');
+    btn.onclick = addVisit; // restaurar
+  };
+}
+
+/* modales visitas lejanas */
+function openAddDistantModal() {
+  document.getElementById('distant-addr-input').value = '';
+  document.getElementById('distant-obs-input').value  = '';
+  openModal('modal-distant');
+}
+function addDistant() {
+  const addr = document.getElementById('distant-addr-input').value.trim();
+  if (!addr) { showToast('Introduce una dirección'); return; }
+  const obs  = document.getElementById('distant-obs-input').value.trim() || '';
+  State.distants.push({ id: State.nextDistantId++, addr, obs });
+  closeModal('modal-distant');
+  renderVisits();
+  showToast('Ubicación lejana añadida ✓');
+}
+function deleteDistant(id) {
+  State.distants = State.distants.filter(d => d.id !== id);
+  renderVisits();
+}
+
+/* acciones de ruta */
+function printMap() {
+  showToast('Preparando impresión del mapa...');
+  setTimeout(() => window.print(), 500);
+}
+function recalcRoute() {
+  showToast('Recalculando ruta optimizada...');
+  setTimeout(() => { renderVisits(); showToast('Ruta actualizada ✓'); }, 1200);
+}
+function exportRoutePDF() { showToast('Exportando ruta a PDF...'); }
+function shareRoute() {
+  if (navigator.share) {
+    navigator.share({ title: 'Ruta UHD', text: State.visits.map((v,i)=>`${i+1}. ${v.addr}`).join('\n') });
+  } else { showToast('Ruta copiada al portapapeles'); }
+}
+function startNavigation() { showToast('Abriendo navegación GPS...'); }
+
+/* ─────────────────────────────────────────────
+   PANTALLA CURAS IA — timeline
+───────────────────────────────────────────── */
+function renderTimeline() {
+  const tl = document.getElementById('wound-timeline');
+  if (!State.woundRecords.length) {
+    tl.innerHTML = '<div class="empty-state"><i class="ti ti-camera-off"></i>Sin registros de cura</div>';
+    return;
+  }
+  tl.innerHTML = State.woundRecords.map(r => `
+    <div class="tl-date-label">${r.date}</div>
+    <div class="tl-entry fade-in">
+      <div class="tl-photo ${r.badge === 'alerta' ? 'warning' : ''}" onclick="showToast('Zoom no disponible en demo')">
+        <i class="ti ti-camera" style="font-size:30px;opacity:0.6"></i>
+        <div class="tl-photo-overlay"></div>
+      </div>
+      <div class="tl-meta">
+        <div class="tl-meta-row">
+          <span class="tl-title">${r.label}</span>
+          <span class="tl-badge badge-${r.badge}">${badgeLabel(r.badge)}</span>
+        </div>
+        <div class="tl-obs">${r.obs}</div>
+      </div>
+      <div class="ai-analysis">
+        <i class="ti ti-sparkles"></i>
+        <span>${r.ai}</span>
+      </div>
+      <div class="tl-quick-actions">
+        <button class="tl-action" onclick="showToast('Comparativa abierta')"><i class="ti ti-columns"></i>Comparar</button>
+        <button class="tl-action" onclick="showToast('Zoom activado')"><i class="ti ti-zoom-in"></i>Ampliar</button>
+        <button class="tl-action" onclick="showToast('Gráfico de evolución')"><i class="ti ti-chart-line"></i>Evolución</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function badgeLabel(b) {
+  return { mejora:'Mejora ↑', alerta:'Atención ⚠', critico:'Crítico ⛔' }[b] || b;
+}
+
+function selectPatient(el, name) {
+  document.querySelectorAll('.patient-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  State.currentPatient = name;
+  showToast('Paciente: ' + name);
+}
+
+function simulatePhoto(src) {
+  const entry = {
+    id: State.nextWoundId++,
+    date: new Date().toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}),
+    label: 'Úlcera sacra G-III',
+    obs: src === 'camera' ? 'Foto recién tomada. Pendiente de análisis.' : 'Foto de galería importada.',
+    badge: 'mejora',
+    ai: 'IA: Analizando imagen... Comparando con registros anteriores.',
+  };
+  State.woundRecords.unshift(entry);
+  renderTimeline();
+  showToast(src === 'camera' ? 'Foto guardada ✓' : 'Foto importada ✓');
+}
+
+/* ─────────────────────────────────────────────
+   ASISTENTE IA (chat clínico simulado)
+───────────────────────────────────────────── */
+// Respuestas simuladas basadas en palabras clave
+const AI_RESPONSES = [
+  { keys: ['úlcera','sacra','grado'],
+    reply: '<b>Protocolo úlcera por presión:</b><ul><li>Grado III: afectación hasta tejido subcutáneo</li><li>Apósito recomendado: espuma de poliuretano hidrocelular (cambio c/3–5 días)</li><li>Proteger piel perilesional con film barrera</li><li>Posición: alivio de presión cada 2h</li><li>Valorar TPN si sin mejora en 2 semanas</li></ul>' },
+  { keys: ['infección','signos','vigilar'],
+    reply: '<b>Signos de infección local a vigilar:</b><ul><li>Eritema perilesional en expansión (&gt;2cm)</li><li>Exudado purulento o maloliente</li><li>Calor y edema local</li><li>Dolor desproporcionado</li><li>Fiebre o leucocitosis</li><li>Estancamiento de la cicatrización &gt;2 semanas</li></ul>Si aparecen varios → toma de cultivo y valorar antibioterapia sistémica.' },
+  { keys: ['apósito','recomienda'],
+    reply: '<b>Selección de apósito según tipo de herida:</b><ul><li>Exudado escaso: hidrogel + film transparente</li><li>Exudado moderado: espuma hidrocelular</li><li>Exudado abundante: alginato cálcico</li><li>Herida infectada: apósito de plata iónica</li><li>Cavidades: alginato en cinta o espuma de cavidades</li></ul>' },
+  { keys: ['picc','catéter','vascular'],
+    reply: '<b>Cuidados del catéter PICC:</b><ul><li>Cambio de apósito transparente c/7 días o si despegado</li><li>Inspeccionar punto de inserción en cada visita</li><li>Signos de alarma: eritema, edema, exudado, fiebre</li><li>Heparinización según protocolo del centro</li><li>Registro de cm externos del catéter en cada visita</li></ul>' },
+  { keys: ['desbridamiento','necros'],
+    reply: '<b>Desbridamiento en heridas crónicas:</b><ul><li>Autolítico: hidrogel (1ª elección, no doloroso)</li><li>Enzimático: colagenasa (tejido necrótico seco)</li><li>Cortante/quirúrgico: indicado en necrosis extensa</li><li>Mecánico: irrigación a presión (contraindicado en tejido granulación)</li></ul>Siempre valorar perfusión periférica antes.' },
+];
+
+const AI_DEFAULT = 'Entendido. Basándome en guías clínicas actualizadas (GNEAUPP, EWMA), te recomendaría revisar el protocolo de tu unidad para este caso. ¿Puedes darme más detalles sobre el tipo de lesión, exudado y estado perilesional?';
+
+function getAIReply(text) {
+  const t = text.toLowerCase();
+  for (const r of AI_RESPONSES) {
+    if (r.keys.some(k => t.includes(k))) return r.reply;
+  }
+  return AI_DEFAULT;
+}
+
+function openAI() {
+  document.getElementById('ai-overlay').classList.add('open');
+  document.getElementById('ai-chat-input').focus();
+}
+function closeAI() {
+  document.getElementById('ai-overlay').classList.remove('open');
+  stopAIMic();
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('ai-chat-input');
+  const text  = input.value.trim();
+  if (!text) return;
+  appendBubble(text, 'user');
+  input.value = '';
+  input.style.height = 'auto';
+  // typing indicator
+  const typingId = 'typing-' + Date.now();
+  const typing = document.createElement('div');
+  typing.className = 'bubble ai fade-in';
+  typing.id = typingId;
+  typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  document.getElementById('chat-messages').appendChild(typing);
+  scrollChat();
+  // respuesta simulada con delay
+  setTimeout(() => {
+    const el = document.getElementById(typingId);
+    if (el) el.remove();
+    appendBubble(getAIReply(text), 'ai');
+  }, 1100 + Math.random() * 600);
+}
+
+function appendBubble(html, type) {
+  const el = document.createElement('div');
+  el.className = `bubble ${type} fade-in`;
+  el.innerHTML = html;
+  document.getElementById('chat-messages').appendChild(el);
+  scrollChat();
+}
+function scrollChat() {
+  const c = document.getElementById('chat-messages');
+  setTimeout(() => { c.scrollTop = c.scrollHeight; }, 50);
+}
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+  // auto-resize textarea
+  e.target.style.height = 'auto';
+  e.target.style.height = Math.min(e.target.scrollHeight, 80) + 'px';
+}
+
+/* Voz en el chat IA */
+function toggleAIMic() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    showToast('Reconocimiento de voz no disponible en este navegador');
+    return;
+  }
+  if (State.aiMicActive) { stopAIMic(); return; }
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  State.recognition = new SpeechRec();
+  State.recognition.lang = 'es-ES';
+  State.recognition.continuous = true;
+  State.recognition.interimResults = true;
+  State.recognition.onresult = (ev) => {
+    const transcript = Array.from(ev.results).map(r => r[0].transcript).join('');
+    document.getElementById('ai-chat-input').value = transcript;
+  };
+  State.recognition.onend = () => stopAIMic();
+  State.recognition.start();
+  State.aiMicActive = true;
+  document.getElementById('ai-mic-btn').classList.add('recording');
+  showToast('Dictando... habla ahora');
+}
+function stopAIMic() {
+  if (State.recognition) { try { State.recognition.stop(); } catch(e){} State.recognition = null; }
+  State.aiMicActive = false;
+  const btn = document.getElementById('ai-mic-btn');
+  if (btn) btn.classList.remove('recording');
+}
+
+/* ─────────────────────────────────────────────
+   EVOLUTIVO IA — dictado + generación
+───────────────────────────────────────────── */
+
+// Frases de transcripción simulada para demo sin permisos
+const DEMO_PHRASES = [
+  'Paciente estable, afebril, tolera tratamiento oral sin incidencias.',
+  'Paciente estable, afebril, tolera tratamiento oral sin incidencias. PICC permeable, sin signos de infección.',
+  'Paciente estable, afebril, tolera tratamiento. PICC permeable, sin signos infección. Herida con granulación activa.',
+  'Paciente estable, afebril, tolera tratamiento. PICC limpio. Herida granulando. Familia informada, comprende plan terapéutico.',
+];
+
+// Conversión de texto crudo a evolutivo clínico (simulado)
+function generateEvolutivo(raw) {
+  const r = raw.toLowerCase();
+  let note = '';
+  if (r.includes('estable')) note += 'Paciente clínicamente estable. ';
+  if (r.includes('afebril') || r.includes('sin fiebre')) note += 'Afebril en el momento de la visita. ';
+  if (r.includes('tolera')) note += 'Buena tolerancia al tratamiento pautado, sin efectos adversos reportados. ';
+  if (r.includes('picc') || r.includes('catéter')) note += 'Catéter PICC permeable y con punto de inserción sin signos de infección local ni sistémica. ';
+  if (r.includes('herida') || r.includes('granul')) note += 'Herida en proceso de granulación activa, sin signos de sobreinfección. ';
+  if (r.includes('familia') || r.includes('cuidador')) note += 'Familia/cuidador principal correctamente informados del plan terapéutico y adherentes al mismo. ';
+  if (r.includes('dolor')) note += 'Refiere dolor controlado con analgesia actual. ';
+  if (r.includes('febril') || r.includes('fiebre')) note += 'Se objetiva febrícula/fiebre; se valora y se actúa según protocolo. ';
+  if (r.includes('tensión') || r.includes('presión')) note += 'Constantes vitales dentro de rango habitual del paciente. ';
+  if (!note) note = raw.charAt(0).toUpperCase() + raw.slice(1) + '.';
+  note += ' Próxima visita según plan establecido. Se deja pauta escrita al cuidador.';
+  return note.trim();
+}
+
+let demoPhaseIdx = 0;
+let demoInterval = null;
+let evolRecognition = null;
+let isEvolRecording = false;
+let liveTranscript = '';
+
+function toggleRecording() {
+  if (isEvolRecording) {
+    stopEvolRecording();
+  } else {
+    startEvolRecording();
+  }
+}
+
+function startEvolRecording() {
+  isEvolRecording = true;
+  const btn  = document.getElementById('record-btn');
+  const wave = document.getElementById('waveform');
+  const hint = document.getElementById('record-hint');
+  btn.classList.add('recording');
+  wave.classList.add('active');
+  hint.textContent = 'Grabando... pulsa para detener';
+  liveTranscript = '';
+
+  // Intentar reconocimiento real
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    evolRecognition = new SR();
+    evolRecognition.lang = 'es-ES';
+    evolRecognition.continuous = true;
+    evolRecognition.interimResults = true;
+    evolRecognition.onresult = (ev) => {
+      liveTranscript = Array.from(ev.results).map(r => r[0].transcript).join(' ');
+      document.getElementById('transcript-display').textContent = liveTranscript;
+    };
+    evolRecognition.onend = () => {
+      if (isEvolRecording) { try { evolRecognition.start(); } catch(e){} }
+    };
+    evolRecognition.onerror = () => runDemoMode();
+    try { evolRecognition.start(); return; } catch(e) {}
+  }
+  // Fallback demo
+  runDemoMode();
+}
+
+function runDemoMode() {
+  demoPhaseIdx = 0;
+  demoInterval = setInterval(() => {
+    if (demoPhaseIdx < DEMO_PHRASES.length) {
+      liveTranscript = DEMO_PHRASES[demoPhaseIdx++];
+      document.getElementById('transcript-display').textContent = liveTranscript;
     }
+  }, 1800);
+}
+
+function stopEvolRecording() {
+  isEvolRecording = false;
+  if (evolRecognition) { try { evolRecognition.stop(); } catch(e){} evolRecognition = null; }
+  if (demoInterval)    { clearInterval(demoInterval); demoInterval = null; }
+
+  const btn  = document.getElementById('record-btn');
+  const wave = document.getElementById('waveform');
+  const hint = document.getElementById('record-hint');
+  btn.classList.remove('recording');
+  wave.classList.remove('active');
+  hint.textContent = 'Mantén pulsado para grabar';
+
+  if (!liveTranscript) { showToast('Sin audio detectado'); return; }
+
+  // Generar evolutivo
+  const generated = generateEvolutivo(liveTranscript);
+  State.evolText   = generated;
+  State.transcript = liveTranscript;
+
+  const textEl = document.getElementById('evol-text');
+  const editEl = document.getElementById('evol-edit');
+  textEl.textContent = generated;
+  editEl.value = generated;
+  textEl.classList.remove('hidden');
+  editEl.classList.remove('active');
+  State.editMode = false;
+  document.getElementById('edit-toggle-btn').innerHTML = '<i class="ti ti-edit"></i> Editar';
+  showToast('Evolutivo generado ✓');
+}
+
+/* Editar evolutivo */
+function toggleEditMode() {
+  State.editMode = !State.editMode;
+  const textEl = document.getElementById('evol-text');
+  const editEl = document.getElementById('evol-edit');
+  const btn    = document.getElementById('edit-toggle-btn');
+  if (State.editMode) {
+    editEl.value = State.evolText || textEl.textContent;
+    textEl.classList.add('hidden');
+    editEl.classList.add('active');
+    editEl.focus();
+    btn.innerHTML = '<i class="ti ti-check"></i> Listo';
+  } else {
+    State.evolText = editEl.value;
+    textEl.textContent = State.evolText;
+    textEl.classList.remove('hidden');
+    editEl.classList.remove('active');
+    btn.innerHTML = '<i class="ti ti-edit"></i> Editar';
+    showToast('Cambios guardados');
+  }
+}
+
+/* Voz para corregir / ampliar evolutivo */
+let voiceEditActive = false;
+let voiceEditRec = null;
+
+function toggleVoiceEdit() {
+  if (voiceEditActive) { stopVoiceEdit(); return; }
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    showToast('Reconocimiento de voz no disponible'); return;
+  }
+  // Activar edición
+  if (!State.editMode) toggleEditMode();
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  voiceEditRec = new SR();
+  voiceEditRec.lang = 'es-ES';
+  voiceEditRec.continuous = true;
+  voiceEditRec.interimResults = false;
+  const existing = document.getElementById('evol-edit').value;
+  voiceEditRec.onresult = (ev) => {
+    const extra = Array.from(ev.results).map(r => r[0].transcript).join(' ');
+    document.getElementById('evol-edit').value = existing + ' ' + extra;
+  };
+  voiceEditRec.onend = () => stopVoiceEdit();
+  voiceEditRec.start();
+  voiceEditActive = true;
+  document.getElementById('voice-edit-btn').textContent = '⏹ Detener';
+  showToast('Dictando corrección... habla ahora');
+}
+function stopVoiceEdit() {
+  if (voiceEditRec) { try { voiceEditRec.stop(); } catch(e){} voiceEditRec = null; }
+  voiceEditActive = false;
+  document.getElementById('voice-edit-btn').textContent = 'Dictar corrección';
+}
+
+/* Acciones del evolutivo */
+function copyEvolutivo() {
+  const txt = getEvolContent();
+  if (!txt || txt.includes('aquí')) { showToast('Genera un evolutivo primero'); return; }
+  navigator.clipboard ? navigator.clipboard.writeText(txt).then(() => showToast('Copiado al portapapeles ✓'))
+                      : showToast('Copia manual: ' + txt.substring(0,30) + '...');
+}
+function shareEvolutivo() {
+  const txt = getEvolContent();
+  if (!txt || txt.includes('aquí')) { showToast('Genera un evolutivo primero'); return; }
+  navigator.share ? navigator.share({ title:'Evolutivo UHD', text: txt })
+                  : showToast('Función de compartir no disponible');
+}
+function saveEvolutivo() {
+  const txt = getEvolContent();
+  if (!txt || txt.includes('aquí')) { showToast('Genera un evolutivo primero'); return; }
+  State.evolText = txt;
+  showToast('Evolutivo guardado ✓');
+}
+function getEvolContent() {
+  return State.editMode
+    ? document.getElementById('evol-edit').value
+    : document.getElementById('evol-text').textContent;
+}
+
+/* ─────────────────────────────────────────────
+   MODALES GENÉRICOS
+───────────────────────────────────────────── */
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+/* ─────────────────────────────────────────────
+   TOAST NOTIFICACIONES
+───────────────────────────────────────────── */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ─────────────────────────────────────────────
+   INICIALIZACIÓN
+───────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  updateGreeting();
+  renderVisits();
+  renderTimeline();
+});
 </script>
 
 </body>
