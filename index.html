@@ -2,79 +2,71 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <!-- ✅ viewport-fit=cover para safe-area iPhone -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
   <title>AsisteUHD — Unidad de Hospitalización Domiciliaria</title>
-
-  <!-- ✅ PWA -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#185FA5">
-
-  <!-- ✅ iOS PWA (icono + nombre + modo app) -->
   <link rel="apple-touch-icon" href="icon1.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="AsisteUHD">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-  <!-- ✅ favicon (opcional, pero recomendable) -->
   <link rel="icon" href="icon1.png">
 
-  <!-- ═══════════════════════════════════════════════════════════
-       FUENTES
-  ════════════════════════════════════════════════════════════ -->
+  <!-- FUENTES -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <!-- Iconos Tabler (outline) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.3.0/tabler-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- ✅ ICONOS: Bootstrap Icons — librería estable, sin dependencias -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
-    /* ═══════════════════════════════════════════════════════════
+    /* ══════════════════════════════════════════
        RESET & VARIABLES
-    ════════════════════════════════════════════════════════════ */
+    ══════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --blue-50:  #E6F1FB;
-      --blue-100: #B5D4F4;
-      --blue-300: #378ADD;
-      --blue-500: #185FA5;
-      --blue-700: #0C447C;
-
-      --green-50:  #EAF3DE;
-      --green-300: #639922;
-      --green-500: #3B6D11;
-
+      --blue-50:    #E6F1FB;
+      --blue-100:   #B5D4F4;
+      --blue-300:   #378ADD;
+      --blue-500:   #185FA5;
+      --blue-700:   #0C447C;
+      --green-50:   #EAF3DE;
+      --green-300:  #639922;
+      --green-500:  #3B6D11;
+      --teal-50:    #E0F4F1;
+      --teal-300:   #2A9D8F;
+      --teal-500:   #1A7A6E;
       --purple-50:  #EEEDFE;
       --purple-300: #7F77DD;
       --purple-500: #534AB7;
-
-      --amber-50:  #FAEEDA;
-      --amber-300: #EF9F27;
-      --amber-500: #854F0B;
-
-      --red-50:  #FCEBEB;
-      --red-300: #E24B4A;
-      --red-500: #A32D2D;
-
-      --gray-50:  #F7F8FA;
-      --gray-100: #EEF0F4;
-      --gray-200: #DDE1E9;
-      --gray-400: #9BA3B2;
-      --gray-600: #5C6474;
-      --gray-800: #2C3142;
-      --gray-900: #181D2C;
-
-      --white: #FFFFFF;
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 18px;
-      --radius-xl: 24px;
+      --amber-50:   #FAEEDA;
+      --amber-300:  #EF9F27;
+      --amber-500:  #854F0B;
+      --red-50:     #FCEBEB;
+      --red-300:    #E24B4A;
+      --red-500:    #A32D2D;
+      --gray-50:    #F7F8FA;
+      --gray-100:   #EEF0F4;
+      --gray-200:   #DDE1E9;
+      --gray-400:   #9BA3B2;
+      --gray-500:   #6E7787;
+      --gray-600:   #5C6474;
+      --gray-700:   #384052;
+      --gray-800:   #2C3142;
+      --gray-900:   #181D2C;
+      --white:      #FFFFFF;
+      --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px;
       --shadow-sm: 0 1px 4px rgba(0,0,0,0.06);
       --shadow-md: 0 4px 16px rgba(0,0,0,0.09);
       --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-      --transition: 0.18s cubic-bezier(0.4,0,0.2,1);
+      --tr: 0.18s cubic-bezier(0.4,0,0.2,1);
       --font: 'DM Sans', sans-serif;
-      --font-mono: 'DM Mono', monospace;
+      --mono: 'DM Mono', monospace;
     }
 
     html, body {
@@ -87,9 +79,9 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       LAYOUT PRINCIPAL — SIMULACIÓN MÓVIL EN ESCRITORIO
-    ════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════
+       SHELL PRINCIPAL
+    ══════════════════════════════════════════ */
     #app-shell {
       display: flex;
       align-items: flex-start;
@@ -114,7 +106,7 @@
       position: relative;
     }
 
-    /* barra de estado */
+    /* Status bar */
     .status-bar {
       background: var(--white);
       display: flex;
@@ -126,41 +118,34 @@
       color: var(--gray-600);
       flex-shrink: 0;
     }
-    .status-icons { display: flex; gap: 6px; align-items: center; }
+    .status-icons { display: flex; gap: 6px; align-items: center; font-size: 14px; }
 
-    /* ═══════════════════════════════════════════════════════════
-       PANTALLAS — la activa tiene display:flex
-    ════════════════════════════════════════════════════════════ */
-    .screen {
-      display: none;
-      flex-direction: column;
-      flex: 1;
-      overflow: hidden;
-    }
+    /* ══════════════════════════════════════════
+       PANTALLAS
+    ══════════════════════════════════════════ */
+    .screen { display: none; flex-direction: column; flex: 1; overflow: hidden; }
     .screen.active { display: flex; }
 
-    /* contenedor scrollable de cada pantalla */
     .screen-body {
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      /* ✅ para que no tape la nav inferior persistente */
-      padding-bottom: 12px;
+      padding-bottom: 16px;
     }
     .screen-body::-webkit-scrollbar { display: none; }
 
-    /* ═══════════════════════════════════════════════════════════
-       CABECERA INTERNA (pantallas secundarias)
-    ════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════
+       CABECERA INTERNA
+    ══════════════════════════════════════════ */
     .inner-header {
       background: var(--white);
       border-bottom: 1px solid var(--gray-100);
-      padding: 14px 20px 12px;
+      padding: 12px 16px 10px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-shrink: 0;
       position: sticky;
       top: 0;
@@ -168,556 +153,514 @@
     }
     .back-btn {
       width: 34px; height: 34px;
-      border-radius: var(--radius-sm);
+      border-radius: var(--r-sm);
       background: var(--gray-100);
       border: 1px solid var(--gray-200);
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       color: var(--gray-600);
-      font-size: 18px;
-      transition: var(--transition);
+      transition: var(--tr);
       flex-shrink: 0;
+      font-size: 16px;
     }
     .back-btn:hover { background: var(--gray-200); }
-    .inner-title { font-size: 16px; font-weight: 600; color: var(--gray-800); flex: 1; }
+    .inner-title {
+      font-size: 16px; font-weight: 600; color: var(--gray-800); flex: 1;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .inner-title .bi { font-size: 18px; }
     .header-badge {
       font-size: 11px; font-weight: 500;
       padding: 4px 10px;
       border-radius: 20px;
-      display: flex; align-items: center; gap: 4px;
+      display: inline-flex; align-items: center; gap: 4px;
+      border: none; cursor: pointer;
+      font-family: var(--font);
     }
+    .header-badge .bi { font-size: 12px; }
 
-    /* ═══════════════════════════════════════════════════════════
-       NAV BAR INFERIOR (✅ persistente + safe-area + home centrado)
-    ════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════
+       ✅ NAV BAR — 5 pestañas, Bootstrap Icons
+    ══════════════════════════════════════════ */
     .nav-bar {
       background: var(--white);
       border-top: 1px solid var(--gray-100);
       display: flex;
       justify-content: space-around;
-      padding: 8px 0 calc(14px + env(safe-area-inset-bottom)); /* ✅ iPhone safe-area */
+      align-items: flex-end;
+      padding: 6px 4px calc(10px + env(safe-area-inset-bottom));
       flex-shrink: 0;
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
     }
     .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      padding: 6px 14px; border-radius: var(--radius-md);
-      cursor: pointer; font-size: 11px; color: var(--gray-400);
-      transition: var(--transition);
-      user-select: none;
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 4px 8px; border-radius: var(--r-md);
+      cursor: pointer; font-size: 10px; font-weight: 500;
+      color: var(--gray-400); transition: var(--tr);
+      user-select: none; min-width: 52px; text-align: center;
     }
-    .nav-item i {
-      font-size: 22px;
-      /* ✅ caja para que no se vean vacíos */
-      background: var(--gray-100);
-      border: 1px solid var(--gray-200);
-      border-radius: 10px;
-      padding: 6px;
-      line-height: 1;
-    }
+    .nav-item .bi { font-size: 22px; line-height: 1; display: block; }
     .nav-item.active { color: var(--blue-500); }
-    .nav-item.active i { background: var(--blue-50); border-color: var(--blue-100); color: var(--blue-500); }
-    .nav-item:hover { background: var(--gray-50); color: var(--blue-300); }
-    .nav-item:hover i { background: var(--blue-50); color: var(--blue-500); border-color: var(--blue-100); }
+    .nav-item:hover { color: var(--blue-300); }
 
-    /* ✅ botón Inicio en el centro, más “app pro” */
-    .nav-home {
-      transform: translateY(-6px);
-      background: var(--blue-50);
-      border-radius: 18px;
-      padding: 10px 18px;
-      color: var(--blue-500);
-      font-weight: 600;
-      box-shadow: 0 4px 14px rgba(24,95,165,0.12);
+    /* Inicio centrado y elevado */
+    .nav-home-center {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      cursor: pointer; user-select: none; margin-bottom: 2px;
     }
-    .nav-home i {
-      background: var(--white);
-      border-color: var(--blue-100);
+    .nav-home-icon {
+      width: 50px; height: 50px; border-radius: 16px;
+      background: var(--blue-500);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px rgba(24,95,165,0.35);
+      transition: var(--tr); margin-bottom: 2px;
     }
+    .nav-home-icon .bi { font-size: 24px; color: var(--white); line-height: 1; }
+    .nav-home-label { font-size: 10px; font-weight: 600; color: var(--blue-500); }
+    .nav-home-center:hover .nav-home-icon { background: var(--blue-700); transform: translateY(-2px); }
 
-    /* ═══════════════════════════════════════════════════════════
-       TARJETAS GENÉRICAS
-    ════════════════════════════════════════════════════════════ */
-    .card {
-      background: var(--white);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--gray-100);
-      box-shadow: var(--shadow-sm);
-    }
-    .card-pad { padding: 14px 16px; }
-
-    /* ═══════════════════════════════════════════════════════════
+    /* ══════════════════════════════════════════
        BOTONES
-    ════════════════════════════════════════════════════════════ */
+    ══════════════════════════════════════════ */
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 10px 18px; border-radius: var(--radius-md);
+      padding: 9px 16px; border-radius: var(--r-md);
       border: 1px solid var(--gray-200);
       background: var(--white); color: var(--gray-600);
       font-family: var(--font); font-size: 13px; font-weight: 500;
-      cursor: pointer; transition: var(--transition);
+      cursor: pointer; transition: var(--tr);
     }
-    .btn:hover { background: var(--gray-50); border-color: var(--gray-300, #c0c7d4); }
-    .btn-primary {
-      background: var(--blue-500); color: var(--white);
-      border-color: var(--blue-500);
-    }
+    .btn .bi { font-size: 15px; }
+    .btn:hover { background: var(--gray-50); border-color: var(--gray-400); }
+    .btn-primary { background: var(--blue-500); color: var(--white); border-color: var(--blue-500); }
     .btn-primary:hover { background: var(--blue-700); border-color: var(--blue-700); }
+    .btn-danger { background: var(--red-50); color: var(--red-500); border-color: var(--red-300); }
+    .btn-danger:hover { background: var(--red-300); color: var(--white); }
+    .btn-success { background: var(--green-50); color: var(--green-500); border-color: var(--green-300); }
     .btn-block { width: 100%; }
 
-    /* ═══════════════════════════════════════════════════════════
+    /* ══════════════════════════════════════════
        SECCIÓN LABEL
-    ════════════════════════════════════════════════════════════ */
+    ══════════════════════════════════════════ */
     .section-label {
       font-size: 11px; font-weight: 600; letter-spacing: 0.7px;
       text-transform: uppercase; color: var(--gray-400);
-      padding: 0 20px;
-      margin: 18px 0 10px;
+      padding: 0 16px; margin: 16px 0 8px;
+      display: flex; align-items: center; gap: 6px;
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       ── PANTALLA HOME ──
-    ════════════════════════════════════════════════════════════ */
-    #screen-home .home-header {
+    /* ══════════════════════════════════════════
+       TARJETAS GENÉRICAS
+    ══════════════════════════════════════════ */
+    .card {
+      background: var(--white); border-radius: var(--r-lg);
+      border: 1px solid var(--gray-100); box-shadow: var(--shadow-sm);
+    }
+    .card-pad { padding: 14px 16px; }
+
+    /* ══════════════════════════════════════════
+       HOME
+    ══════════════════════════════════════════ */
+    .home-header {
       background: var(--white);
-      padding: 16px 20px 20px;
+      padding: 14px 16px 16px;
       border-bottom: 1px solid var(--gray-100);
       flex-shrink: 0;
     }
-    .logo-row {
-      display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
-    }
+    .logo-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
     .logo-icon {
-      width: 38px; height: 38px; border-radius: 12px;
+      width: 40px; height: 40px; border-radius: 12px;
       background: var(--blue-500);
       display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
     }
-    .logo-icon i { font-size: 20px; color: var(--white); }
-    .logo-name { font-size: 18px; font-weight: 600; color: var(--gray-800); }
-    .logo-unit { font-size: 11px; color: var(--gray-400); font-weight: 400; }
+    .logo-icon .bi { font-size: 20px; color: var(--white); }
+    .logo-name { font-size: 18px; font-weight: 600; color: var(--gray-800); line-height: 1.2; }
+    .logo-unit { font-size: 10px; color: var(--gray-400); font-weight: 400; }
 
-    /* saludo editable */
     .greeting-line { font-size: 14px; color: var(--gray-600); margin-bottom: 8px; }
-    .greeting-name-wrap {
-      display: inline-flex; align-items: center; gap: 6px;
-      position: relative;
-    }
+    .greeting-name-wrap { display: inline-flex; align-items: center; gap: 4px; position: relative; }
     .greeting-name {
       font-weight: 600; color: var(--gray-800);
       cursor: pointer; border-bottom: 2px dashed var(--blue-300);
-      padding-bottom: 1px;
-      transition: var(--transition);
+      padding-bottom: 1px; transition: var(--tr);
     }
     .greeting-name:hover { color: var(--blue-500); }
-    /* dropdown del nombre */
-    .name-dropdown {
-      position: absolute; top: calc(100% + 6px); left: 0;
+    .edit-name-icon { font-size: 13px; color: var(--blue-300); cursor: pointer; }
+
+    .name-edit-panel {
+      position: absolute; top: calc(100% + 8px); left: 0;
       background: var(--white); border: 1px solid var(--gray-200);
-      border-radius: var(--radius-md); box-shadow: var(--shadow-md);
-      min-width: 220px; z-index: 100; overflow: hidden;
-      display: none;
+      border-radius: var(--r-md); box-shadow: var(--shadow-md);
+      min-width: 240px; z-index: 100; overflow: hidden; display: none;
     }
-    .name-dropdown.open { display: block; }
-    .dropdown-section { padding: 6px 0; border-bottom: 1px solid var(--gray-100); }
-    .dropdown-section:last-child { border-bottom: none; }
-    .dropdown-label {
+    .name-edit-panel.open { display: block; }
+    .panel-section { padding: 8px 0; }
+    .panel-section + .panel-section { border-top: 1px solid var(--gray-100); }
+    .panel-label {
       font-size: 10px; font-weight: 600; letter-spacing: 0.6px;
-      text-transform: uppercase; color: var(--gray-400);
-      padding: 6px 14px 2px;
+      text-transform: uppercase; color: var(--gray-400); padding: 4px 14px 6px;
     }
-    .dropdown-option {
+    .panel-option {
       padding: 8px 14px; font-size: 13px; font-weight: 500;
-      cursor: pointer; color: var(--gray-700, #384052);
-      display: flex; align-items: center; gap: 8px;
-      transition: var(--transition);
+      cursor: pointer; color: var(--gray-700);
+      display: flex; align-items: center; gap: 8px; transition: var(--tr);
     }
-    .dropdown-option:hover { background: var(--blue-50); color: var(--blue-500); }
-    .dropdown-input-row {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 14px;
+    .panel-option .bi { font-size: 15px; color: var(--gray-400); }
+    .panel-option:hover { background: var(--blue-50); color: var(--blue-500); }
+    .panel-option:hover .bi { color: var(--blue-500); }
+    .panel-option.selected { color: var(--blue-500); background: var(--blue-50); }
+    .panel-option.selected .bi { color: var(--blue-500); }
+    .panel-input-row {
+      display: flex; align-items: center; gap: 6px; padding: 8px 14px;
     }
-    .dropdown-input-row input {
-      flex: 1; border: 1px solid var(--gray-200); border-radius: var(--radius-sm);
-      padding: 6px 10px; font-family: var(--font); font-size: 13px;
-      outline: none; color: var(--gray-800);
+    .panel-input-row input {
+      flex: 1; border: 1px solid var(--gray-200); border-radius: var(--r-sm);
+      padding: 7px 10px; font-family: var(--font); font-size: 13px;
+      outline: none; color: var(--gray-800); background: var(--gray-50);
     }
-    .dropdown-input-row input:focus { border-color: var(--blue-300); }
-    .dropdown-input-row button {
+    .panel-input-row input:focus { border-color: var(--blue-300); background: var(--white); }
+    .panel-input-row button {
       background: var(--blue-500); color: var(--white); border: none;
-      border-radius: var(--radius-sm); padding: 6px 10px;
-      cursor: pointer; font-size: 12px; font-weight: 500;
+      border-radius: var(--r-sm); padding: 7px 12px;
+      cursor: pointer; font-size: 12px; font-weight: 600; transition: var(--tr);
+      font-family: var(--font);
     }
+    .panel-input-row button:hover { background: var(--blue-700); }
 
     .date-pill {
       display: inline-flex; align-items: center; gap: 5px;
       background: var(--blue-50); color: var(--blue-500);
       border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 500;
     }
+    .date-pill .bi { font-size: 13px; }
 
-    /* tarjetas principales home */
-    .main-cards { padding: 4px 16px 8px; display: flex; flex-direction: column; gap: 10px; }
+    .main-cards { padding: 0 16px 4px; display: flex; flex-direction: column; gap: 8px; }
     .main-card {
-      display: flex; align-items: center; gap: 14px;
-      padding: 16px 16px;
-      background: var(--white);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--gray-100);
-      box-shadow: var(--shadow-sm);
-      cursor: pointer;
-      transition: var(--transition);
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px; background: var(--white);
+      border-radius: var(--r-lg); border: 1px solid var(--gray-100);
+      box-shadow: var(--shadow-sm); cursor: pointer; transition: var(--tr);
     }
     .main-card:hover { border-color: var(--blue-100); box-shadow: var(--shadow-md); transform: translateY(-1px); }
-    .main-card:active { transform: translateY(0); box-shadow: var(--shadow-sm); }
+    .main-card:active { transform: none; box-shadow: var(--shadow-sm); }
     .card-icon {
-      width: 48px; height: 48px; border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; flex-shrink: 0;
+      width: 46px; height: 46px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-    .icon-blue  { background: var(--blue-50);   color: var(--blue-500); }
-    .icon-green { background: var(--green-50);  color: var(--green-500); }
-    .icon-purple{ background: var(--purple-50); color: var(--purple-500); }
+    .card-icon .bi { font-size: 22px; }
+    .icon-blue   { background: var(--blue-50);   color: var(--blue-500); }
+    .icon-green  { background: var(--green-50);  color: var(--green-500); }
+    .icon-teal   { background: var(--teal-50);   color: var(--teal-500); }
+    .icon-purple { background: var(--purple-50); color: var(--purple-500); }
+    .icon-amber  { background: var(--amber-50);  color: var(--amber-500); }
     .card-body { flex: 1; }
-    .card-title { font-size: 15px; font-weight: 600; color: var(--gray-800); }
-    .card-sub   { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
-    .card-arrow { color: var(--gray-200); font-size: 18px; }
+    .card-title { font-size: 14px; font-weight: 600; color: var(--gray-800); }
+    .card-sub   { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+    .card-arrow { color: var(--gray-200); font-size: 16px; }
 
-    /* stats rápidas */
-    .stat-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 10px; padding: 0 16px;
-    }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px; }
     .stat-card {
-      background: var(--white); border-radius: var(--radius-md);
+      background: var(--white); border-radius: var(--r-md);
       border: 1px solid var(--gray-100); padding: 12px 14px;
+      cursor: pointer; transition: var(--tr);
     }
+    .stat-card:hover { border-color: var(--blue-100); }
     .stat-num { font-size: 26px; font-weight: 600; color: var(--gray-800); }
     .stat-lbl { font-size: 11px; color: var(--gray-400); margin-top: 2px; display: flex; align-items: center; gap: 5px; }
     .stat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .dot-blue   { background: var(--blue-300); }
-    .dot-green  { background: var(--green-300); }
-    .dot-amber  { background: var(--amber-300); }
-    .dot-red    { background: var(--red-300); }
+    .dot-blue  { background: var(--blue-300); }
+    .dot-green { background: var(--green-300); }
+    .dot-amber { background: var(--amber-300); }
+    .dot-red   { background: var(--red-300); }
 
-    /* ═══════════════════════════════════════════════════════════
-       ── PANTALLA RUTA DIARIA ──
-    ════════════════════════════════════════════════════════════ */
-    .map-container {
-      position: relative;
-      height: 220px;
-      overflow: hidden;
-      flex-shrink: 0;
-      background: #e8eedd;
+    /* ══════════════════════════════════════════
+       RUTA DIARIA
+    ══════════════════════════════════════════ */
+    .map-container { position: relative; height: 200px; overflow: hidden; flex-shrink: 0; background: #e8eedd; }
+    #leaflet-map { width: 100%; height: 100%; }
+    .leaflet-pane { z-index: 1 !important; }
+    .leaflet-top, .leaflet-bottom { z-index: 10 !important; }
+
+    .add-location-btn {
+      position: absolute; bottom: 10px; left: 10px;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--blue-500); color: var(--white);
+      border: none; border-radius: 20px;
+      padding: 7px 14px; font-size: 12px; font-weight: 600; font-family: var(--font);
+      cursor: pointer; box-shadow: 0 4px 12px rgba(24,95,165,0.35);
+      transition: var(--tr); z-index: 500;
     }
-    .map-container iframe {
-      width: 100%; height: 100%;
-      border: none;
-    }
-    .map-overlay-btns {
-      position: absolute; bottom: 10px; right: 10px;
-      display: flex; gap: 6px; z-index: 5;
-    }
+    .add-location-btn .bi { font-size: 14px; }
+    .add-location-btn:hover { background: var(--blue-700); }
+
+    .map-overlay-btns { position: absolute; bottom: 10px; right: 10px; display: flex; gap: 6px; z-index: 500; }
     .map-btn {
       background: var(--white); border: 1px solid var(--gray-200);
-      border-radius: var(--radius-sm); padding: 7px 10px;
-      font-size: 12px; font-weight: 500; color: var(--gray-700, #384052);
-      cursor: pointer; display: flex; align-items: center; gap: 5px;
-      box-shadow: var(--shadow-sm); transition: var(--transition);
+      border-radius: var(--r-sm); padding: 6px 10px;
+      font-size: 11px; font-weight: 500; color: var(--gray-700);
+      cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
+      box-shadow: var(--shadow-sm); transition: var(--tr); font-family: var(--font);
     }
+    .map-btn .bi { font-size: 13px; }
     .map-btn:hover { background: var(--gray-50); }
-    .fab-add {
-      position: absolute; bottom: 10px; left: 10px;
-      width: 42px; height: 42px; border-radius: 50%;
-      background: var(--blue-500); color: var(--white);
-      border: none; cursor: pointer; font-size: 22px;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 12px rgba(24,95,165,0.35);
-      transition: var(--transition); z-index: 5;
-    }
-    .fab-add:hover { background: var(--blue-700); transform: scale(1.06); }
 
-    /* info ruta */
     .route-info-bar {
       background: var(--blue-50); border-bottom: 1px solid var(--blue-100);
-      padding: 8px 20px; display: flex; gap: 18px; align-items: center;
-      font-size: 12px; color: var(--blue-500); font-weight: 500;
-      flex-shrink: 0;
+      padding: 7px 16px; display: flex; gap: 14px; align-items: center;
+      font-size: 12px; color: var(--blue-500); font-weight: 500; flex-shrink: 0;
     }
-    .route-info-bar span { display: flex; align-items: center; gap: 5px; }
+    .route-info-bar span { display: flex; align-items: center; gap: 4px; }
+    .route-info-bar .bi { font-size: 14px; }
 
-    /* lista visitas */
-    .visits-list { padding: 0 16px 12px; }
+    .visits-list { padding: 0 16px 8px; }
     .visit-item {
-      display: flex; align-items: center; gap: 12px;
-      background: var(--white);
-      border-radius: var(--radius-md);
+      display: flex; align-items: center; gap: 10px;
+      background: var(--white); border-radius: var(--r-md);
       border: 1px solid var(--gray-100);
-      padding: 11px 14px;
-      margin-bottom: 8px;
-      transition: var(--transition);
+      padding: 10px 12px; margin-bottom: 7px; transition: var(--tr);
     }
     .visit-item:hover { border-color: var(--gray-200); box-shadow: var(--shadow-sm); }
+    .visit-item.done { opacity: 0.55; }
+    .visit-item.done .visit-addr { text-decoration: line-through; color: var(--gray-400); }
     .visit-num {
       width: 26px; height: 26px; border-radius: 8px;
       background: var(--blue-50); color: var(--blue-500);
-      font-size: 12px; font-weight: 600;
+      font-size: 11px; font-weight: 700;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
     .visit-info { flex: 1; min-width: 0; }
     .visit-addr { font-size: 13px; font-weight: 500; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .visit-obs  { font-size: 11px; color: var(--gray-400); }
-    .visit-actions { display: flex; gap: 6px; }
+    .visit-obs  { font-size: 11px; color: var(--gray-400); margin-top: 1px; }
+    .visit-actions { display: flex; gap: 4px; align-items: center; }
 
-    /* ✅ iconos con “caja” clara */
+    /* ✅ Botones de acción — colores semánticos claros */
     .icon-btn {
-      width: 30px; height: 30px;
-      border-radius: 9px;
-      border: 1px solid var(--gray-200);
-      background: var(--gray-100);
-      cursor: pointer; font-size: 14px; color: var(--gray-600);
-      display: flex; align-items: center; justify-content: center;
-      transition: var(--transition);
+      width: 32px; height: 32px; border-radius: 8px;
+      border: 1px solid var(--gray-200); background: var(--gray-50);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: var(--tr); font-size: 14px; color: var(--gray-500);
+      text-decoration: none;
     }
-    .icon-btn:hover { background: var(--gray-200); color: var(--blue-500); border-color: var(--gray-200); }
+    .icon-btn .bi { font-size: 14px; line-height: 1; }
+    .icon-btn:hover { background: var(--blue-50); color: var(--blue-500); border-color: var(--blue-100); }
+    .icon-btn.btn-check-done { color: var(--green-500); border-color: var(--green-300); background: var(--green-50); }
+    .icon-btn.btn-check-done:hover { background: var(--green-300); color: var(--white); }
+    .icon-btn.btn-check-pend:hover { background: var(--green-50); color: var(--green-500); border-color: var(--green-300); }
+    .icon-btn.btn-edit:hover { background: var(--blue-50); color: var(--blue-500); border-color: var(--blue-100); }
+    .icon-btn.btn-delete { color: var(--red-300); border-color: var(--red-50); background: var(--red-50); }
+    .icon-btn.btn-delete:hover { background: var(--red-300); color: var(--white); border-color: var(--red-300); }
 
     .priority-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .p-alta  { background: var(--red-300); }
     .p-media { background: var(--amber-300); }
     .p-baja  { background: var(--green-300); }
 
-    /* visitas lejanas */
     .distant-section {
-      margin: 4px 16px 16px;
-      background: var(--amber-50);
-      border: 1px solid #F5C4B3;
-      border-radius: var(--radius-lg);
-      padding: 14px 16px;
+      margin: 0 16px 12px;
+      background: var(--amber-50); border: 1px solid #F5C4B3;
+      border-radius: var(--r-lg); padding: 12px 14px;
     }
     .distant-header {
       display: flex; align-items: center; gap: 8px;
-      font-size: 13px; font-weight: 600; color: var(--amber-500);
-      margin-bottom: 10px;
+      font-size: 12px; font-weight: 600; color: var(--amber-500); margin-bottom: 8px;
     }
+    .distant-header .bi { font-size: 16px; }
     .distant-item {
-      background: var(--white); border-radius: var(--radius-md);
+      background: var(--white); border-radius: var(--r-md);
       border: 1px solid var(--gray-100);
-      padding: 10px 12px; margin-bottom: 7px;
-      display: flex; align-items: center; gap: 10px;
+      padding: 9px 11px; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 8px;
     }
     .distant-item:last-child { margin-bottom: 0; }
+    .distant-item .bi { font-size: 16px; color: var(--amber-500); flex-shrink: 0; }
 
-    /* acciones de ruta */
     .route-action-bar {
-      background: var(--white);
-      border-top: 1px solid var(--gray-100);
-      padding: 10px 16px;
-      display: flex; gap: 8px;
-      flex-shrink: 0;
+      background: var(--white); border-top: 1px solid var(--gray-100);
+      padding: 8px 12px; display: flex; gap: 6px; flex-shrink: 0;
     }
-    .route-action-bar .btn { flex: 1; font-size: 12px; }
+    .route-action-bar .btn { flex: 1; font-size: 11px; padding: 8px 6px; }
 
-    /* ═══════════════════════════════════════════════════════════
-       ── PANTALLA CURAS IA ──
-    ════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════
+       SEGUIMIENTO DE CURAS
+    ══════════════════════════════════════════ */
     .patient-selector {
-      padding: 10px 16px 4px;
-      display: flex; gap: 8px; overflow-x: auto;
-      scrollbar-width: none; flex-shrink: 0;
+      padding: 8px 16px 4px; display: flex; gap: 7px;
+      overflow-x: auto; scrollbar-width: none; flex-shrink: 0;
     }
     .patient-selector::-webkit-scrollbar { display: none; }
     .patient-chip {
-      padding: 6px 14px; border-radius: 20px;
+      padding: 5px 13px; border-radius: 20px;
       font-size: 12px; font-weight: 500;
       background: var(--gray-100); color: var(--gray-600);
       white-space: nowrap; cursor: pointer; border: 1.5px solid transparent;
-      transition: var(--transition);
+      transition: var(--tr);
     }
     .patient-chip.active {
-      background: var(--blue-50); color: var(--blue-500);
-      border-color: var(--blue-300);
+      background: var(--blue-50); color: var(--blue-500); border-color: var(--blue-300);
     }
 
-    /* timeline de curas */
-    .timeline { padding: 8px 16px 12px; }
+    /* Subida de imagen */
+    .photo-upload-area {
+      margin: 8px 16px 0;
+      background: var(--white); border-radius: var(--r-lg);
+      border: 2px dashed var(--gray-200); padding: 16px;
+      text-align: center; cursor: pointer; transition: var(--tr);
+      flex-shrink: 0;
+    }
+    .photo-upload-area:hover { border-color: var(--blue-300); background: var(--blue-50); }
+    .photo-upload-area .bi { font-size: 28px; color: var(--gray-400); display: block; margin-bottom: 6px; }
+    .photo-upload-area p { font-size: 12px; color: var(--gray-500); }
+    .photo-upload-area.drag-over { border-color: var(--blue-500); background: var(--blue-50); }
+
+    .photo-preview-wrap {
+      margin: 8px 16px 0;
+      position: relative; display: none; border-radius: var(--r-lg); overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+    .photo-preview-wrap.visible { display: block; }
+    .photo-preview-wrap img {
+      width: 100%; max-height: 180px; object-fit: cover; display: block;
+    }
+    .photo-preview-remove {
+      position: absolute; top: 8px; right: 8px;
+      background: rgba(0,0,0,0.55); color: var(--white);
+      border: none; border-radius: 50%; width: 28px; height: 28px;
+      cursor: pointer; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .photo-analysis-box {
+      margin: 8px 16px 0;
+      background: var(--white); border-radius: var(--r-lg);
+      border: 1.5px solid var(--blue-300); overflow: hidden; display: none;
+    }
+    .photo-analysis-box.visible { display: block; }
+    .analysis-header {
+      background: var(--blue-500); color: var(--white);
+      padding: 8px 14px; font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .analysis-header .bi { font-size: 14px; }
+    .analysis-body { padding: 12px 14px; }
+    .analysis-grade {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .grade-i    { background: var(--green-50);  color: var(--green-500); }
+    .grade-ii   { background: var(--amber-50);  color: var(--amber-500); }
+    .grade-iii  { background: #FEE2D1; color: #923506; }
+    .grade-iv   { background: var(--red-50);    color: var(--red-500); }
+    .grade-nd   { background: var(--gray-100);  color: var(--gray-600); }
+    .analysis-disclaimer {
+      background: var(--amber-50); border: 1px solid #F5C4B3;
+      border-radius: var(--r-sm); padding: 7px 10px; font-size: 11px;
+      color: var(--amber-500); margin-bottom: 10px;
+      display: flex; align-items: flex-start; gap: 6px;
+    }
+    .analysis-disclaimer .bi { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .analysis-section { margin-bottom: 10px; }
+    .analysis-section-title {
+      font-size: 11px; font-weight: 700; color: var(--gray-600);
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .analysis-section-title .bi { font-size: 12px; }
+    .analysis-section ul { padding-left: 16px; }
+    .analysis-section li { font-size: 12px; color: var(--gray-700); margin-bottom: 3px; }
+    .analysis-ref {
+      border-top: 1px solid var(--gray-100); margin-top: 10px; padding-top: 8px;
+      font-size: 10px; color: var(--gray-400); line-height: 1.5;
+    }
+
+    /* Timeline */
+    .timeline { padding: 4px 16px 8px; }
     .tl-date-label {
-      font-size: 11px; font-weight: 600; color: var(--gray-400);
-      letter-spacing: 0.5px; margin: 12px 0 8px;
-      text-transform: uppercase;
+      font-size: 10px; font-weight: 600; color: var(--gray-400);
+      letter-spacing: 0.5px; margin: 10px 0 6px; text-transform: uppercase;
     }
     .tl-entry {
-      background: var(--white);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--gray-100);
-      overflow: hidden; margin-bottom: 12px;
-      box-shadow: var(--shadow-sm);
+      background: var(--white); border-radius: var(--r-lg);
+      border: 1px solid var(--gray-100); overflow: hidden;
+      margin-bottom: 10px; box-shadow: var(--shadow-sm);
     }
     .tl-photo {
       width: 100%; height: 110px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 32px; color: var(--blue-300);
+      color: var(--blue-300);
       background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
-      cursor: pointer; position: relative;
+      cursor: pointer; position: relative; overflow: hidden;
     }
+    .tl-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tl-photo .bi { font-size: 30px; opacity: 0.6; }
     .tl-photo.warning { background: linear-gradient(135deg, var(--amber-50) 0%, #F5C4B3 100%); color: var(--amber-500); }
     .tl-photo-overlay {
       position: absolute; inset: 0; background: rgba(0,0,0,0);
-      display: flex; align-items: center; justify-content: center;
-      transition: var(--transition);
+      display: flex; align-items: center; justify-content: center; transition: var(--tr);
     }
-    .tl-photo:hover .tl-photo-overlay { background: rgba(0,0,0,0.12); }
-    .tl-meta { padding: 10px 12px 4px; }
+    .tl-photo:hover .tl-photo-overlay { background: rgba(0,0,0,0.10); }
+    .tl-meta { padding: 9px 12px 4px; }
     .tl-meta-row { display: flex; justify-content: space-between; align-items: center; }
     .tl-title { font-size: 13px; font-weight: 600; color: var(--gray-800); }
     .tl-badge {
-      font-size: 10px; font-weight: 600; padding: 3px 9px;
+      font-size: 10px; font-weight: 600; padding: 3px 8px;
       border-radius: 20px; letter-spacing: 0.3px;
     }
-    .badge-mejora { background: var(--green-50); color: var(--green-500); }
-    .badge-alerta { background: var(--amber-50); color: var(--amber-500); }
-    .badge-critico { background: var(--red-50); color: var(--red-500); }
+    .badge-mejora  { background: var(--green-50); color: var(--green-500); }
+    .badge-alerta  { background: var(--amber-50); color: var(--amber-500); }
+    .badge-critico { background: var(--red-50);   color: var(--red-500); }
     .tl-obs { font-size: 12px; color: var(--gray-600); margin: 4px 0; }
     .ai-analysis {
-      margin: 0 12px 12px;
-      background: var(--blue-50); border-radius: var(--radius-sm);
-      padding: 8px 10px; font-size: 12px; color: var(--blue-700);
-      display: flex; align-items: flex-start; gap: 7px;
+      margin: 0 12px 10px;
+      background: var(--blue-50); border-radius: var(--r-sm);
+      padding: 7px 10px; font-size: 11px; color: var(--blue-700);
+      display: flex; align-items: flex-start; gap: 6px;
     }
-    .ai-analysis i { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+    .ai-analysis .bi { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
     .tl-quick-actions {
       display: grid; grid-template-columns: repeat(3,1fr);
       gap: 1px; border-top: 1px solid var(--gray-100);
     }
     .tl-action {
-      padding: 9px 0; text-align: center;
+      padding: 8px 0; text-align: center;
       font-size: 11px; font-weight: 500; color: var(--gray-600);
       cursor: pointer; background: var(--white); border: none;
       display: flex; flex-direction: column; align-items: center; gap: 3px;
-      transition: var(--transition);
+      transition: var(--tr); font-family: var(--font);
     }
+    .tl-action .bi { font-size: 16px; }
     .tl-action:hover { background: var(--gray-50); color: var(--blue-500); }
-    .tl-action i {
-      font-size: 16px;
-      /* ✅ caja del icono para que no se vea “vacío” */
-      background: var(--gray-100);
-      border: 1px solid var(--gray-200);
-      border-radius: 10px;
-      padding: 6px;
-      line-height: 1;
-    }
 
-    /* botón añadir foto */
     .add-photo-bar {
-      padding: 10px 16px;
+      padding: 8px 14px;
       background: var(--white);
       border-top: 1px solid var(--gray-100);
-      display: flex; gap: 8px;
-      flex-shrink: 0;
+      display: flex; gap: 8px; flex-shrink: 0;
     }
     .add-photo-bar .btn { flex: 1; }
 
-    /* ═══════════════════════════════════════════════════════════
-       ASISTENTE IA (modal / overlay dentro del teléfono)
-    ════════════════════════════════════════════════════════════ */
-    .ai-overlay {
-      position: absolute; inset: 0; z-index: 50;
-      background: var(--white);
-      display: none; flex-direction: column;
-    }
-    .ai-overlay.open { display: flex; }
-    .ai-chat-header {
-      background: var(--white);
-      border-bottom: 1px solid var(--gray-100);
-      padding: 12px 18px;
-      display: flex; align-items: center; gap: 12px;
-      flex-shrink: 0;
-    }
-    .ai-badge {
-      background: var(--green-50); color: var(--green-500);
-      border-radius: 20px; padding: 3px 10px;
-      font-size: 11px; font-weight: 600; margin-left: auto;
-      display: flex; align-items: center; gap: 5px;
-    }
-    .ai-badge::before {
-      content: ''; width: 6px; height: 6px;
-      background: var(--green-300); border-radius: 50%;
-    }
-    .chat-messages {
-      flex: 1; overflow-y: auto; padding: 14px 16px;
-      display: flex; flex-direction: column; gap: 10px;
-      scrollbar-width: none;
-    }
-    .chat-messages::-webkit-scrollbar { display: none; }
-    .bubble {
-      max-width: 88%; padding: 10px 13px;
-      border-radius: 16px; font-size: 13px; line-height: 1.55;
-    }
-    .bubble.user {
-      align-self: flex-end;
-      background: var(--blue-500); color: var(--white);
-      border-bottom-right-radius: 4px;
-    }
-    .bubble.ai {
-      align-self: flex-start;
-      background: var(--gray-100); color: var(--gray-800);
-      border-bottom-left-radius: 4px;
-    }
-    .bubble.ai b { color: var(--blue-700); font-weight: 600; }
-    .bubble.ai ul { padding-left: 16px; margin-top: 4px; }
-    .bubble.ai li { margin-bottom: 3px; }
-    .chat-input-bar {
-      background: var(--white); border-top: 1px solid var(--gray-100);
-      padding: 10px 14px; display: flex; align-items: center; gap: 8px;
-      flex-shrink: 0;
-    }
-    .chat-input {
-      flex: 1; background: var(--gray-100);
-      border: 1px solid transparent; border-radius: 22px;
-      padding: 9px 14px; font-family: var(--font); font-size: 13px;
-      color: var(--gray-800); outline: none; resize: none;
-      max-height: 80px;
-    }
-    .chat-input:focus { border-color: var(--blue-300); background: var(--white); }
-    .chat-send-btn {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--blue-500); color: var(--white);
-      border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; flex-shrink: 0;
-      transition: var(--transition);
-    }
-    .chat-send-btn:hover { background: var(--blue-700); }
-    .chat-mic-btn {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--gray-100); color: var(--gray-600);
-      border: 1px solid var(--gray-200);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-      transition: var(--transition);
-    }
-    .chat-mic-btn.recording { background: var(--red-50); color: var(--red-300); animation: pulse 1s infinite; }
-    .chat-mic-btn:hover { background: var(--gray-200); }
+    /* ══════════════════════════════════════════
+       EVOLUTIA
+    ══════════════════════════════════════════ */
+    .evol-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
 
-    /* ═══════════════════════════════════════════════════════════
-       ── PANTALLA EVOLUTIVO IA ──
-    ════════════════════════════════════════════════════════════ */
-    .evol-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-
-    /* botón grabar grande */
     .record-area {
-      background: var(--white);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--gray-100);
-      padding: 20px 16px;
-      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      background: var(--white); border-radius: var(--r-lg);
+      border: 1px solid var(--gray-100); padding: 18px 16px;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
     }
     .record-btn-big {
-      width: 70px; height: 70px; border-radius: 50%;
+      width: 68px; height: 68px; border-radius: 50%;
       background: var(--blue-500); color: var(--white);
       border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(24,95,165,0.35); transition: var(--tr);
       font-size: 28px;
-      box-shadow: 0 4px 16px rgba(24,95,165,0.35);
-      transition: var(--transition);
     }
+    .record-btn-big .bi { font-size: 28px; line-height: 1; }
     .record-btn-big:hover { background: var(--blue-700); transform: scale(1.05); }
     .record-btn-big.recording {
       background: var(--red-300);
@@ -726,182 +669,243 @@
     }
     .record-hint { font-size: 12px; color: var(--gray-400); font-weight: 500; }
 
-    /* waveform animado */
-    .waveform {
-      display: flex; align-items: center; gap: 3px;
-      height: 36px; opacity: 0;
-      transition: opacity 0.3s;
-    }
+    .waveform { display: flex; align-items: center; gap: 3px; height: 32px; opacity: 0; transition: opacity 0.3s; }
     .waveform.active { opacity: 1; }
-    .wave-bar {
-      width: 3px; border-radius: 2px; background: var(--blue-300);
-      animation: waveAnim 1.1s ease-in-out infinite;
-    }
-    @keyframes waveAnim {
-      0%, 100% { height: 5px; }
-      50% { height: 28px; }
-    }
+    .wave-bar { width: 3px; border-radius: 2px; background: var(--blue-300); animation: waveAnim 1.1s ease-in-out infinite; }
+    @keyframes waveAnim { 0%, 100% { height: 5px; } 50% { height: 26px; } }
 
-    /* transcripción en tiempo real */
     .transcript-box {
-      background: var(--white); border-radius: var(--radius-lg);
-      border: 1px solid var(--gray-100); padding: 12px 14px;
+      background: var(--white); border-radius: var(--r-lg);
+      border: 1px solid var(--gray-100); padding: 11px 13px;
     }
     .box-label {
       font-size: 10px; font-weight: 600; letter-spacing: 0.6px;
       text-transform: uppercase; color: var(--gray-400);
-      display: flex; align-items: center; gap: 5px; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 5px; margin-bottom: 5px;
     }
-    .transcript-text {
-      font-size: 13px; color: var(--gray-600); font-style: italic;
-      line-height: 1.6; min-height: 32px;
-    }
+    .box-label .bi { font-size: 12px; color: var(--blue-300); }
+    .transcript-text { font-size: 13px; color: var(--gray-600); font-style: italic; line-height: 1.6; min-height: 30px; }
 
-    /* evolutivo generado */
+    /* SOAP selector */
+    .soap-selector {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 6px;
+    }
+    .soap-btn {
+      padding: 7px 4px; border-radius: var(--r-sm);
+      border: 1.5px solid var(--gray-200); background: var(--gray-50);
+      font-family: var(--font); font-size: 11px; font-weight: 600;
+      color: var(--gray-500); cursor: pointer; text-align: center;
+      transition: var(--tr);
+    }
+    .soap-btn.active { background: var(--blue-50); border-color: var(--blue-300); color: var(--blue-500); }
+    .soap-btn:hover { border-color: var(--blue-300); color: var(--blue-500); }
+
     .evolutivo-box {
-      background: var(--white); border-radius: var(--radius-lg);
-      border: 1.5px solid var(--blue-300); padding: 14px 14px;
+      background: var(--white); border-radius: var(--r-lg);
+      border: 1.5px solid var(--blue-300); padding: 12px 13px;
     }
     .evolutivo-text {
-      font-size: 13px; color: var(--gray-800); line-height: 1.7;
-      min-height: 48px;
+      font-size: 13px; color: var(--gray-800); line-height: 1.75; min-height: 44px;
+      white-space: pre-wrap;
     }
-    /* textarea de edición */
     .evolutivo-edit {
       width: 100%; border: none; outline: none; resize: none;
-      font-family: var(--font); font-size: 13px; color: var(--gray-800);
-      line-height: 1.7; background: transparent; display: none;
+      font-family: var(--mono); font-size: 12px; color: var(--gray-800);
+      line-height: 1.75; background: transparent; display: none;
     }
     .evolutivo-edit.active { display: block; }
     .evolutivo-text.hidden { display: none; }
 
-    .evol-actions {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-    }
+    .evol-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
     .evol-btn {
-      padding: 10px 0; border-radius: var(--radius-md);
+      padding: 9px 0; border-radius: var(--r-md);
       border: 1px solid var(--gray-200); background: var(--white);
       font-family: var(--font); font-size: 12px; font-weight: 500;
       color: var(--gray-600); cursor: pointer;
       display: flex; align-items: center; justify-content: center; gap: 5px;
-      transition: var(--transition);
+      transition: var(--tr);
     }
-    .evol-btn:hover { background: var(--gray-50); border-color: var(--gray-200); }
+    .evol-btn .bi { font-size: 14px; }
+    .evol-btn:hover { background: var(--gray-50); }
     .evol-btn.primary { background: var(--blue-500); color: var(--white); border-color: var(--blue-500); }
     .evol-btn.primary:hover { background: var(--blue-700); }
 
-    /* voz para editar evolutivo */
     .evol-voice-bar {
       display: flex; align-items: center; gap: 8px;
-      background: var(--purple-50); border-radius: var(--radius-md);
-      padding: 10px 14px; font-size: 12px; color: var(--purple-500);
+      background: var(--purple-50); border-radius: var(--r-md);
+      padding: 9px 13px; font-size: 12px; color: var(--purple-500);
     }
-    .evol-voice-bar i { font-size: 18px; }
+    .evol-voice-bar .bi { font-size: 16px; }
     .voice-edit-btn {
       margin-left: auto; background: var(--purple-500); color: var(--white);
-      border: none; border-radius: var(--radius-sm); padding: 5px 12px;
-      font-size: 11px; font-weight: 600; cursor: pointer;
-      transition: var(--transition);
+      border: none; border-radius: var(--r-sm); padding: 5px 11px;
+      font-size: 11px; font-weight: 600; cursor: pointer; transition: var(--tr); font-family: var(--font);
     }
     .voice-edit-btn:hover { background: var(--purple-300); }
 
-    /* ═══════════════════════════════════════════════════════════
-       MODALES GENÉRICOS (dialogs)
-    ════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════
+       ASISTENTE IA
+    ══════════════════════════════════════════ */
+    .ai-chat-header {
+      background: var(--white); border-bottom: 1px solid var(--gray-100);
+      padding: 11px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    }
+    .ai-badge {
+      background: var(--green-50); color: var(--green-500);
+      border-radius: 20px; padding: 3px 10px;
+      font-size: 11px; font-weight: 600; margin-left: auto;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .ai-badge::before { content: ''; width: 6px; height: 6px; background: var(--green-300); border-radius: 50%; }
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 12px 14px;
+      display: flex; flex-direction: column; gap: 8px; scrollbar-width: none;
+    }
+    .chat-messages::-webkit-scrollbar { display: none; }
+    .bubble {
+      max-width: 90%; padding: 9px 13px;
+      border-radius: 14px; font-size: 13px; line-height: 1.55;
+    }
+    .bubble.user { align-self: flex-end; background: var(--blue-500); color: var(--white); border-bottom-right-radius: 4px; }
+    .bubble.ai { align-self: flex-start; background: var(--gray-100); color: var(--gray-800); border-bottom-left-radius: 4px; }
+    .bubble.ai b { color: var(--blue-700); font-weight: 600; }
+    .bubble.ai ul { padding-left: 16px; margin-top: 4px; }
+    .bubble.ai li { margin-bottom: 3px; }
+    .bubble.ai .ref-block {
+      margin-top: 8px; padding-top: 8px;
+      border-top: 1px solid var(--gray-200);
+      font-size: 11px; color: var(--gray-500); font-style: italic;
+    }
+    .chat-input-bar {
+      background: var(--white); border-top: 1px solid var(--gray-100);
+      padding: 8px 12px; display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+    }
+    .chat-input {
+      flex: 1; background: var(--gray-100);
+      border: 1px solid transparent; border-radius: 20px;
+      padding: 8px 12px; font-family: var(--font); font-size: 13px;
+      color: var(--gray-800); outline: none; resize: none; max-height: 80px;
+    }
+    .chat-input:focus { border-color: var(--blue-300); background: var(--white); }
+    .chat-send-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--blue-500); color: var(--white); border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: var(--tr); font-size: 15px;
+    }
+    .chat-send-btn .bi { font-size: 15px; }
+    .chat-send-btn:hover { background: var(--blue-700); }
+    .chat-mic-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--gray-100); color: var(--gray-600);
+      border: 1px solid var(--gray-200); cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--tr);
+    }
+    .chat-mic-btn .bi { font-size: 16px; }
+    .chat-mic-btn.recording { background: var(--red-50); color: var(--red-300); }
+    .chat-mic-btn:hover { background: var(--gray-200); }
+
+    /* ══════════════════════════════════════════
+       MODALES
+    ══════════════════════════════════════════ */
     .modal-backdrop {
       position: absolute; inset: 0; z-index: 60;
-      background: rgba(0,0,0,0.35);
-      display: none; align-items: flex-end;
+      background: rgba(0,0,0,0.35); display: none; align-items: flex-end;
     }
     .modal-backdrop.open { display: flex; }
     .modal-sheet {
       background: var(--white); width: 100%;
-      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-      padding: 20px 20px 30px;
+      border-radius: var(--r-xl) var(--r-xl) 0 0;
+      padding: 18px 18px 28px;
       animation: slideUp 0.25s cubic-bezier(0.4,0,0.2,1);
     }
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to   { transform: translateY(0); }
-    }
-    .modal-handle {
-      width: 36px; height: 4px; background: var(--gray-200);
-      border-radius: 2px; margin: 0 auto 18px;
-    }
-    .modal-title { font-size: 16px; font-weight: 600; color: var(--gray-800); margin-bottom: 14px; }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    .modal-handle { width: 36px; height: 4px; background: var(--gray-200); border-radius: 2px; margin: 0 auto 16px; }
+    .modal-title { font-size: 15px; font-weight: 600; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .modal-title .bi { font-size: 18px; }
     .modal-input {
-      width: 100%; border: 1px solid var(--gray-200); border-radius: var(--radius-md);
-      padding: 11px 14px; font-family: var(--font); font-size: 14px;
-      color: var(--gray-800); outline: none; margin-bottom: 10px;
+      width: 100%; border: 1px solid var(--gray-200); border-radius: var(--r-md);
+      padding: 10px 13px; font-family: var(--font); font-size: 13px;
+      color: var(--gray-800); outline: none; margin-bottom: 8px; background: var(--gray-50);
     }
-    .modal-input:focus { border-color: var(--blue-300); }
-    .modal-actions { display: flex; gap: 8px; }
+    .modal-input:focus { border-color: var(--blue-300); background: var(--white); }
+    .modal-actions { display: flex; gap: 8px; margin-top: 4px; }
 
-    /* ═══════════════════════════════════════════════════════════
-       TOAST NOTIFICACIONES
-    ════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════
+       VISTA IMPRIMIR / COMPARTIR
+    ══════════════════════════════════════════ */
+    .print-overlay {
+      position: absolute; inset: 0; z-index: 70;
+      background: var(--white); display: none; flex-direction: column; overflow-y: auto;
+    }
+    .print-overlay.open { display: flex; }
+    .print-header { background: var(--blue-500); color: var(--white); padding: 16px; flex-shrink: 0; }
+    .print-header h2 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .print-header p  { font-size: 12px; opacity: 0.8; }
+    .print-map-area  { height: 180px; background: var(--gray-100); position: relative; flex-shrink: 0; }
+    #print-map { width: 100%; height: 100%; }
+    .print-body { padding: 14px 16px; }
+    .print-stop { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--gray-100); }
+    .print-stop:last-child { border-bottom: none; }
+    .print-stop-num { width: 24px; height: 24px; border-radius: 8px; background: var(--blue-50); color: var(--blue-500); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .print-stop-addr { font-size: 13px; font-weight: 500; color: var(--gray-800); }
+    .print-stop-obs  { font-size: 11px; color: var(--gray-400); }
+    .print-totals { background: var(--blue-50); border-radius: var(--r-md); padding: 12px 14px; margin-top: 12px; display: flex; justify-content: space-around; }
+    .print-total-item { text-align: center; }
+    .print-total-num  { font-size: 20px; font-weight: 600; color: var(--blue-500); }
+    .print-total-lbl  { font-size: 11px; color: var(--blue-700); font-weight: 500; }
+    .print-actions { padding: 10px 16px 24px; display: flex; gap: 8px; background: var(--white); border-top: 1px solid var(--gray-100); flex-shrink: 0; }
+    .print-actions .btn { flex: 1; }
+
+    /* ══════════════════════════════════════════
+       TOAST
+    ══════════════════════════════════════════ */
     .toast {
-      position: absolute; bottom: 96px; left: 50%;
+      position: absolute; bottom: 88px; left: 50%;
       transform: translateX(-50%) translateY(10px);
       background: var(--gray-800); color: var(--white);
-      padding: 9px 18px; border-radius: 22px;
-      font-size: 12px; font-weight: 500; white-space: nowrap;
+      padding: 8px 16px; border-radius: 20px;
+      font-size: 12px; font-weight: 500;
       opacity: 0; transition: all 0.3s; z-index: 200;
-      pointer-events: none;
+      pointer-events: none; max-width: 280px;
+      text-align: center; white-space: normal;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ═══════════════════════════════════════════════════════════
-       ANIMACIONES UTILIDAD
-    ════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════
+       ANIMACIONES
+    ══════════════════════════════════════════ */
     @keyframes pulse {
       0%, 100% { box-shadow: 0 0 0 0 rgba(226,75,74,0.4); }
-      50% { box-shadow: 0 0 0 10px rgba(226,75,74,0); }
+      50%       { box-shadow: 0 0 0 10px rgba(226,75,74,0); }
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .fade-in { animation: fadeIn 0.25s ease forwards; }
+    .fade-in { animation: fadeIn 0.22s ease forwards; }
 
-    /* typing indicator */
     .typing-dots span {
       display: inline-block; width: 7px; height: 7px;
       border-radius: 50%; background: var(--gray-400);
-      animation: dot 1.2s ease-in-out infinite;
-      margin-right: 3px;
+      animation: dot 1.2s ease-in-out infinite; margin-right: 3px;
     }
     .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
     .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes dot {
-      0%, 100% { transform: translateY(0); opacity: 0.5; }
-      50% { transform: translateY(-5px); opacity: 1; }
-    }
+    @keyframes dot { 0%, 100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(-5px); opacity: 1; } }
 
-    /* estado vacío */
-    .empty-state {
-      text-align: center; padding: 40px 20px;
-      color: var(--gray-400); font-size: 13px;
-    }
-    .empty-state i { font-size: 40px; display: block; margin-bottom: 10px; }
+    .empty-state { text-align: center; padding: 36px 20px; color: var(--gray-400); font-size: 13px; }
+    .empty-state .bi { font-size: 36px; display: block; margin-bottom: 8px; }
 
-    /* responsive: en pantallas anchas se ve bien */
+    /* Responsive */
     @media (max-width: 440px) {
       #app-shell { padding: 0; background: var(--gray-50); }
-      #phone {
-        width: 100%; min-height: 100vh;
-        border-radius: 0;
-        box-shadow: none;
-      }
+      #phone { width: 100%; min-height: 100vh; border-radius: 0; box-shadow: none; }
     }
   </style>
 </head>
-
 <body>
 
-<!-- ════════════════════════════════════════════════════════════
-     CONTENEDOR PRINCIPAL
-════════════════════════════════════════════════════════════ -->
 <div id="app-shell">
 <div id="phone">
 
@@ -909,205 +913,182 @@
   <div class="status-bar">
     <span id="clock">9:41</span>
     <div class="status-icons">
-      <i class="ti ti-wifi"></i>
-      <i class="ti ti-battery-2"></i>
+      <i class="bi bi-wifi"></i>
+      <i class="bi bi-battery-half"></i>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════
-       PANTALLA: HOME
-  ═══════════════════════════════════════════ -->
+  <!-- ══════════════════════════════
+       HOME
+  ════════════════════════════════ -->
   <div id="screen-home" class="screen active">
     <div class="home-header">
-
-      <!-- Logo -->
       <div class="logo-row">
-        <div class="logo-icon"><i class="ti ti-stethoscope"></i></div>
+        <div class="logo-icon"><i class="bi bi-heart-pulse-fill"></i></div>
         <div>
           <div class="logo-name">AsisteUHD</div>
           <div class="logo-unit">Unidad de Hospitalización Domiciliaria</div>
         </div>
       </div>
 
-      <!-- Saludo editable -->
       <div class="greeting-line">
         Buenos días,
         <span class="greeting-name-wrap">
-          <!-- Al hacer click abre el dropdown -->
-          <span id="greeting-display" class="greeting-name" onclick="toggleNameDropdown(event)">
-            Dra. García
-          </span>
-          <!-- Dropdown de selección / edición de nombre -->
-          <div id="name-dropdown" class="name-dropdown">
-            <div class="dropdown-section">
-              <div class="dropdown-label">Título profesional</div>
-              <div class="dropdown-option" onclick="setTitle('Dra.')"><i class="ti ti-user-check"></i> Dra.</div>
-              <div class="dropdown-option" onclick="setTitle('Dr.')"><i class="ti ti-user-check"></i> Dr.</div>
-              <div class="dropdown-option" onclick="setTitle('Enfermera')"><i class="ti ti-nurse"></i> Enfermera</div>
-              <div class="dropdown-option" onclick="setTitle('Enfermero')"><i class="ti ti-nurse"></i> Enfermero</div>
+          <span id="greeting-display" class="greeting-name" onclick="toggleNamePanel(event)">Dra. García</span>
+          <i class="bi bi-pencil-fill edit-name-icon" onclick="toggleNamePanel(event)" title="Editar nombre"></i>
+          <div id="name-panel" class="name-edit-panel">
+            <div class="panel-section">
+              <div class="panel-label">Título profesional</div>
+              <div class="panel-option" onclick="setTitle('Dra.')"><i class="bi bi-person-check"></i> Dra.</div>
+              <div class="panel-option" onclick="setTitle('Dr.')"><i class="bi bi-person-check"></i> Dr.</div>
+              <div class="panel-option" onclick="setTitle('Enfermera')"><i class="bi bi-person-heart"></i> Enfermera</div>
+              <div class="panel-option" onclick="setTitle('Enfermero')"><i class="bi bi-person-heart"></i> Enfermero</div>
+              <div class="panel-option" onclick="setTitle('Fisioterapeuta')"><i class="bi bi-activity"></i> Fisioterapeuta</div>
             </div>
-            <div class="dropdown-section">
-              <div class="dropdown-label">Nombre</div>
-              <div class="dropdown-input-row">
-                <input id="name-input" type="text" placeholder="Tu nombre..." value="García" />
-                <button onclick="applyName()">OK</button>
+            <div class="panel-section">
+              <div class="panel-label">Tu nombre</div>
+              <div class="panel-input-row">
+                <input id="name-input" type="text" placeholder="Escribe tu nombre..." />
+                <button onclick="applyName()">Guardar</button>
               </div>
             </div>
           </div>
         </span>
       </div>
 
-      <!-- Fecha dinámica -->
       <div style="margin-top:8px">
-        <span class="date-pill">
-          <i class="ti ti-calendar" style="font-size:13px"></i>
-          <span id="today-date"></span>
-        </span>
+        <span class="date-pill"><i class="bi bi-calendar3"></i><span id="today-date"></span></span>
       </div>
     </div>
 
-    <!-- Cuerpo scrollable del home -->
     <div class="screen-body">
       <div class="section-label">Acceso rápido</div>
       <div class="main-cards">
-
-        <!-- Ruta diaria -->
         <div class="main-card" onclick="showScreen('screen-rutas')">
-          <div class="card-icon icon-blue"><i class="ti ti-map-2"></i></div>
+          <div class="card-icon icon-blue"><i class="bi bi-map"></i></div>
           <div class="card-body">
             <div class="card-title">Ruta diaria</div>
-            <div class="card-sub">7 visitas · 34 km estimados</div>
+            <div class="card-sub" id="home-ruta-sub">0 visitas · 0 km estimados</div>
           </div>
-          <i class="ti ti-chevron-right card-arrow"></i>
+          <i class="bi bi-chevron-right card-arrow"></i>
         </div>
-
-        <!-- Curas IA -->
         <div class="main-card" onclick="showScreen('screen-curas')">
-          <div class="card-icon icon-green"><i class="ti ti-bandage"></i></div>
+          <div class="card-icon icon-green"><i class="bi bi-bandaid"></i></div>
           <div class="card-body">
-            <div class="card-title">Curas IA</div>
-            <div class="card-sub">3 pacientes en seguimiento</div>
+            <div class="card-title">Seguimiento de Curas</div>
+            <div class="card-sub" id="home-curas-sub">0 registros de curas</div>
           </div>
-          <i class="ti ti-chevron-right card-arrow"></i>
+          <i class="bi bi-chevron-right card-arrow"></i>
         </div>
-
-        <!-- Evolutivo IA -->
         <div class="main-card" onclick="showScreen('screen-evolutivo')">
-          <div class="card-icon icon-purple"><i class="ti ti-microphone"></i></div>
+          <div class="card-icon icon-purple"><i class="bi bi-mic-fill"></i></div>
           <div class="card-body">
-            <div class="card-title">Evolutivo IA</div>
-            <div class="card-sub">Dictado clínico inteligente</div>
+            <div class="card-title">EvolutIA</div>
+            <div class="card-sub">Dictado clínico estructurado</div>
           </div>
-          <i class="ti ti-chevron-right card-arrow"></i>
+          <i class="bi bi-chevron-right card-arrow"></i>
+        </div>
+        <div class="main-card" onclick="showScreen('screen-asistente')">
+          <div class="card-icon icon-amber"><i class="bi bi-robot"></i></div>
+          <div class="card-body">
+            <div class="card-title">Asistente IA</div>
+            <div class="card-sub">Consulta basada en evidencia</div>
+          </div>
+          <i class="bi bi-chevron-right card-arrow"></i>
         </div>
       </div>
 
       <div class="section-label">Resumen de hoy</div>
       <div class="stat-grid">
-        <div class="stat-card">
-          <div class="stat-num">7</div>
+        <div class="stat-card" onclick="showScreen('screen-rutas')">
+          <div class="stat-num" id="stat-visitas">0</div>
           <div class="stat-lbl"><span class="stat-dot dot-blue"></span>Visitas pendientes</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-num">2</div>
-          <div class="stat-lbl"><span class="stat-dot dot-green"></span>Curas programadas</div>
+        <div class="stat-card" onclick="showScreen('screen-curas')">
+          <div class="stat-num" id="stat-curas">0</div>
+          <div class="stat-lbl"><span class="stat-dot dot-green"></span>Curas hoy</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-num">1</div>
+        <div class="stat-card" onclick="showScreen('screen-rutas')">
+          <div class="stat-num" id="stat-prioridad">0</div>
           <div class="stat-lbl"><span class="stat-dot dot-red"></span>Prioridad alta</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-num">34</div>
+        <div class="stat-card" onclick="showScreen('screen-rutas')">
+          <div class="stat-num" id="stat-km">0</div>
           <div class="stat-lbl"><span class="stat-dot dot-amber"></span>km estimados</div>
         </div>
       </div>
-      <div style="height:20px"></div>
+      <div style="height:16px"></div>
     </div>
-  </div><!-- /screen-home -->
+  </div>
 
-
-  <!-- ══════════════════════════════════════════
-       PANTALLA: RUTA DIARIA
-  ═══════════════════════════════════════════ -->
+  <!-- ══════════════════════════
+       RUTA DIARIA
+  ════════════════════════════ -->
   <div id="screen-rutas" class="screen">
-
-    <!-- Cabecera -->
     <div class="inner-header">
-      <!-- ✅ volver con historial real -->
-      <button class="back-btn" onclick="goBack()"><i class="ti ti-arrow-left"></i></button>
-      <span class="inner-title">Ruta diaria</span>
+      <button class="back-btn" onclick="goBack()" aria-label="Volver"><i class="bi bi-arrow-left"></i></button>
+      <span class="inner-title"><i class="bi bi-map" style="color:var(--blue-500)"></i>Ruta diaria</span>
       <span class="header-badge" style="background:var(--blue-50);color:var(--blue-500);">
-        <i class="ti ti-route" style="font-size:13px"></i>Optimizada
+        <i class="bi bi-signpost-split"></i>Optimizada
       </span>
     </div>
 
-    <!-- Mapa con Google Maps iframe -->
     <div class="map-container">
-      <iframe
-        id="map-iframe"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d50000!2d-0.49!3d38.34!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd6235da7ab2a89d%3A0x3016e0bf562c4c37!2sAlicante!5e0!3m2!1ses!2ses!4v1715600000000"
-        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
-      <!-- Botón añadir visita -->
-      <button class="fab-add" onclick="openAddVisitModal()" title="Añadir dirección">
-        <i class="ti ti-plus"></i>
+      <div id="leaflet-map"></div>
+      <button class="add-location-btn" onclick="useMyLocation()" aria-label="Añadir mi ubicación GPS">
+        <i class="bi bi-crosshair2"></i> Mi ubicación
       </button>
-      <!-- Botones overlay -->
       <div class="map-overlay-btns">
-        <button class="map-btn" onclick="printMap()"><i class="ti ti-printer"></i>Imprimir</button>
-        <button class="map-btn" onclick="recalcRoute()"><i class="ti ti-refresh"></i>Recalcular</button>
+        <button class="map-btn" onclick="openSharePrint()"><i class="bi bi-printer"></i> Imprimir</button>
+        <button class="map-btn" onclick="recalcRoute()"><i class="bi bi-arrow-clockwise"></i> Recalc.</button>
       </div>
     </div>
 
-    <!-- Barra info ruta -->
     <div class="route-info-bar">
-      <span><i class="ti ti-map-pin"></i><span id="visit-count">3</span> paradas</span>
-      <span><i class="ti ti-clock"></i><span id="route-time">52 min</span> estimados</span>
-      <span><i class="ti ti-road"></i><span id="route-km">18.4 km</span></span>
+      <span><i class="bi bi-geo-alt-fill"></i><span id="visit-count">0</span> paradas</span>
+      <span><i class="bi bi-clock"></i><span id="route-time">0 min</span></span>
+      <span><i class="bi bi-signpost"></i><span id="route-km">0 km</span></span>
     </div>
 
-    <!-- Lista scrollable -->
     <div class="screen-body">
-      <div class="section-label">Visitas del recorrido</div>
-      <div class="visits-list" id="visits-list">
-        <!-- generadas por JS -->
-      </div>
-
-      <!-- Visitas lejanas / independientes -->
-      <div class="section-label">Ubicaciones lejanas</div>
-      <div class="distant-section">
-        <div class="distant-header">
-          <i class="ti ti-alert-triangle" style="font-size:18px"></i>
-          Estas visitas no se incluyen en el mapa porque alterarían la ruta optimizada
-        </div>
-        <div id="distant-list">
-          <!-- generadas por JS -->
-        </div>
-        <button class="btn btn-block" style="margin-top:8px;font-size:12px"
-          onclick="openAddDistantModal()">
-          <i class="ti ti-plus"></i> Añadir ubicación lejana
+      <div class="section-label" style="justify-content:space-between;padding-right:16px">
+        <span><i class="bi bi-list-check"></i> Visitas del recorrido</span>
+        <button class="btn" style="font-size:11px;padding:5px 10px;" onclick="openAddVisitModal()">
+          <i class="bi bi-plus-lg"></i> Añadir
         </button>
       </div>
-      <div style="height:10px"></div>
+      <div class="visits-list" id="visits-list"></div>
+
+      <div class="section-label"><i class="bi bi-exclamation-triangle"></i> Ubicaciones lejanas</div>
+      <div class="distant-section">
+        <div class="distant-header">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          No incluidas en la ruta optimizada
+        </div>
+        <div id="distant-list"></div>
+        <button class="btn btn-block" style="margin-top:8px;font-size:12px" onclick="openAddDistantModal()">
+          <i class="bi bi-plus-lg"></i> Añadir ubicación lejana
+        </button>
+      </div>
+      <div style="height:8px"></div>
     </div>
 
-    <!-- Barra de acciones -->
     <div class="route-action-bar">
-      <button class="btn" onclick="exportRoutePDF()"><i class="ti ti-file-export"></i>PDF</button>
-      <button class="btn" onclick="shareRoute()"><i class="ti ti-share"></i>Compartir</button>
-      <button class="btn btn-primary" onclick="startNavigation()"><i class="ti ti-navigation"></i>Iniciar ruta</button>
+      <button class="btn" onclick="openSharePrint()"><i class="bi bi-file-earmark-arrow-down"></i>PDF</button>
+      <button class="btn" onclick="shareRouteText()"><i class="bi bi-share"></i>Compartir</button>
+      <button class="btn btn-primary" onclick="startNavigation()"><i class="bi bi-navigation-fill"></i>Iniciar</button>
     </div>
 
-    <!-- Modal añadir visita -->
+    <!-- Modal visita -->
     <div id="modal-visit" class="modal-backdrop" onclick="closeModal('modal-visit')">
       <div class="modal-sheet" onclick="event.stopPropagation()">
         <div class="modal-handle"></div>
-        <div class="modal-title"><i class="ti ti-map-pin" style="color:var(--blue-500)"></i> Nueva visita</div>
+        <div class="modal-title"><i class="bi bi-geo-alt-fill" style="color:var(--blue-500)"></i> Nueva visita</div>
         <input id="visit-addr-input" class="modal-input" type="text" placeholder="Calle y número..." />
         <input id="visit-obs-input" class="modal-input" type="text" placeholder="Observaciones (opcional)" />
-        <div style="margin-bottom:10px">
-          <label style="font-size:12px;color:var(--gray-600);font-weight:500">Prioridad</label>
-          <select id="visit-priority" class="modal-input" style="margin-top:5px;margin-bottom:0">
+        <div style="margin-bottom:8px">
+          <label style="font-size:11px;color:var(--gray-600);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:5px">Prioridad</label>
+          <select id="visit-priority" class="modal-input" style="margin-bottom:0;cursor:pointer">
             <option value="alta">🔴 Alta</option>
             <option value="media" selected>🟡 Media</option>
             <option value="baja">🟢 Baja</option>
@@ -1120,11 +1101,11 @@
       </div>
     </div>
 
-    <!-- Modal añadir visita lejana -->
+    <!-- Modal visita lejana -->
     <div id="modal-distant" class="modal-backdrop" onclick="closeModal('modal-distant')">
       <div class="modal-sheet" onclick="event.stopPropagation()">
         <div class="modal-handle"></div>
-        <div class="modal-title"><i class="ti ti-alert-triangle" style="color:var(--amber-500)"></i> Ubicación lejana</div>
+        <div class="modal-title"><i class="bi bi-exclamation-triangle-fill" style="color:var(--amber-500)"></i> Ubicación lejana</div>
         <input id="distant-addr-input" class="modal-input" type="text" placeholder="Dirección..." />
         <input id="distant-obs-input" class="modal-input" type="text" placeholder="Motivo o notas..." />
         <div class="modal-actions">
@@ -1134,110 +1115,119 @@
       </div>
     </div>
 
-  </div><!-- /screen-rutas -->
+    <!-- Vista imprimir/compartir -->
+    <div id="print-overlay" class="print-overlay">
+      <div class="print-header">
+        <h2>Ruta del día — <span id="print-date"></span></h2>
+        <p id="print-prof">Profesional: Dra. García</p>
+      </div>
+      <div class="print-map-area"><div id="print-map"></div></div>
+      <div class="print-body">
+        <p style="font-size:12px;font-weight:600;color:var(--gray-600);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Paradas del recorrido</p>
+        <div id="print-stops"></div>
+        <div class="print-totals" id="print-totals"></div>
+      </div>
+      <div class="print-actions">
+        <button class="btn" onclick="closePrint()"><i class="bi bi-x-lg"></i>Cerrar</button>
+        <button class="btn btn-primary" onclick="doPrint()"><i class="bi bi-printer-fill"></i>Imprimir / PDF</button>
+      </div>
+    </div>
+  </div>
 
-
-  <!-- ══════════════════════════════════════════
-       PANTALLA: CURAS IA
-  ═══════════════════════════════════════════ -->
+  <!-- ══════════════════════════
+       SEGUIMIENTO DE CURAS
+  ════════════════════════════ -->
   <div id="screen-curas" class="screen">
-
-    <!-- Cabecera -->
     <div class="inner-header">
-      <!-- ✅ volver con historial real -->
-      <button class="back-btn" onclick="goBack()"><i class="ti ti-arrow-left"></i></button>
-      <span class="inner-title">Curas IA</span>
-      <!-- Botón Asistente IA -->
+      <button class="back-btn" onclick="goBack()" aria-label="Volver"><i class="bi bi-arrow-left"></i></button>
+      <span class="inner-title"><i class="bi bi-bandaid" style="color:var(--green-500)"></i>Seguimiento de Curas</span>
       <button class="header-badge"
-        style="background:var(--green-50);color:var(--green-500);border:none;cursor:pointer;font-weight:600;font-size:11px;padding:5px 12px;border-radius:20px"
-        onclick="openAI()">
-        <i class="ti ti-sparkles" style="font-size:13px"></i> Asistente IA
+        style="background:var(--green-50);color:var(--green-500);border:none;cursor:pointer;font-weight:600;font-size:11px;padding:5px 11px;border-radius:20px"
+        onclick="showScreen('screen-asistente')">
+        <i class="bi bi-stars"></i> Asistente
       </button>
     </div>
 
-    <!-- Selector de paciente -->
     <div class="patient-selector">
       <div class="patient-chip active" onclick="selectPatient(this,'García M.')">García M.</div>
       <div class="patient-chip" onclick="selectPatient(this,'López R.')">López R.</div>
       <div class="patient-chip" onclick="selectPatient(this,'Martínez A.')">Martínez A.</div>
+      <div class="patient-chip" onclick="selectPatient(this,'+ Nuevo')">+ Nuevo</div>
     </div>
 
-    <!-- Timeline scrollable -->
-    <div class="screen-body">
-      <div class="timeline" id="wound-timeline">
-        <!-- generado por JS -->
+    <!-- ✅ Zona subida de imagen con previsualización -->
+    <div class="photo-upload-area" id="upload-area"
+         onclick="document.getElementById('photo-file-input').click()"
+         ondragover="event.preventDefault();this.classList.add('drag-over')"
+         ondragleave="this.classList.remove('drag-over')"
+         ondrop="handlePhotoDrop(event)">
+      <i class="bi bi-camera-fill"></i>
+      <p><strong>Pulsa para añadir foto</strong> o arrastra aquí</p>
+      <p style="margin-top:2px;font-size:11px;color:var(--gray-400)">Galería o cámara · JPG, PNG, HEIC</p>
+    </div>
+    <!-- Input oculto -->
+    <input type="file" id="photo-file-input" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoFile(event)" />
+
+    <!-- Previsualización -->
+    <div class="photo-preview-wrap" id="photo-preview-wrap">
+      <img id="photo-preview-img" src="" alt="Foto de la cura" />
+      <button class="photo-preview-remove" onclick="removePhoto()" aria-label="Quitar foto"><i class="bi bi-x"></i></button>
+    </div>
+
+    <!-- Análisis IA -->
+    <div class="photo-analysis-box" id="photo-analysis-box">
+      <div class="analysis-header">
+        <i class="bi bi-stars"></i> Análisis IA — Apoyo clínico (no diagnóstico)
       </div>
+      <div class="analysis-body" id="analysis-body"></div>
     </div>
 
-    <!-- Barra inferior -->
+    <div class="screen-body">
+      <div class="timeline" id="wound-timeline"></div>
+    </div>
+
     <div class="add-photo-bar">
-      <button class="btn" onclick="simulatePhoto('gallery')"><i class="ti ti-photo"></i>Galería</button>
-      <button class="btn btn-primary" style="flex:1" onclick="simulatePhoto('camera')">
-        <i class="ti ti-camera"></i>Añadir foto de hoy
+      <button class="btn" onclick="document.getElementById('photo-file-input').removeAttribute('capture');document.getElementById('photo-file-input').click()">
+        <i class="bi bi-images"></i> Galería
+      </button>
+      <button class="btn btn-primary" style="flex:1"
+        onclick="document.getElementById('photo-file-input').setAttribute('capture','environment');document.getElementById('photo-file-input').click()">
+        <i class="bi bi-camera-fill"></i> Cámara
       </button>
     </div>
+  </div>
 
-    <!-- ── OVERLAY ASISTENTE IA ── -->
-    <div id="ai-overlay" class="ai-overlay">
-      <div class="ai-chat-header">
-        <button class="back-btn" onclick="closeAI()"><i class="ti ti-x"></i></button>
-        <div>
-          <div style="font-size:15px;font-weight:600;color:var(--gray-800)">Asistente clínico IA</div>
-          <div style="font-size:11px;color:var(--gray-400)">Basado en evidencia clínica</div>
-        </div>
-        <div class="ai-badge">Online</div>
-      </div>
-
-      <!-- Mensajes del chat -->
-      <div class="chat-messages" id="chat-messages">
-        <div class="bubble ai fade-in">
-          Hola, soy tu asistente clínico. Puedo ayudarte con protocolos de curas, elección de apósitos, signos de infección y seguimiento de heridas. Descríbeme la cura por texto o por voz.
-        </div>
-      </div>
-
-      <!-- Barra de entrada -->
-      <div class="chat-input-bar">
-        <button class="chat-mic-btn" id="ai-mic-btn" onclick="toggleAIMic()" title="Dictado por voz">
-          <i class="ti ti-microphone"></i>
-        </button>
-        <textarea class="chat-input" id="ai-chat-input"
-          placeholder="Describe la cura o pregunta al asistente..."
-          rows="1"
-          onkeydown="handleChatKey(event)"></textarea>
-        <button class="chat-send-btn" onclick="sendChatMessage()">
-          <i class="ti ti-send"></i>
-        </button>
-      </div>
-    </div>
-
-  </div><!-- /screen-curas -->
-
-
-  <!-- ══════════════════════════════════════════
-       PANTALLA: EVOLUTIVO IA
-  ═══════════════════════════════════════════ -->
+  <!-- ══════════════════════════
+       EVOLUTIA
+  ════════════════════════════ -->
   <div id="screen-evolutivo" class="screen">
-
     <div class="inner-header">
-      <!-- ✅ volver con historial real -->
-      <button class="back-btn" onclick="goBack()"><i class="ti ti-arrow-left"></i></button>
-      <span class="inner-title">Evolutivo IA</span>
+      <button class="back-btn" onclick="goBack()" aria-label="Volver"><i class="bi bi-arrow-left"></i></button>
+      <span class="inner-title"><i class="bi bi-mic-fill" style="color:var(--purple-500)"></i>EvolutIA</span>
       <span class="header-badge" style="background:var(--purple-50);color:var(--purple-500)">
-        <i class="ti ti-sparkles" style="font-size:12px"></i>Whisper + GPT
+        <i class="bi bi-stars"></i>Clínico
       </span>
     </div>
 
     <div class="screen-body">
       <div class="evol-body">
 
-        <!-- Área de grabación -->
+        <!-- Selección tipo evolutivo -->
+        <div>
+          <div class="section-label" style="margin:0 0 8px"><i class="bi bi-layout-text-window-reverse"></i> Tipo de anotación</div>
+          <div class="soap-selector">
+            <button class="soap-btn active" onclick="setSoapMode('soap',this)">SOAP</button>
+            <button class="soap-btn" onclick="setSoapMode('evolucion',this)">Evolución</button>
+            <button class="soap-btn" onclick="setSoapMode('cura',this)">Cura</button>
+            <button class="soap-btn" onclick="setSoapMode('incidencia',this)">Incidencia</button>
+          </div>
+        </div>
+
         <div class="record-area">
-          <button id="record-btn" class="record-btn-big" onclick="toggleRecording()">
-            <i class="ti ti-microphone"></i>
+          <button id="record-btn" class="record-btn-big" onclick="toggleRecording()" aria-label="Grabar dictado">
+            <i class="bi bi-mic-fill"></i>
           </button>
-          <!-- ✅ texto coherente (era “mantén pulsado”, pero era click) -->
           <p class="record-hint" id="record-hint">Pulsa para grabar</p>
-          <!-- Waveform animado (visible al grabar) -->
           <div class="waveform" id="waveform">
             <div class="wave-bar" style="animation-delay:0s"></div>
             <div class="wave-bar" style="animation-delay:0.1s"></div>
@@ -1253,446 +1243,950 @@
           </div>
         </div>
 
-        <!-- Transcripción en tiempo real -->
         <div class="transcript-box">
-          <div class="box-label">
-            <i class="ti ti-microphone" style="font-size:12px;color:var(--blue-300)"></i>
-            Transcripción en tiempo real
-          </div>
-          <div class="transcript-text" id="transcript-display">
-            Pulsa el botón para comenzar a dictar...
-          </div>
+          <div class="box-label"><i class="bi bi-mic"></i>Transcripción en tiempo real</div>
+          <div class="transcript-text" id="transcript-display">Pulsa el botón para comenzar a dictar...</div>
         </div>
 
-        <!-- Evolutivo generado -->
         <div class="evolutivo-box">
           <div class="box-label" style="color:var(--blue-500)">
-            <i class="ti ti-sparkles" style="font-size:12px"></i>
-            Evolutivo clínico generado por IA
+            <i class="bi bi-stars" style="color:var(--blue-500)"></i>
+            Anotación clínica estructurada
           </div>
-          <!-- Texto de solo lectura -->
-          <div class="evolutivo-text" id="evol-text">
-            El evolutivo aparecerá aquí tras el dictado...
-          </div>
-          <!-- Textarea editable (se activa al pulsar "Editar") -->
-          <textarea class="evolutivo-edit" id="evol-edit" rows="6"
-            placeholder="Edita el evolutivo aquí..."></textarea>
+          <div class="evolutivo-text" id="evol-text">El evolutivo estructurado aparecerá aquí...</div>
+          <textarea class="evolutivo-edit" id="evol-edit" rows="8" placeholder="Edita el evolutivo..."></textarea>
         </div>
 
-        <!-- Barra de voz para ampliar / corregir -->
         <div class="evol-voice-bar">
-          <i class="ti ti-microphone-2"></i>
-          <span>Amplía o corrige el evolutivo por voz</span>
-          <button class="voice-edit-btn" id="voice-edit-btn" onclick="toggleVoiceEdit()">
-            Dictar corrección
-          </button>
+          <i class="bi bi-mic-fill"></i>
+          <span>Dictar corrección o ampliación</span>
+          <button class="voice-edit-btn" id="voice-edit-btn" onclick="toggleVoiceEdit()">Dictar</button>
         </div>
 
-        <!-- Acciones sobre el evolutivo -->
         <div class="evol-actions">
-          <button class="evol-btn" onclick="copyEvolutivo()">
-            <i class="ti ti-copy"></i> Copiar
-          </button>
-          <button class="evol-btn" id="edit-toggle-btn" onclick="toggleEditMode()">
-            <i class="ti ti-edit"></i> Editar
-          </button>
-          <button class="evol-btn" onclick="shareEvolutivo()">
-            <i class="ti ti-share"></i> Compartir
-          </button>
-          <button class="evol-btn primary" onclick="saveEvolutivo()">
-            <i class="ti ti-device-floppy"></i> Guardar
-          </button>
+          <button class="evol-btn" onclick="copyEvolutivo()"><i class="bi bi-clipboard"></i> Copiar</button>
+          <button class="evol-btn" id="edit-toggle-btn" onclick="toggleEditMode()"><i class="bi bi-pencil"></i> Editar</button>
+          <button class="evol-btn" onclick="shareEvolutivo()"><i class="bi bi-share"></i> Compartir</button>
+          <button class="evol-btn primary" onclick="saveEvolutivo()"><i class="bi bi-floppy2-fill"></i> Guardar</button>
         </div>
-
-      </div><!-- /evol-body -->
-    </div><!-- /screen-body -->
-  </div><!-- /screen-evolutivo -->
-
-
-  <!-- ✅ NAV BAR (persistente, con inicio centrado) -->
-  <div class="nav-bar">
-    <div class="nav-item" id="nav-ruta" onclick="showScreen('screen-rutas')">
-      <i class="ti ti-map-2"></i>Ruta
-    </div>
-
-    <div class="nav-item nav-home active" id="nav-home" onclick="showScreen('screen-home')">
-      <i class="ti ti-home"></i>Inicio
-    </div>
-
-    <div class="nav-item" id="nav-curas" onclick="showScreen('screen-curas')">
-      <i class="ti ti-bandage"></i>Curas
+      </div>
     </div>
   </div>
 
-  <!-- TOAST global -->
+  <!-- ══════════════════════════
+       ASISTENTE IA
+  ════════════════════════════ -->
+  <div id="screen-asistente" class="screen">
+    <div class="ai-chat-header inner-header">
+      <button class="back-btn" onclick="goBack()" aria-label="Volver"><i class="bi bi-arrow-left"></i></button>
+      <div>
+        <div style="font-size:15px;font-weight:600;color:var(--gray-800)">Asistente clínico IA</div>
+        <div style="font-size:11px;color:var(--gray-400)">Basado en guías clínicas oficiales · GNEAUPP · EWMA · SEHER</div>
+      </div>
+      <div class="ai-badge">Online</div>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <div class="bubble ai fade-in">
+        Hola. Soy un asistente de apoyo clínico para profesionales sanitarios de UHD.<br><br>
+        Puedo ayudarte con protocolos basados en evidencia sobre: curas y úlceras por presión, manejo de catéteres, tratamiento del dolor, cuidados domiciliarios y redacción de evolutivos.<br><br>
+        <b>Importante:</b> Mis respuestas citan guías clínicas oficiales y no sustituyen el juicio clínico del profesional.
+      </div>
+    </div>
+
+    <div class="chat-input-bar">
+      <button class="chat-mic-btn" id="ai-mic-btn" onclick="toggleAIMic()" title="Dictado por voz" aria-label="Activar micrófono">
+        <i class="bi bi-mic-fill"></i>
+      </button>
+      <textarea class="chat-input" id="ai-chat-input"
+        placeholder="Consulta clínica..."
+        rows="1"
+        onkeydown="handleChatKey(event)"></textarea>
+      <button class="chat-send-btn" onclick="sendChatMessage()" aria-label="Enviar">
+        <i class="bi bi-send-fill"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════
+       NAV BAR — 5 pestañas
+  ════════════════════════════ -->
+  <div class="nav-bar">
+    <div class="nav-item" id="nav-ruta" onclick="showScreen('screen-rutas')" role="button" aria-label="Ruta diaria">
+      <i class="bi bi-map"></i>Ruta
+    </div>
+    <div class="nav-item" id="nav-curas" onclick="showScreen('screen-curas')" role="button" aria-label="Seguimiento de Curas">
+      <i class="bi bi-bandaid"></i>Curas
+    </div>
+    <div class="nav-home-center" id="nav-home" onclick="showScreen('screen-home')" role="button" aria-label="Inicio">
+      <div class="nav-home-icon"><i class="bi bi-house-fill"></i></div>
+      <span class="nav-home-label">Inicio</span>
+    </div>
+    <div class="nav-item" id="nav-evolutivo" onclick="showScreen('screen-evolutivo')" role="button" aria-label="EvolutIA">
+      <i class="bi bi-mic-fill"></i>EvolutIA
+    </div>
+    <div class="nav-item" id="nav-asistente" onclick="showScreen('screen-asistente')" role="button" aria-label="Asistente IA">
+      <i class="bi bi-robot"></i>Asist. IA
+    </div>
+  </div>
+
   <div id="toast" class="toast"></div>
 
 </div><!-- /phone -->
 </div><!-- /app-shell -->
 
 
-<!-- ════════════════════════════════════════════════════════════
+<!-- ═══════════════════════════════════════════════════════
      JAVASCRIPT
-════════════════════════════════════════════════════════════ -->
+══════════════════════════════════════════════════════════ -->
 <script>
-/* ─────────────────────────────────────────────
-   ESTADO GLOBAL DE LA APLICACIÓN
-───────────────────────────────────────────── */
+/* ──────────────────────────────
+   ESTADO GLOBAL
+────────────────────────────── */
 const State = {
-  title: 'Dra.',
-  name: 'García',
-  isRecording: false,
-  isVoiceEditing: false,
+  title: loadLS('uhd_title') || 'Dra.',
+  name:  loadLS('uhd_name')  || 'García',
   editMode: false,
+  soapMode: 'soap',
   evolText: '',
   transcript: '',
-  visits: [
-    { id:1, addr:'C/ Ramón y Cajal, 14 – 2ºA', obs:'Cura úlcera grado III', priority:'alta' },
-    { id:2, addr:'Av. Constitución, 88 – 4ºC',  obs:'Control PICC',          priority:'media' },
-    { id:3, addr:'C/ San Vicente, 33 – 1ºB',     obs:'Seguimiento IV',        priority:'baja'  },
-  ],
-  distants: [
-    { id:1, addr:'Urb. La Cantera, 12 – Bungalow 5', obs:'Fuera de zona – 22 km extra' },
-  ],
-  woundRecords: [
-    { id:1, date:'13 mayo 2026', label:'Úlcera sacra G-III', obs:'Exudado reducido. Granulación visible.', badge:'mejora', ai:'IA: Reducción de tamaño estimada ~15%. Sin signos de infección activa.' },
-    { id:2, date:'10 mayo 2026', label:'Úlcera sacra G-III', obs:'Bordes macerados. Incremento de exudado.', badge:'alerta', ai:'IA: Posible inicio de infección local. Revisar apósito y considerar cultivo.' },
-    { id:3, date:'6 mayo 2026',  label:'Úlcera sacra G-III', obs:'Lesión estabilizada. Sin cambios.',        badge:'alerta', ai:'IA: Sin cambios significativos respecto a visita anterior.' },
-  ],
-  nextVisitId: 4,
-  nextDistantId: 2,
-  nextWoundId: 4,
-  currentPatient: 'García M.',
+  currentPhoto: null,
+  visits:   loadLS('uhd_visits', []),
+  distants: loadLS('uhd_distants', []),
+  woundRecords: loadLS('uhd_wounds', [
+    { id:1, date:'13 mayo 2025', label:'Úlcera sacra G-III', obs:'Exudado reducido. Bordes en proceso de granulación.', badge:'mejora', ai:'UPP G-III · Reducción de tamaño ~15 %. Sin signos de infección sistémica.' },
+    { id:2, date:'10 mayo 2025', label:'Úlcera sacra G-III', obs:'Bordes macerados. Aumento de exudado seroso.', badge:'alerta', ai:'UPP G-III · Posible colonización crítica. Valorar cultivo y apósito de plata.' },
+  ]),
+  nextVisitId:   loadLS('uhd_nvi', 10),
+  nextDistantId: loadLS('uhd_ndi', 10),
+  nextWoundId:   loadLS('uhd_nwi', 10),
+  currentPatient:'García M.',
   aiMicActive: false,
   recognition: null,
-  evolRecognition: null,
 };
 
-/* ✅ escape HTML para evitar problemas al renderizar contenido */
-function escapeHTML(str='') {
-  return String(str)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;');
+function loadLS(key, fallback) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+  catch { return fallback; }
+}
+function saveLS(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
+function persistState() {
+  saveLS('uhd_title',   State.title);
+  saveLS('uhd_name',    State.name);
+  saveLS('uhd_visits',  State.visits);
+  saveLS('uhd_distants',State.distants);
+  saveLS('uhd_wounds',  State.woundRecords);
+  saveLS('uhd_nvi',     State.nextVisitId);
+  saveLS('uhd_ndi',     State.nextDistantId);
+  saveLS('uhd_nwi',     State.nextWoundId);
 }
 
-/* ─────────────────────────────────────────────
+function esc(s='') {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+/* ──────────────────────────────
    RELOJ Y FECHA
-───────────────────────────────────────────── */
+────────────────────────────── */
 function updateClock() {
   const now = new Date();
   document.getElementById('clock').textContent =
-    now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+    now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
 }
 function setTodayDate() {
-  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
   document.getElementById('today-date').textContent =
-    new Date().toLocaleDateString('es-ES', opts);
+    new Date().toLocaleDateString('es-ES',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 }
-updateClock();
-setTodayDate();
-setInterval(updateClock, 30000);
+updateClock(); setTodayDate(); setInterval(updateClock, 30000);
 
-/* ─────────────────────────────────────────────
-   ✅ NAVEGACIÓN ENTRE PANTALLAS + HISTORIAL REAL
-───────────────────────────────────────────── */
+/* ──────────────────────────────
+   NAVEGACIÓN
+────────────────────────────── */
 const screenHistory = [];
+const NAV_MAP = {
+  'screen-home':      'nav-home',
+  'screen-rutas':     'nav-ruta',
+  'screen-curas':     'nav-curas',
+  'screen-evolutivo': 'nav-evolutivo',
+  'screen-asistente': 'nav-asistente',
+};
 
-function updateNavActive(screenId) {
-  const home = document.getElementById('nav-home');
-  const ruta = document.getElementById('nav-ruta');
-  const curas = document.getElementById('nav-curas');
-
-  [home, ruta, curas].forEach(x => x.classList.remove('active', 'nav-home'));
-  // nav-home siempre mantiene estilo especial cuando está activo
-  if (screenId === 'screen-home') {
-    home.classList.add('active', 'nav-home');
-  } else if (screenId === 'screen-rutas') {
-    ruta.classList.add('active');
-  } else if (screenId === 'screen-curas') {
-    curas.classList.add('active');
-  } else {
-    // evolutivo: dejamos activo “Inicio” como base visual
-    home.classList.add('active', 'nav-home');
-  }
+function updateNavActive(id) {
+  document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+  const navId = NAV_MAP[id] || 'nav-home';
+  const el = document.getElementById(navId);
+  if (el) el.classList.add('active');
+  const homeIcon = document.querySelector('.nav-home-icon');
+  if (homeIcon) homeIcon.style.background = id === 'screen-home' ? 'var(--blue-700)' : 'var(--blue-500)';
 }
 
-function showScreen(id, pushHistory=true) {
-  const current = document.querySelector('.screen.active');
-  if (pushHistory && current && current.id !== id) {
-    screenHistory.push(current.id);
-  }
+function showScreen(id, push = true) {
+  const cur = document.querySelector('.screen.active');
+  if (push && cur && cur.id !== id) screenHistory.push(cur.id);
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-
-  if (id === 'screen-rutas')   renderVisits();
-  if (id === 'screen-curas')   renderTimeline();
-
   updateNavActive(id);
+  if (id === 'screen-rutas')     { renderVisits(); setTimeout(initMap, 100); }
+  if (id === 'screen-curas')     renderTimeline();
+  if (id === 'screen-home')      updateHomeStats();
 }
 
 function goBack() {
-  const prev = screenHistory.pop() || 'screen-home';
-  showScreen(prev, false);
+  showScreen(screenHistory.pop() || 'screen-home', false);
 }
 
-/* ─────────────────────────────────────────────
-   NOMBRE / SALUDO EDITABLE
-───────────────────────────────────────────── */
-function toggleNameDropdown(e) {
+/* ──────────────────────────────
+   NOMBRE / SALUDO
+────────────────────────────── */
+function toggleNamePanel(e) {
   e.stopPropagation();
-  const dd = document.getElementById('name-dropdown');
-  dd.classList.toggle('open');
-  document.getElementById('name-input').value = State.name;
+  const p = document.getElementById('name-panel');
+  p.classList.toggle('open');
+  if (p.classList.contains('open')) {
+    document.getElementById('name-input').value = State.name;
+    document.getElementById('name-input').focus();
+    document.querySelectorAll('.panel-option').forEach(o =>
+      o.classList.toggle('selected', o.textContent.trim().startsWith(State.title)));
+  }
 }
-document.addEventListener('click', () => {
-  document.getElementById('name-dropdown').classList.remove('open');
-});
+document.addEventListener('click', () => document.getElementById('name-panel').classList.remove('open'));
+
 function setTitle(t) {
-  State.title = t;
-  updateGreeting();
-  document.getElementById('name-dropdown').classList.remove('open');
-  showToast('Título actualizado: ' + t);
+  State.title = t; updateGreeting(); persistState();
+  document.getElementById('name-panel').classList.remove('open');
+  showToast('Título: '+t);
 }
 function applyName() {
-  const val = document.getElementById('name-input').value.trim();
-  if (val) { State.name = val; updateGreeting(); }
-  document.getElementById('name-dropdown').classList.remove('open');
+  const v = document.getElementById('name-input').value.trim();
+  if (!v) { showToast('Escribe un nombre'); return; }
+  State.name = v; updateGreeting(); persistState();
+  document.getElementById('name-panel').classList.remove('open');
+  showToast('Nombre guardado ✓');
 }
 function updateGreeting() {
-  document.getElementById('greeting-display').textContent = State.title + ' ' + State.name;
+  document.getElementById('greeting-display').textContent = State.title+' '+State.name;
+  const pp = document.getElementById('print-prof');
+  if (pp) pp.textContent = 'Profesional: '+State.title+' '+State.name;
 }
 
-/* ─────────────────────────────────────────────
-   PANTALLA RUTA DIARIA — renderizado
-───────────────────────────────────────────── */
+/* ──────────────────────────────
+   HOME STATS
+────────────────────────────── */
+function updateHomeStats() {
+  const vis   = State.visits.length;
+  const km    = calcKm();
+  const alta  = State.visits.filter(v => v.priority === 'alta').length;
+  const today = new Date().toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
+  const curasHoy = State.woundRecords.filter(r => r.date === today).length;
+
+  document.getElementById('stat-visitas').textContent   = vis;
+  document.getElementById('stat-curas').textContent     = curasHoy;
+  document.getElementById('stat-prioridad').textContent = alta;
+  document.getElementById('stat-km').textContent        = km;
+
+  document.getElementById('home-ruta-sub').textContent =
+    vis+' visita'+(vis!==1?'s':'')+' · '+km+' km estimados';
+  document.getElementById('home-curas-sub').textContent =
+    State.woundRecords.length+' registro'+(State.woundRecords.length!==1?'s':'')+' de curas';
+}
+
+/* ──────────────────────────────
+   MAPA LEAFLET
+────────────────────────────── */
+let leafletMap = null, routeLayer = null, printMapObj = null;
+const CENTER = [38.3453, -0.4831];
+const DEMO_COORDS = [
+  [38.3453,-0.4831],[38.3480,-0.4910],[38.3510,-0.4780],
+  [38.3430,-0.4760],[38.3520,-0.4850],[38.3470,-0.4920],[38.3395,-0.4880],
+];
+
+function initMap() {
+  if (leafletMap) { leafletMap.invalidateSize(); drawRoute(); return; }
+  const el = document.getElementById('leaflet-map');
+  if (!el) return;
+  leafletMap = L.map('leaflet-map', {zoomControl:false, attributionControl:false}).setView(CENTER, 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(leafletMap);
+  drawRoute();
+}
+
+function drawRoute() {
+  if (!leafletMap) return;
+  if (routeLayer) { leafletMap.removeLayer(routeLayer); routeLayer = null; }
+  leafletMap.eachLayer(l => { if (l instanceof L.Marker || l instanceof L.Polyline) leafletMap.removeLayer(l); });
+  if (!State.visits.length) { leafletMap.setView(CENTER,13); return; }
+  const coords = State.visits.map((_,i) => DEMO_COORDS[i % DEMO_COORDS.length]);
+  routeLayer = L.polyline(coords,{color:'#185FA5',weight:4,opacity:0.85}).addTo(leafletMap);
+  coords.forEach((c,i) => {
+    const color = i===0?'#3B6D11':(i===coords.length-1?'#A32D2D':'#185FA5');
+    const icon = L.divIcon({
+      html:`<div style="background:${color};color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25)">${i+1}</div>`,
+      className:'',iconSize:[26,26],iconAnchor:[13,13],
+    });
+    L.marker(c,{icon}).addTo(leafletMap)
+      .bindPopup(`<b>${i+1}. ${esc(State.visits[i].addr)}</b><br>${esc(State.visits[i].obs)}`);
+  });
+  leafletMap.fitBounds(routeLayer.getBounds(),{padding:[20,20]});
+}
+
+/* ──────────────────────────────
+   CÁLCULO KM + TIEMPO
+────────────────────────────── */
+function haversine(a, b) {
+  const R = 6371, dLat=(b[0]-a[0])*Math.PI/180, dLon=(b[1]-a[1])*Math.PI/180;
+  const x = Math.sin(dLat/2)**2 + Math.cos(a[0]*Math.PI/180)*Math.cos(b[0]*Math.PI/180)*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(x));
+}
+function calcKm() {
+  if (State.visits.length < 2) return (State.visits.length*1.2).toFixed(1);
+  const coords = State.visits.map((_,i) => DEMO_COORDS[i%DEMO_COORDS.length]);
+  return coords.slice(1).reduce((t,c,i) => t+haversine(coords[i],c), 0).toFixed(1);
+}
+function calcTime(km) { return Math.round((parseFloat(km)/30)*60 + State.visits.length*10); }
+
+/* ──────────────────────────────
+   RUTA — RENDERIZADO
+────────────────────────────── */
 let editingVisitId = null;
 
 function renderVisits() {
-  const list = document.getElementById('visits-list');
+  const list  = document.getElementById('visits-list');
   const dlist = document.getElementById('distant-list');
+  const km = calcKm(), mins = calcTime(km), count = State.visits.length;
 
-  const count = State.visits.length;
-  const km = (count * 6.1 + 0.3).toFixed(1);
-  const mins = Math.round(count * 17.5);
   document.getElementById('visit-count').textContent = count;
-  document.getElementById('route-time').textContent = mins + ' min';
-  document.getElementById('route-km').textContent = km + ' km';
+  document.getElementById('route-time').textContent  = mins+' min';
+  document.getElementById('route-km').textContent    = km+' km';
 
-  list.innerHTML = State.visits.length ? State.visits.map((v,i) => `
-    <div class="visit-item fade-in" id="visit-${v.id}">
-      <div class="visit-num">${i+1}</div>
-      <div class="visit-info">
-        <div class="visit-addr">${escapeHTML(v.addr)}</div>
-        <div class="visit-obs">${escapeHTML(v.obs)}</div>
-      </div>
-      <div class="visit-actions">
-        <button class="icon-btn" onclick="editVisit(${v.id})" title="Editar"><i class="ti ti-edit"></i></button>
-        <button class="icon-btn" onclick="deleteVisit(${v.id})" title="Eliminar"><i class="ti ti-trash"></i></button>
-      </div>
-      <div class="priority-dot p-${v.priority}" title="Prioridad ${v.priority}"></div>
-    </div>
-  `).join('') : '<div class="empty-state"><i class="ti ti-map-pin-off"></i>Sin visitas añadidas</div>';
+  if (!count) {
+    list.innerHTML = '<div class="empty-state"><i class="bi bi-geo-alt-fill"></i>Sin visitas añadidas.<br>Pulsa "+ Añadir" para comenzar.</div>';
+  } else {
+    list.innerHTML = State.visits.map((v,i) => `
+      <div class="visit-item fade-in ${v.done?'done':''}" id="visit-${v.id}">
+        <div class="visit-num">${i+1}</div>
+        <div class="visit-info">
+          <div class="visit-addr">${esc(v.addr)}</div>
+          <div class="visit-obs">${esc(v.obs)}</div>
+        </div>
+        <div class="visit-actions">
+          <button
+            class="icon-btn ${v.done?'btn-check-done':'btn-check-pend'}"
+            onclick="toggleVisitDone(${v.id})"
+            aria-label="${v.done?'Marcar como pendiente':'Marcar como realizada'}"
+            title="${v.done?'Pendiente':'Realizada'}">
+            <i class="bi bi-${v.done?'check-circle-fill':'circle'}"></i>
+          </button>
+          <button class="icon-btn btn-edit" onclick="editVisit(${v.id})" aria-label="Editar visita" title="Editar">
+            <i class="bi bi-pencil-fill"></i>
+          </button>
+          <button class="icon-btn btn-delete" onclick="deleteVisit(${v.id})" aria-label="Eliminar visita" title="Eliminar">
+            <i class="bi bi-trash3-fill"></i>
+          </button>
+        </div>
+        <div class="priority-dot p-${esc(v.priority)}" title="Prioridad ${esc(v.priority)}"></div>
+      </div>`).join('');
+  }
 
-  dlist.innerHTML = State.distants.map(d => `
-    <div class="distant-item fade-in">
-      <i class="ti ti-map-pin-exclamation" style="font-size:18px;color:var(--amber-500);flex-shrink:0"></i>
-      <div class="visit-info">
-        <div class="visit-addr">${escapeHTML(d.addr)}</div>
-        <div class="visit-obs">${escapeHTML(d.obs)}</div>
-      </div>
-      <div class="visit-actions">
-        <button class="icon-btn" onclick="deleteDistant(${d.id})"><i class="ti ti-trash"></i></button>
-      </div>
-    </div>
-  `).join('') || '<div style="font-size:12px;color:var(--gray-400);text-align:center;padding:8px 0">Sin ubicaciones lejanas</div>';
+  dlist.innerHTML = State.distants.length
+    ? State.distants.map(d=>`
+      <div class="distant-item fade-in">
+        <i class="bi bi-geo-alt-fill"></i>
+        <div class="visit-info">
+          <div class="visit-addr">${esc(d.addr)}</div>
+          <div class="visit-obs">${esc(d.obs)}</div>
+        </div>
+        <div class="visit-actions">
+          <button class="icon-btn btn-delete" onclick="deleteDistant(${d.id})" aria-label="Eliminar" title="Eliminar">
+            <i class="bi bi-trash3-fill"></i>
+          </button>
+        </div>
+      </div>`).join('')
+    : '<div style="font-size:12px;color:var(--gray-400);text-align:center;padding:6px 0">Sin ubicaciones lejanas</div>';
+
+  updateHomeStats(); persistState(); drawRoute();
 }
 
-/* modales visitas */
 function openAddVisitModal() {
   editingVisitId = null;
   document.getElementById('visit-addr-input').value = '';
-  document.getElementById('visit-obs-input').value = '';
-  document.getElementById('visit-priority').value = 'media';
+  document.getElementById('visit-obs-input').value  = '';
+  document.getElementById('visit-priority').value   = 'media';
   openModal('modal-visit');
+  setTimeout(()=>document.getElementById('visit-addr-input').focus(),200);
 }
 function addVisit() {
   const addr = document.getElementById('visit-addr-input').value.trim();
   if (!addr) { showToast('Introduce una dirección'); return; }
   const obs  = document.getElementById('visit-obs-input').value.trim() || 'Sin observaciones';
   const prio = document.getElementById('visit-priority').value;
-
   if (editingVisitId) {
-    const v = State.visits.find(v => v.id === editingVisitId);
-    if (!v) return;
-    v.addr = addr;
-    v.obs = obs;
-    v.priority = prio;
+    const v = State.visits.find(v=>v.id===editingVisitId);
+    if (v) { v.addr=addr; v.obs=obs; v.priority=prio; }
     showToast('Visita actualizada ✓');
   } else {
-    State.visits.push({ id: State.nextVisitId++, addr, obs, priority: prio });
-    showToast('Visita añadida al recorrido ✓');
+    State.visits.push({id:State.nextVisitId++,addr,obs,priority:prio,done:false});
+    showToast('Visita añadida ✓');
   }
-
-  closeModal('modal-visit');
-  renderVisits();
+  closeModal('modal-visit'); renderVisits();
 }
-function deleteVisit(id) {
-  State.visits = State.visits.filter(v => v.id !== id);
-  renderVisits();
-  showToast('Visita eliminada');
-}
+function deleteVisit(id) { State.visits = State.visits.filter(v=>v.id!==id); renderVisits(); showToast('Visita eliminada'); }
 function editVisit(id) {
-  const v = State.visits.find(v => v.id === id);
-  if (!v) return;
+  const v = State.visits.find(v=>v.id===id); if(!v) return;
   editingVisitId = id;
   document.getElementById('visit-addr-input').value = v.addr;
   document.getElementById('visit-obs-input').value  = v.obs;
   document.getElementById('visit-priority').value   = v.priority;
   openModal('modal-visit');
+  setTimeout(()=>document.getElementById('visit-addr-input').focus(),200);
 }
-
-/* modales visitas lejanas */
+function toggleVisitDone(id) {
+  const v = State.visits.find(v=>v.id===id);
+  if(v){ v.done=!v.done; renderVisits(); showToast(v.done?'Visita marcada como realizada ✓':'Visita marcada como pendiente'); }
+}
 function openAddDistantModal() {
-  document.getElementById('distant-addr-input').value = '';
-  document.getElementById('distant-obs-input').value  = '';
+  document.getElementById('distant-addr-input').value='';
+  document.getElementById('distant-obs-input').value='';
   openModal('modal-distant');
+  setTimeout(()=>document.getElementById('distant-addr-input').focus(),200);
 }
 function addDistant() {
-  const addr = document.getElementById('distant-addr-input').value.trim();
-  if (!addr) { showToast('Introduce una dirección'); return; }
-  const obs  = document.getElementById('distant-obs-input').value.trim() || '';
-  State.distants.push({ id: State.nextDistantId++, addr, obs });
-  closeModal('modal-distant');
-  renderVisits();
-  showToast('Ubicación lejana añadida ✓');
+  const addr=document.getElementById('distant-addr-input').value.trim();
+  if(!addr){ showToast('Introduce una dirección'); return; }
+  State.distants.push({id:State.nextDistantId++,addr,obs:document.getElementById('distant-obs-input').value.trim()});
+  closeModal('modal-distant'); renderVisits(); showToast('Ubicación lejana añadida ✓');
 }
-function deleteDistant(id) {
-  State.distants = State.distants.filter(d => d.id !== id);
-  renderVisits();
+function deleteDistant(id) { State.distants=State.distants.filter(d=>d.id!==id); renderVisits(); }
+
+function useMyLocation() {
+  showToast('Obteniendo ubicación GPS...');
+  if (!navigator.geolocation) { showToast('Geolocalización no disponible'); return; }
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const {latitude:lat,longitude:lng} = pos.coords;
+      State.visits.push({id:State.nextVisitId++,addr:`GPS: ${lat.toFixed(4)}, ${lng.toFixed(4)}`,obs:'Ubicación GPS actual',priority:'media',done:false});
+      renderVisits(); showToast('Ubicación añadida ✓');
+    },
+    () => {
+      State.visits.push({id:State.nextVisitId++,addr:'Av. Oscar Esplá, 37 – Alicante',obs:'Demo (GPS no disponible)',priority:'media',done:false});
+      renderVisits(); showToast('Parada demo añadida (GPS no disponible)');
+    }
+  );
+}
+function recalcRoute() { showToast('Recalculando ruta...'); setTimeout(()=>{renderVisits();showToast('Ruta actualizada ✓');},800); }
+function shareRouteText() {
+  if (!State.visits.length) { showToast('No hay visitas'); return; }
+  const txt = `Ruta UHD — ${new Date().toLocaleDateString('es-ES')}\n`+
+    State.visits.map((v,i)=>`${i+1}. ${v.addr} [${v.priority}]`).join('\n')+
+    `\n─── Total: ${State.visits.length} paradas · ${calcKm()} km`;
+  navigator.share ? navigator.share({title:'Ruta UHD',text:txt}) :
+    navigator.clipboard?.writeText(txt).then(()=>showToast('Ruta copiada ✓'));
+}
+function startNavigation() {
+  if (!State.visits.length) { showToast('Añade visitas primero'); return; }
+  window.open(`https://maps.google.com/?q=${encodeURIComponent(State.visits[0].addr)}`,'_blank');
+  showToast('Abriendo navegación...');
 }
 
-/* acciones de ruta */
-function printMap() {
-  showToast('Preparando impresión del mapa...');
-  setTimeout(() => window.print(), 500);
+/* ──────────────────────────────
+   IMPRIMIR / COMPARTIR
+────────────────────────────── */
+function openSharePrint() {
+  if (!State.visits.length) { showToast('Añade visitas para imprimir'); return; }
+  document.getElementById('print-overlay').classList.add('open');
+  document.getElementById('print-date').textContent =
+    new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('print-prof').textContent = 'Profesional: '+State.title+' '+State.name;
+  const km=calcKm(), mins=calcTime(km);
+  document.getElementById('print-stops').innerHTML = State.visits.map((v,i)=>`
+    <div class="print-stop">
+      <div class="print-stop-num">${i+1}</div>
+      <div>
+        <div class="print-stop-addr">${esc(v.addr)}</div>
+        <div class="print-stop-obs">${esc(v.obs)} — <span style="color:${v.priority==='alta'?'#E24B4A':v.priority==='media'?'#EF9F27':'#639922'};font-weight:600">${v.priority}</span></div>
+      </div>
+    </div>`).join('');
+  document.getElementById('print-totals').innerHTML = `
+    <div class="print-total-item"><div class="print-total-num">${State.visits.length}</div><div class="print-total-lbl">Paradas</div></div>
+    <div class="print-total-item"><div class="print-total-num">${km}</div><div class="print-total-lbl">Kilómetros</div></div>
+    <div class="print-total-item"><div class="print-total-num">${mins}</div><div class="print-total-lbl">Min estimados</div></div>`;
+  setTimeout(()=>{
+    if (!printMapObj) {
+      printMapObj = L.map('print-map',{zoomControl:false,attributionControl:false}).setView(CENTER,13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(printMapObj);
+    }
+    printMapObj.invalidateSize();
+    printMapObj.eachLayer(l=>{if(l instanceof L.Marker||l instanceof L.Polyline) printMapObj.removeLayer(l);});
+    if (State.visits.length>=2) {
+      const coords=State.visits.map((_,i)=>DEMO_COORDS[i%DEMO_COORDS.length]);
+      const poly=L.polyline(coords,{color:'#185FA5',weight:4}).addTo(printMapObj);
+      coords.forEach(c=>L.circleMarker(c,{radius:7,color:'#185FA5',fillColor:'#fff',fillOpacity:1,weight:2}).addTo(printMapObj));
+      printMapObj.fitBounds(poly.getBounds(),{padding:[10,10]});
+    }
+  },200);
 }
-function recalcRoute() {
-  showToast('Recalculando ruta optimizada...');
-  setTimeout(() => { renderVisits(); showToast('Ruta actualizada ✓'); }, 1200);
-}
-function exportRoutePDF() { showToast('Exportando ruta a PDF...'); }
-function shareRoute() {
-  if (navigator.share) {
-    navigator.share({ title: 'Ruta UHD', text: State.visits.map((v,i)=>`${i+1}. ${v.addr}`).join('\n') });
-  } else { showToast('Ruta copiada al portapapeles'); }
-}
-function startNavigation() { showToast('Abriendo navegación GPS...'); }
+function closePrint() { document.getElementById('print-overlay').classList.remove('open'); }
+function doPrint()    { showToast('Preparando PDF...'); setTimeout(()=>window.print(),400); }
 
-/* ─────────────────────────────────────────────
-   PANTALLA CURAS IA — timeline
-───────────────────────────────────────────── */
+/* ──────────────────────────────
+   SEGUIMIENTO DE CURAS — IMAGEN
+────────────────────────────── */
+function handlePhotoFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    State.currentPhoto = ev.target.result;
+    showPhotoPreview(ev.target.result);
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+
+function handlePhotoDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-area').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (!file || !file.type.startsWith('image/')) { showToast('Solo imágenes JPG, PNG o HEIC'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => { State.currentPhoto = ev.target.result; showPhotoPreview(ev.target.result); };
+  reader.readAsDataURL(file);
+}
+
+function showPhotoPreview(src) {
+  document.getElementById('photo-preview-img').src = src;
+  document.getElementById('photo-preview-wrap').classList.add('visible');
+  document.getElementById('upload-area').style.display = 'none';
+  showToast('Imagen cargada — analizando...');
+  setTimeout(() => runWoundAnalysis(), 600);
+}
+
+function removePhoto() {
+  State.currentPhoto = null;
+  document.getElementById('photo-preview-img').src = '';
+  document.getElementById('photo-preview-wrap').classList.remove('visible');
+  document.getElementById('photo-analysis-box').classList.remove('visible');
+  document.getElementById('upload-area').style.display = '';
+}
+
+/* ──────────────────────────────
+   IA: ANÁLISIS DE CURA (UPP)
+────────────────────────────── */
+function runWoundAnalysis() {
+  const box = document.getElementById('photo-analysis-box');
+  const body = document.getElementById('analysis-body');
+  box.classList.add('visible');
+
+  // En producción aquí iría la llamada a la API de visión.
+  // Demo clínico estructurado basado en criterios EPUAP/NPUAP 2019.
+  body.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div class="analysis-grade grade-iii"><i class="bi bi-exclamation-octagon-fill" style="font-size:12px"></i> UPP Grado III (estimado)</div>
+    </div>
+    <div class="analysis-disclaimer">
+      <i class="bi bi-info-circle-fill"></i>
+      <span><b>Apoyo al profesional · No diagnóstico.</b> Esta valoración está basada en criterios EPUAP/NPUAP 2019 y requiere confirmación clínica presencial.</span>
+    </div>
+    <div class="analysis-section">
+      <div class="analysis-section-title"><i class="bi bi-eye-fill"></i> Hallazgos observados</div>
+      <ul>
+        <li>Pérdida cutánea de espesor total visible en imagen</li>
+        <li>Posible tejido subcutáneo expuesto sin afectación de fascia</li>
+        <li>Bordes irregulares con signos de maceración perilesional</li>
+        <li>Exudado seroso-serosanguinolento estimado</li>
+      </ul>
+    </div>
+    <div class="analysis-section">
+      <div class="analysis-section-title" style="color:var(--red-500)"><i class="bi bi-exclamation-triangle-fill"></i> Signos de alarma a valorar</div>
+      <ul>
+        <li>Eritema perilesional en expansión (>2 cm) → infección local</li>
+        <li>Exudado purulento o maloliente → colonización crítica</li>
+        <li>Necrosis negra/amarilla → desbridamiento urgente</li>
+        <li>Ausencia de granulación tras 2 semanas → reevaluar tratamiento</li>
+      </ul>
+    </div>
+    <div class="analysis-section">
+      <div class="analysis-section-title" style="color:var(--blue-500)"><i class="bi bi-bandaid-fill"></i> Recomendaciones de cuidados</div>
+      <ul>
+        <li><b>Apósito:</b> Espuma de poliuretano hidrocelular en cavidad o alginato cálcico si exudado abundante (c/2–5 días)</li>
+        <li><b>Limpieza:</b> Suero fisiológico a presión efectiva (4–15 psi). Evitar antisépticos citotóxicos</li>
+        <li><b>Perilesional:</b> Film barrera o pasta de zinc para prevenir maceración</li>
+        <li><b>Descarga:</b> Cambios posturales cada 2 h / superficie de redistribución de presión</li>
+        <li><b>Nutrición:</b> Valorar hipoproteinemia (albúmina <3,5 g/dL) y suplementación</li>
+        <li><b>Seguimiento:</b> Fotografía y medición (largo × ancho × profundidad) en cada visita</li>
+      </ul>
+    </div>
+    <div class="analysis-section">
+      <div class="analysis-section-title"><i class="bi bi-clipboard2-pulse-fill"></i> Escalas recomendadas</div>
+      <ul>
+        <li>PUSH Tool 3.0 (Pressure Ulcer Scale for Healing) para monitorizar evolución</li>
+        <li>Escala de Braden para riesgo de nuevas lesiones</li>
+      </ul>
+    </div>
+    <div class="analysis-ref">
+      <b>Referencias:</b><br>
+      European Pressure Ulcer Advisory Panel (EPUAP), National Pressure Injury Advisory Panel (NPIAP) & Pan Pacific Pressure Injury Alliance (PPPIA). <i>Prevention and Treatment of Pressure Ulcers/Injuries: Clinical Practice Guideline.</i> EPUAP, 2019.<br>
+      GNEAUPP. <i>Documento técnico XIV: Instrumentos para la monitorización y evaluación de las heridas crónicas.</i> Grupo Nacional para el Estudio y Asesoramiento en Úlceras por Presión y Heridas Crónicas, 2020.
+    </div>
+  `;
+  showToast('Análisis completado');
+}
+
+/* ──────────────────────────────
+   TIMELINE
+────────────────────────────── */
 function renderTimeline() {
   const tl = document.getElementById('wound-timeline');
+  updateHomeStats();
   if (!State.woundRecords.length) {
-    tl.innerHTML = '<div class="empty-state"><i class="ti ti-camera-off"></i>Sin registros de cura</div>';
+    tl.innerHTML='<div class="empty-state"><i class="bi bi-camera-fill"></i>Sin registros de cura.<br>Añade una foto para comenzar.</div>';
     return;
   }
-  tl.innerHTML = State.woundRecords.map(r => `
-    <div class="tl-date-label">${escapeHTML(r.date)}</div>
+  tl.innerHTML = State.woundRecords.map(r=>`
+    <div class="tl-date-label">${esc(r.date)}</div>
     <div class="tl-entry fade-in">
-      <div class="tl-photo ${r.badge === 'alerta' ? 'warning' : ''}" onclick="showToast('Zoom no disponible en demo')">
-        <i class="ti ti-camera" style="font-size:30px;opacity:0.6"></i>
+      <div class="tl-photo ${r.badge==='alerta'?'warning':''}">
+        ${r.img?`<img src="${r.img}" alt="Foto cura">`:`<i class="bi bi-camera-fill"></i>`}
         <div class="tl-photo-overlay"></div>
       </div>
       <div class="tl-meta">
         <div class="tl-meta-row">
-          <span class="tl-title">${escapeHTML(r.label)}</span>
-          <span class="tl-badge badge-${r.badge}">${badgeLabel(r.badge)}</span>
+          <span class="tl-title">${esc(r.label)}</span>
+          <span class="tl-badge badge-${esc(r.badge)}">${badgeLabel(r.badge)}</span>
         </div>
-        <div class="tl-obs">${escapeHTML(r.obs)}</div>
+        <div class="tl-obs">${esc(r.obs)}</div>
       </div>
       <div class="ai-analysis">
-        <i class="ti ti-sparkles"></i>
-        <span>${escapeHTML(r.ai)}</span>
+        <i class="bi bi-stars"></i><span>${esc(r.ai)}</span>
       </div>
       <div class="tl-quick-actions">
-        <button class="tl-action" onclick="showToast('Comparativa abierta')"><i class="ti ti-columns"></i>Comparar</button>
-        <button class="tl-action" onclick="showToast('Zoom activado')"><i class="ti ti-zoom-in"></i>Ampliar</button>
-        <button class="tl-action" onclick="showToast('Gráfico de evolución')"><i class="ti ti-chart-line"></i>Evolución</button>
+        <button class="tl-action" onclick="showToast('Comparativa activada')"><i class="bi bi-layout-split"></i>Comparar</button>
+        <button class="tl-action" onclick="showToast('Ampliación activada')"><i class="bi bi-zoom-in"></i>Ampliar</button>
+        <button class="tl-action" onclick="showToast('Gráfico de evolución')"><i class="bi bi-graph-up-arrow"></i>Evolución</button>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function badgeLabel(b) {
-  return { mejora:'Mejora ↑', alerta:'Atención ⚠', critico:'Crítico ⛔' }[b] || b;
+  return {mejora:'Mejora ↑',alerta:'Atención ⚠',critico:'Crítico ⛔'}[b]||b;
 }
 
 function selectPatient(el, name) {
-  document.querySelectorAll('.patient-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  State.currentPatient = name;
-  showToast('Paciente: ' + name);
+  document.querySelectorAll('.patient-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active'); State.currentPatient=name; showToast('Paciente: '+name);
 }
 
-function simulatePhoto(src) {
-  const entry = {
-    id: State.nextWoundId++,
-    date: new Date().toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}),
-    label: 'Úlcera sacra G-III',
-    obs: src === 'camera' ? 'Foto recién tomada. Pendiente de análisis.' : 'Foto de galería importada.',
-    badge: 'mejora',
-    ai: 'IA: Analizando imagen... Comparando con registros anteriores.',
-  };
-  State.woundRecords.unshift(entry);
-  renderTimeline();
-  showToast(src === 'camera' ? 'Foto guardada ✓' : 'Foto importada ✓');
+/* Guardar registro desde foto */
+function savePhotoRecord(src) {
+  const today = new Date().toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
+  State.woundRecords.unshift({
+    id: State.nextWoundId++, date: today,
+    label: 'UPP – '+State.currentPatient,
+    obs: 'Registro fotográfico añadido. Pendiente de valoración clínica.',
+    badge: 'alerta',
+    ai: 'IA: imagen registrada. Ejecuta el análisis con el botón de la cámara.',
+    img: src || null,
+  });
+  persistState(); renderTimeline(); showToast('Registro guardado en el seguimiento ✓');
 }
 
-/* ─────────────────────────────────────────────
-   ASISTENTE IA (chat clínico simulado)
-───────────────────────────────────────────── */
-const AI_RESPONSES = [
-  { keys: ['úlcera','sacra','grado'],
-    reply: '<b>Protocolo úlcera por presión:</b><ul><li>Grado III: afectación hasta tejido subcutáneo</li><li>Apósito recomendado: espuma de poliuretano hidrocelular (cambio c/3–5 días)</li><li>Proteger piel perilesional con film barrera</li><li>Posición: alivio de presión cada 2h</li><li>Valorar TPN si sin mejora en 2 semanas</li></ul>' },
-  { keys: ['infección','signos','vigilar'],
-    reply: '<b>Signos de infección local a vigilar:</b><ul><li>Eritema perilesional en expansión (&gt;2cm)</li><li>Exudado purulento o maloliente</li><li>Calor y edema local</li><li>Dolor desproporcionado</li><li>Fiebre o leucocitosis</li><li>Estancamiento de la cicatrización &gt;2 semanas</li></ul>Si aparecen varios → toma de cultivo y valorar antibioterapia sistémica.' },
-  { keys: ['apósito','recomienda'],
-    reply: '<b>Selección de apósito según tipo de herida:</b><ul><li>Exudado escaso: hidrogel + film transparente</li><li>Exudado moderado: espuma hidrocelular</li><li>Exudado abundante: alginato cálcico</li><li>Herida infectada: apósito de plata iónica</li><li>Cavidades: alginato en cinta o espuma de cavidades</li></ul>' },
-  { keys: ['picc','catéter','vascular'],
-    reply: '<b>Cuidados del catéter PICC:</b><ul><li>Cambio de apósito transparente c/7 días o si despegado</li><li>Inspeccionar punto de inserción en cada visita</li><li>Signos de alarma: eritema, edema, exudado, fiebre</li><li>Heparinización según protocolo del centro</li><li>Registro de cm externos del catéter en cada visita</li></ul>' },
-  { keys: ['desbridamiento','necros'],
-    reply: '<b>Desbridamiento en heridas crónicas:</b><ul><li>Autolítico: hidrogel (1ª elección, no doloroso)</li><li>Enzimático: colagenasa (tejido necrótico seco)</li><li>Cortante/quirúrgico: indicado en necrosis extensa</li><li>Mecánico: irrigación a presión (contraindicado en tejido granulación)</li></ul>Siempre valorar perfusión periférica antes.' },
+/* ──────────────────────────────
+   EVOLUTIA — DICTADO + REDACCIÓN
+────────────────────────────── */
+const SOAP_TEMPLATES = {
+  soap: (s) => {
+    const r = s.toLowerCase();
+    let S='', O='', A='', P='';
+    if(r.includes('refiere')||r.includes('dolor')||r.includes('molesti')) S+='Paciente refiere '+extractAfter(s,'refiere','.')+'. ';
+    else S = 'Sin quejas subjetivas relevantes referidas por el paciente. ';
+    if(r.includes('estable')) O += 'Paciente clínicamente estable. ';
+    if(r.includes('afebril')||r.includes('sin fiebre')) O += 'Afebril (Tax. no determinada in situ). ';
+    if(r.includes('picc')||r.includes('catéter')) O += 'Catéter PICC permeable, apósito íntegro, punto de inserción sin signos inflamatorios. ';
+    if(r.includes('herida')||r.includes('úlcera')||r.includes('granul')) O += 'Herida en fase de granulación activa, exudado escaso-moderado de aspecto seroso. ';
+    if(r.includes('tolera')) O += 'Buena tolerancia al tratamiento farmacológico pautado. ';
+    if(!O) O = 'Exploración compatible con situación basal del paciente. ';
+    A = 'Evolución favorable respecto a la visita anterior. Sin incidencias relevantes.';
+    P = 'Continuar pauta de cuidados establecida. Próxima visita según calendario. Pauta escrita entregada al cuidador principal.';
+    return `S (Subjetivo):\n${S.trim()}\n\nO (Objetivo):\n${O.trim()}\n\nA (Valoración):\n${A}\n\nP (Plan):\n${P}`;
+  },
+  evolucion: (s) => {
+    const r = s.toLowerCase();
+    let t = '';
+    if(r.includes('estable')) t += 'Paciente clínicamente estable. ';
+    if(r.includes('afebril')) t += 'Afebril durante el periodo de visita. ';
+    if(r.includes('tolera'))  t += 'Tolerancia adecuada al régimen terapéutico actual. ';
+    if(r.includes('picc'))    t += 'Catéter PICC funcional y sin signos de infección local. ';
+    if(r.includes('herida')||r.includes('cura')) t += 'Se realiza cura de la herida, con evolución satisfactoria. ';
+    if(r.includes('familia')||r.includes('cuidador')) t += 'Familia informada y colaboradora. ';
+    if(!t) t = s.charAt(0).toUpperCase()+s.slice(1)+'. ';
+    return `Nota de evolución de enfermería:\n\n${t.trim()}\n\nPróxima valoración programada según protocolo de UHD. Se deja pauta escrita al cuidador responsable.`;
+  },
+  cura: (s) => {
+    return `Registro de cura domiciliaria:\n\nPaciente: ${State.currentPatient} | Profesional: ${State.title} ${State.name}\nFecha: ${new Date().toLocaleDateString('es-ES')}\n\nDescripción de la lesión:\n${s}\n\nProcedimiento realizado:\nLimpieza con SF 0,9 % a presión efectiva. Aplicación de apósito según protocolo (ver plan de curas). Piel perilesional protegida.\n\nRespuesta del paciente:\nTolerada la cura sin incidencias. Dolor EVA controlado.\n\nPróxima revisión: según protocolo activo.`;
+  },
+  incidencia: (s) => {
+    return `INCIDENCIA CLÍNICA — ${new Date().toLocaleString('es-ES')}\nProfesional: ${State.title} ${State.name}\nPaciente: ${State.currentPatient}\n\nDescripción de la incidencia:\n${s}\n\nMedidas adoptadas:\nValoración clínica in situ. Comunicación a médico responsable si procede.\n\nSeguimiento:\nPaciente y cuidador informados. Se documenta en historia clínica digital.`;
+  },
+};
+
+function extractAfter(s, keyword, stop) {
+  const idx = s.toLowerCase().indexOf(keyword);
+  if (idx<0) return '...';
+  const part = s.slice(idx+keyword.length).trim();
+  const end = part.indexOf(stop);
+  return end>0 ? part.slice(0,end) : part.slice(0,60);
+}
+
+let soapMode = 'soap';
+function setSoapMode(mode, btn) {
+  soapMode = mode;
+  document.querySelectorAll('.soap-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+const DEMO_PHRASES = [
+  'Paciente estable, afebril, tolera tratamiento oral.',
+  'Paciente estable, afebril, tolera tratamiento. PICC permeable.',
+  'Paciente estable, afebril. PICC sin infección. Herida con granulación activa.',
+  'Paciente estable, afebril. Herida granulando. Familia informada y colaboradora.',
 ];
 
-const AI_DEFAULT = 'Entendido. Basándome en guías clínicas actualizadas (GNEAUPP, EWMA), te recomendaría revisar el protocolo de tu unidad para este caso. ¿Puedes darme más detalles sobre el tipo de lesión, exudado y estado perilesional?';
+let demoPhaseIdx=0, demoInterval=null, evolRecognition=null, isEvolRecording=false;
+let liveTranscript='', voiceEditActive=false, voiceEditRec=null;
+
+function toggleRecording() { isEvolRecording ? stopEvolRecording() : startEvolRecording(); }
+function startEvolRecording() {
+  isEvolRecording=true;
+  document.getElementById('record-btn').classList.add('recording');
+  document.getElementById('waveform').classList.add('active');
+  document.getElementById('record-hint').textContent='Grabando... pulsa para detener';
+  liveTranscript='';
+  if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    evolRecognition=new SR(); evolRecognition.lang='es-ES';
+    evolRecognition.continuous=true; evolRecognition.interimResults=true;
+    evolRecognition.onresult=ev=>{
+      liveTranscript=Array.from(ev.results).map(r=>r[0].transcript).join(' ');
+      document.getElementById('transcript-display').textContent=liveTranscript;
+    };
+    evolRecognition.onend=()=>{ if(isEvolRecording){try{evolRecognition.start();}catch(e){}} };
+    evolRecognition.onerror=()=>runDemoMode();
+    try{evolRecognition.start();return;}catch(e){}
+  }
+  runDemoMode();
+}
+function runDemoMode(){
+  demoPhaseIdx=0;
+  demoInterval=setInterval(()=>{
+    if(demoPhaseIdx<DEMO_PHRASES.length){
+      liveTranscript=DEMO_PHRASES[demoPhaseIdx++];
+      document.getElementById('transcript-display').textContent=liveTranscript;
+    }
+  },1600);
+}
+function stopEvolRecording(){
+  isEvolRecording=false;
+  if(evolRecognition){try{evolRecognition.stop();}catch(e){}evolRecognition=null;}
+  if(demoInterval){clearInterval(demoInterval);demoInterval=null;}
+  document.getElementById('record-btn').classList.remove('recording');
+  document.getElementById('waveform').classList.remove('active');
+  document.getElementById('record-hint').textContent='Pulsa para grabar';
+  if(!liveTranscript){showToast('Sin audio detectado');return;}
+  const generated = SOAP_TEMPLATES[soapMode] ? SOAP_TEMPLATES[soapMode](liveTranscript) : liveTranscript;
+  State.evolText=generated; State.transcript=liveTranscript;
+  document.getElementById('evol-text').textContent=generated;
+  document.getElementById('evol-edit').value=generated;
+  document.getElementById('evol-text').classList.remove('hidden');
+  document.getElementById('evol-edit').classList.remove('active');
+  State.editMode=false;
+  document.getElementById('edit-toggle-btn').innerHTML='<i class="bi bi-pencil"></i> Editar';
+  showToast('Evolutivo estructurado generado ✓');
+}
+
+function toggleEditMode(){
+  State.editMode=!State.editMode;
+  const textEl=document.getElementById('evol-text'), editEl=document.getElementById('evol-edit');
+  const btn=document.getElementById('edit-toggle-btn');
+  if(State.editMode){
+    editEl.value=State.evolText||textEl.textContent;
+    textEl.classList.add('hidden'); editEl.classList.add('active'); editEl.focus();
+    btn.innerHTML='<i class="bi bi-check-lg"></i> Listo';
+  } else {
+    State.evolText=editEl.value; textEl.textContent=State.evolText;
+    textEl.classList.remove('hidden'); editEl.classList.remove('active');
+    btn.innerHTML='<i class="bi bi-pencil"></i> Editar';
+    showToast('Cambios guardados');
+  }
+}
+
+function toggleVoiceEdit(){
+  if(voiceEditActive){stopVoiceEdit();return;}
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){showToast('Voz no disponible');return;}
+  if(!State.editMode) toggleEditMode();
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  voiceEditRec=new SR(); voiceEditRec.lang='es-ES'; voiceEditRec.continuous=true; voiceEditRec.interimResults=false;
+  voiceEditRec.onresult=ev=>{
+    const extra=Array.from(ev.results).map(r=>r[0].transcript).join(' ');
+    const box=document.getElementById('evol-edit');
+    box.value=(box.value.trim()+' '+extra).trim();
+  };
+  voiceEditRec.onend=()=>stopVoiceEdit();
+  voiceEditRec.start(); voiceEditActive=true;
+  document.getElementById('voice-edit-btn').textContent='⏹ Detener';
+  showToast('Dictando corrección...');
+}
+function stopVoiceEdit(){
+  if(voiceEditRec){try{voiceEditRec.stop();}catch(e){}voiceEditRec=null;}
+  voiceEditActive=false;
+  document.getElementById('voice-edit-btn').textContent='Dictar';
+}
+function copyEvolutivo(){
+  const t=getEvolContent();
+  if(!t||t.includes('aparecerá')){showToast('Genera un evolutivo primero');return;}
+  navigator.clipboard?.writeText(t).then(()=>showToast('Copiado ✓')).catch(()=>showToast('No se pudo copiar'));
+}
+function shareEvolutivo(){
+  const t=getEvolContent();
+  if(!t||t.includes('aparecerá')){showToast('Genera un evolutivo primero');return;}
+  navigator.share?navigator.share({title:'EvolutIA UHD',text:t}):showToast('Compartir no disponible');
+}
+function saveEvolutivo(){
+  const t=getEvolContent();
+  if(!t||t.includes('aparecerá')){showToast('Genera un evolutivo primero');return;}
+  State.evolText=t; persistState(); showToast('Evolutivo guardado ✓');
+}
+function getEvolContent(){
+  return State.editMode?document.getElementById('evol-edit').value:document.getElementById('evol-text').textContent;
+}
+
+/* ──────────────────────────────
+   ASISTENTE IA — RESPUESTAS BASADAS EN EVIDENCIA
+────────────────────────────── */
+const AI_KB = [
+  {
+    keys:['úlcera','upp','presión','sacra','trocánter','talón','maléolo'],
+    reply:`<b>Úlceras por Presión (UPP) — Clasificación y abordaje</b>
+<ul>
+<li><b>G-I:</b> Eritema no blanqueable. Apósito film transparente. Alivio de presión inmediato.</li>
+<li><b>G-II:</b> Pérdida parcial del espesor cutáneo. Apósito hidrocoloide delgado o espuma (c/3–5 d).</li>
+<li><b>G-III:</b> Pérdida total. Alginato si exudado abundante; espuma de cavidad. Valorar TPN si estancamiento.</li>
+<li><b>G-IV:</b> Afectación tejidos profundos. Desbridamiento (autolítico, enzimático o cortante). Derivación especializada urgente.</li>
+</ul>
+<b>Principios transversales:</b>
+<ul>
+<li>Limpieza: SF 0,9 % a 4–15 psi. Evitar povidona yodada en tejido granulación.</li>
+<li>Cambios posturales cada 2 h (encamado) / 15–30 min (silla de ruedas).</li>
+<li>Soporte nutricional: valorar albúmina, zinc, vitamina C.</li>
+<li>Monitorizar con PUSH Tool 3.0 y fotografía estandarizada.</li>
+</ul>
+<div class="ref-block">
+EPUAP/NPIAP/PPPIA. <i>Clinical Practice Guideline: Prevention and Treatment of Pressure Ulcers/Injuries.</i> 3.ª ed. EPUAP, 2019.<br>
+GNEAUPP. <i>Doc. Técnico XIV.</i> 2020.
+</div>`,
+  },
+  {
+    keys:['infección','infectada','celulitis','purulento','osteomielitis'],
+    reply:`<b>Infección de herida crónica — Criterios diagnósticos y manejo</b>
+<ul>
+<li><b>Colonización crítica:</b> retraso en la cicatrización sin signos locales clásicos → apósito de plata iónica (cambio c/3–7 días) o cadexómero yodado.</li>
+<li><b>Infección local:</b> eritema >2 cm, calor, dolor, exudado purulento → cultivo microbiológico (hisopo Levine) + antibioterapia tópica/sistémica según antibiograma.</li>
+<li><b>Infección sistémica:</b> fiebre, leucocitosis, mal estado general → derivación hospitalaria urgente. Antibioterapia IV según protocolo local.</li>
+<li><b>Osteomielitis:</b> descartar si herida profunda, hueso visible o evolución tórpida → RMN + derivación a cirugía.</li>
+</ul>
+<div class="ref-block">
+EWMA. <i>Wound Infection in Clinical Practice: An International Consensus.</i> 2022.<br>
+IDSA. <i>Practice Guidelines for Diagnosis and Treatment of Diabetic Foot Infections.</i> CID, 2012.
+</div>`,
+  },
+  {
+    keys:['apósito','vendaje','material','hidrogel','alginato','plata','espuma','hidrocoloide'],
+    reply:`<b>Selección de apósito según características de la herida</b>
+<ul>
+<li><b>Exudado escaso:</b> hidrogel + film transparente semipermeable.</li>
+<li><b>Exudado moderado:</b> espuma de poliuretano hidrocelular (cambio c/3–5 d).</li>
+<li><b>Exudado abundante:</b> alginato cálcico o sódico (cambio c/1–3 d cuando saturado).</li>
+<li><b>Infección / colonización crítica:</b> plata iónica (apósito Ag) o cadexómero yodado (máx. 3 meses).</li>
+<li><b>Cavidades o tunelizaciones:</b> alginato en cinta o espuma de cavidades.</li>
+<li><b>Escaras / tejido necrótico seco:</b> hidrogel para rehidratación y desbridamiento autolítico.</li>
+<li><b>Piel frágil / perilesional:</b> film de silicona o pasta de óxido de zinc.</li>
+</ul>
+<div class="ref-block">
+Wounds International. <i>Best Practice Guidelines: Wound Management in Diabetic Foot Ulcers.</i> 2013.<br>
+GNEAUPP. <i>Recomendaciones para la selección de apósitos.</i> 2019.
+</div>`,
+  },
+  {
+    keys:['picc','catéter','vascular','vía central','peripherally'],
+    reply:`<b>Cuidados del catéter PICC — Protocolo domiciliario</b>
+<ul>
+<li><b>Apósito:</b> transparente semipermeable (cambio c/7 días o si despegado/mojado). Apósito con gluconato de clorhexidina si alto riesgo de infección.</li>
+<li><b>Inspección:</b> punto de inserción en cada visita. Registrar cm externos del catéter (comparar con valor inicial).</li>
+<li><b>Permeabilidad:</b> heparinización con heparina sódica (10–100 UI/mL) o SF 0,9 % (SASH: SF — Administración — SF — Heparina) según protocolo del centro.</li>
+<li><b>Signos de alarma:</b> eritema, induración, dolor, exudado o fiebre >38 °C → retirada y hemocultivo central/periférico.</li>
+<li><b>Trombosis:</b> dificultad para infundir sin reflejo → Rx para comprobar posición + valorar fibrinolítico.</li>
+</ul>
+<div class="ref-block">
+INS. <i>Infusion Therapy Standards of Practice.</i> 8.ª ed. JIN, 2021.<br>
+SEMICYUC/SEEIUC. <i>Bacteriemia zero: prevención de bacteriemia relacionada con catéter.</i> 2014.
+</div>`,
+  },
+  {
+    keys:['dolor','analgesia','eva','escalera','opioide','paracetamol','metamizol'],
+    reply:`<b>Manejo del dolor en UHD — Escalera analgésica OMS</b>
+<ul>
+<li><b>EVA 1–3 (leve):</b> Paracetamol 1 g c/6–8 h VO / AINE si no contraindicado (ibuprofeno 400 mg c/8 h con protección gástrica).</li>
+<li><b>EVA 4–6 (moderado):</b> Tramadol 50–100 mg c/6–8 h VO o codeína. Valorar coanalgésicos (pregabalina, amitriptilina) en dolor neuropático.</li>
+<li><b>EVA 7–10 (grave):</b> Morfina oral o SC. Fentanilo transdérmico si dolor estable. Valorar rotación de opioides ante efectos secundarios.</li>
+<li><b>Dolor irruptivo:</b> dosis de rescate del 10–15 % de la dosis diaria total de opioide.</li>
+<li><b>Dolor procedural (cura):</b> analgesia 30–60 min antes. Apósitos de baja adherencia. Técnica de remoción en húmedo.</li>
+</ul>
+<div class="ref-block">
+WHO. <i>Palliative Care: Symptom Management and End-of-Life Care.</i> 2018.<br>
+SEOM. <i>Guía de Práctica Clínica en Oncología: Tratamiento del Dolor.</i> 2021.
+</div>`,
+  },
+  {
+    keys:['nutrición','desnutrición','albúmina','hipoproteinemia','suplemento'],
+    reply:`<b>Nutrición y cicatrización de heridas crónicas</b>
+<ul>
+<li><b>Cribado nutricional:</b> MNA (ancianos) o MUST. Albúmina <3,5 g/dL indica riesgo elevado.</li>
+<li><b>Requerimientos estimados:</b> 30–35 kcal/kg/día y 1,2–1,5 g proteína/kg/día en heridas activas.</li>
+<li><b>Micronutrientes clave:</b> vitamina C (1 g/día), zinc sulfato (220 mg/día si déficit), arginina en heridas G-III/IV.</li>
+<li><b>Hidratación:</b> mínimo 30 mL/kg/día. Valorar signos de deshidratación en paciente mayor.</li>
+<li><b>Suplementos orales:</b> batidos hiperproteicos hipercalóricos si ingesta insuficiente. Valorar SNG/PEG si imposibilidad de ingesta oral.</li>
+</ul>
+<div class="ref-block">
+ESPEN. <i>Guideline on clinical nutrition and hydration in geriatrics.</i> Clin Nutr, 2019.<br>
+GNEAUPP-SENPE. <i>Documento de consenso: Nutrición en heridas crónicas.</i> 2018.
+</div>`,
+  },
+  {
+    keys:['braden','norton','riesgo','prevención upp'],
+    reply:`<b>Prevención de UPP — Valoración del riesgo</b>
+<ul>
+<li><b>Escala de Braden:</b> ≤18 puntos → riesgo. ≤12 → alto riesgo. Valora: percepción sensorial, humedad, actividad, movilidad, nutrición, fricción/cizalla.</li>
+<li><b>Superficies:</b> colchón de espuma viscoelástica (riesgo bajo-moderado); colchón de aire alternante (alto riesgo / UPP existente).</li>
+<li><b>Cambios posturales:</b> cada 2 h en decúbito; cada 1 h en sedestación. Posición lateral 30°. Evitar apoyo directo sobre la UPP.</li>
+<li><b>Piel:</b> hidratación diaria. Evitar humedad por incontinencia (dispositivos colectores, pañal transpirable). Apósito de espuma de silicona en prominencias óseas.</li>
+</ul>
+<div class="ref-block">
+EPUAP/NPIAP/PPPIA. <i>Prevention and Treatment of Pressure Ulcers/Injuries.</i> 2019.<br>
+GNEAUPP. <i>Doc. Técnico III: Directrices generales sobre prevención de las UPP.</i> 2018.
+</div>`,
+  },
+];
+const AI_DEFAULT = `No dispongo de información clínica específica suficiente para responder con evidencia sobre esta consulta en particular.<br><br>Te recomiendo consultar:<br><ul><li><b>GNEAUPP</b> (gneaupp.info) — Heridas crónicas</li><li><b>EWMA</b> (ewma.org) — Wound Management</li><li><b>SEHER</b> — Estomaterapia y heridas</li><li><b>UpToDate / PubMed</b> — Evidencia primaria</li></ul>Si me das más contexto clínico (tipo de lesión, localización, tratamiento actual, comorbilidades), intentaré darte una respuesta más útil.`;
 
 function getAIReply(text) {
-  const t = text.toLowerCase();
-  for (const r of AI_RESPONSES) {
-    if (r.keys.some(k => t.includes(k))) return r.reply;
+  const t = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  for (const r of AI_KB) {
+    if (r.keys.some(k => t.includes(k.normalize('NFD').replace(/[\u0300-\u036f]/g,'')))) return r.reply;
   }
   return AI_DEFAULT;
 }
 
-function openAI() {
-  document.getElementById('ai-overlay').classList.add('open');
-  document.getElementById('ai-chat-input').focus();
-}
-function closeAI() {
-  document.getElementById('ai-overlay').classList.remove('open');
-  stopAIMic();
-}
-
-/* ✅ appendBubble seguro: usuario como texto, IA puede ser HTML */
 function appendBubble(content, type, isHTML=false) {
   const el = document.createElement('div');
   el.className = `bubble ${type} fade-in`;
-  if (isHTML) el.innerHTML = content;
-  else el.textContent = content;
+  isHTML ? el.innerHTML=content : el.textContent=content;
   document.getElementById('chat-messages').appendChild(el);
   scrollChat();
 }
@@ -1701,290 +2195,86 @@ function sendChatMessage() {
   const input = document.getElementById('ai-chat-input');
   const text  = input.value.trim();
   if (!text) return;
-
-  appendBubble(text, 'user', false);
-  input.value = '';
-  input.style.height = 'auto';
-
-  const typingId = 'typing-' + Date.now();
-  const typing = document.createElement('div');
-  typing.className = 'bubble ai fade-in';
-  typing.id = typingId;
-  typing.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-  document.getElementById('chat-messages').appendChild(typing);
-  scrollChat();
-
-  setTimeout(() => {
-    const el = document.getElementById(typingId);
-    if (el) el.remove();
-    appendBubble(getAIReply(text), 'ai', true);
-  }, 1100 + Math.random() * 600);
+  appendBubble(text,'user',false);
+  input.value=''; input.style.height='auto';
+  const tid='t-'+Date.now();
+  const t=document.createElement('div');
+  t.className='bubble ai fade-in'; t.id=tid;
+  t.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+  document.getElementById('chat-messages').appendChild(t); scrollChat();
+  setTimeout(()=>{
+    document.getElementById(tid)?.remove();
+    appendBubble(getAIReply(text),'ai',true);
+  },900+Math.random()*500);
 }
 
-function scrollChat() {
-  const c = document.getElementById('chat-messages');
-  setTimeout(() => { c.scrollTop = c.scrollHeight; }, 50);
+function scrollChat(){
+  const c=document.getElementById('chat-messages');
+  setTimeout(()=>{c.scrollTop=c.scrollHeight;},50);
 }
-function handleChatKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
-  e.target.style.height = 'auto';
-  e.target.style.height = Math.min(e.target.scrollHeight, 80) + 'px';
+function handleChatKey(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMessage();}
+  e.target.style.height='auto';
+  e.target.style.height=Math.min(e.target.scrollHeight,80)+'px';
 }
-
-/* Voz en el chat IA */
-function toggleAIMic() {
-  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-    showToast('Reconocimiento de voz no disponible en este navegador');
+function toggleAIMic(){
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){showToast('Voz no disponible');return;}
+  if(State.aiMicActive){
+    if(State.recognition){try{State.recognition.stop();}catch(e){}State.recognition=null;}
+    State.aiMicActive=false;
+    document.getElementById('ai-mic-btn').classList.remove('recording');
     return;
   }
-  if (State.aiMicActive) { stopAIMic(); return; }
-  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  State.recognition = new SpeechRec();
-  State.recognition.lang = 'es-ES';
-  State.recognition.continuous = true;
-  State.recognition.interimResults = true;
-  State.recognition.onresult = (ev) => {
-    const transcript = Array.from(ev.results).map(r => r[0].transcript).join('');
-    document.getElementById('ai-chat-input').value = transcript;
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  State.recognition=new SR(); State.recognition.lang='es-ES';
+  State.recognition.continuous=true; State.recognition.interimResults=true;
+  State.recognition.onresult=ev=>{
+    document.getElementById('ai-chat-input').value=Array.from(ev.results).map(r=>r[0].transcript).join('');
   };
-  State.recognition.onend = () => stopAIMic();
-  State.recognition.start();
-  State.aiMicActive = true;
+  State.recognition.onend=()=>{State.aiMicActive=false;document.getElementById('ai-mic-btn').classList.remove('recording');};
+  State.recognition.start(); State.aiMicActive=true;
   document.getElementById('ai-mic-btn').classList.add('recording');
-  showToast('Dictando... habla ahora');
-}
-function stopAIMic() {
-  if (State.recognition) { try { State.recognition.stop(); } catch(e){} State.recognition = null; }
-  State.aiMicActive = false;
-  const btn = document.getElementById('ai-mic-btn');
-  if (btn) btn.classList.remove('recording');
+  showToast('Dictando...');
 }
 
-/* ─────────────────────────────────────────────
-   EVOLUTIVO IA — dictado + generación
-───────────────────────────────────────────── */
-const DEMO_PHRASES = [
-  'Paciente estable, afebril, tolera tratamiento oral sin incidencias.',
-  'Paciente estable, afebril, tolera tratamiento oral sin incidencias. PICC permeable, sin signos de infección.',
-  'Paciente estable, afebril, tolera tratamiento. PICC permeable, sin signos infección. Herida con granulación activa.',
-  'Paciente estable, afebril, tolera tratamiento. PICC limpio. Herida granulando. Familia informada, comprende plan terapéutico.',
-];
-
-function generateEvolutivo(raw) {
-  const r = raw.toLowerCase();
-  let note = '';
-  if (r.includes('estable')) note += 'Paciente clínicamente estable. ';
-  if (r.includes('afebril') || r.includes('sin fiebre')) note += 'Afebril en el momento de la visita. ';
-  if (r.includes('tolera')) note += 'Buena tolerancia al tratamiento pautado, sin efectos adversos reportados. ';
-  if (r.includes('picc') || r.includes('catéter')) note += 'Catéter PICC permeable y con punto de inserción sin signos de infección local ni sistémica. ';
-  if (r.includes('herida') || r.includes('granul')) note += 'Herida en proceso de granulación activa, sin signos de sobreinfección. ';
-  if (r.includes('familia') || r.includes('cuidador')) note += 'Familia/cuidador principal correctamente informados del plan terapéutico y adherentes al mismo. ';
-  if (r.includes('dolor')) note += 'Refiere dolor controlado con analgesia actual. ';
-  if (r.includes('febril') || r.includes('fiebre')) note += 'Se objetiva febrícula/fiebre; se valora y se actúa según protocolo. ';
-  if (r.includes('tensión') || r.includes('presión')) note += 'Constantes vitales dentro de rango habitual del paciente. ';
-  if (!note) note = raw.charAt(0).toUpperCase() + raw.slice(1) + '.';
-  note += ' Próxima visita según plan establecido. Se deja pauta escrita al cuidador.';
-  return note.trim();
-}
-
-let demoPhaseIdx = 0;
-let demoInterval = null;
-let evolRecognition = null;
-let isEvolRecording = false;
-let liveTranscript = '';
-
-function toggleRecording() {
-  if (isEvolRecording) {
-    stopEvolRecording();
-  } else {
-    startEvolRecording();
-  }
-}
-
-function startEvolRecording() {
-  isEvolRecording = true;
-  const btn  = document.getElementById('record-btn');
-  const wave = document.getElementById('waveform');
-  const hint = document.getElementById('record-hint');
-  btn.classList.add('recording');
-  wave.classList.add('active');
-  hint.textContent = 'Grabando... pulsa para detener';
-  liveTranscript = '';
-
-  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    evolRecognition = new SR();
-    evolRecognition.lang = 'es-ES';
-    evolRecognition.continuous = true;
-    evolRecognition.interimResults = true;
-    evolRecognition.onresult = (ev) => {
-      liveTranscript = Array.from(ev.results).map(r => r[0].transcript).join(' ');
-      document.getElementById('transcript-display').textContent = liveTranscript;
-    };
-    evolRecognition.onend = () => {
-      if (isEvolRecording) { try { evolRecognition.start(); } catch(e){} }
-    };
-    evolRecognition.onerror = () => runDemoMode();
-    try { evolRecognition.start(); return; } catch(e) {}
-  }
-  runDemoMode();
-}
-
-function runDemoMode() {
-  demoPhaseIdx = 0;
-  demoInterval = setInterval(() => {
-    if (demoPhaseIdx < DEMO_PHRASES.length) {
-      liveTranscript = DEMO_PHRASES[demoPhaseIdx++];
-      document.getElementById('transcript-display').textContent = liveTranscript;
-    }
-  }, 1800);
-}
-
-function stopEvolRecording() {
-  isEvolRecording = false;
-  if (evolRecognition) { try { evolRecognition.stop(); } catch(e){} evolRecognition = null; }
-  if (demoInterval)    { clearInterval(demoInterval); demoInterval = null; }
-
-  const btn  = document.getElementById('record-btn');
-  const wave = document.getElementById('waveform');
-  const hint = document.getElementById('record-hint');
-  btn.classList.remove('recording');
-  wave.classList.remove('active');
-  hint.textContent = 'Pulsa para grabar';
-
-  if (!liveTranscript) { showToast('Sin audio detectado'); return; }
-
-  const generated = generateEvolutivo(liveTranscript);
-  State.evolText   = generated;
-  State.transcript = liveTranscript;
-
-  const textEl = document.getElementById('evol-text');
-  const editEl = document.getElementById('evol-edit');
-  textEl.textContent = generated;
-  editEl.value = generated;
-  textEl.classList.remove('hidden');
-  editEl.classList.remove('active');
-  State.editMode = false;
-  document.getElementById('edit-toggle-btn').innerHTML = '<i class="ti ti-edit"></i> Editar';
-  showToast('Evolutivo generado ✓');
-}
-
-/* Editar evolutivo */
-function toggleEditMode() {
-  State.editMode = !State.editMode;
-  const textEl = document.getElementById('evol-text');
-  const editEl = document.getElementById('evol-edit');
-  const btn    = document.getElementById('edit-toggle-btn');
-  if (State.editMode) {
-    editEl.value = State.evolText || textEl.textContent;
-    textEl.classList.add('hidden');
-    editEl.classList.add('active');
-    editEl.focus();
-    btn.innerHTML = '<i class="ti ti-check"></i> Listo';
-  } else {
-    State.evolText = editEl.value;
-    textEl.textContent = State.evolText;
-    textEl.classList.remove('hidden');
-    editEl.classList.remove('active');
-    btn.innerHTML = '<i class="ti ti-edit"></i> Editar';
-    showToast('Cambios guardados');
-  }
-}
-
-/* Voz para corregir / ampliar evolutivo */
-let voiceEditActive = false;
-let voiceEditRec = null;
-
-function toggleVoiceEdit() {
-  if (voiceEditActive) { stopVoiceEdit(); return; }
-  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-    showToast('Reconocimiento de voz no disponible'); return;
-  }
-  if (!State.editMode) toggleEditMode();
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  voiceEditRec = new SR();
-  voiceEditRec.lang = 'es-ES';
-  voiceEditRec.continuous = true;
-  voiceEditRec.interimResults = false;
-
-  voiceEditRec.onresult = (ev) => {
-    const extra = Array.from(ev.results).map(r => r[0].transcript).join(' ');
-    const box = document.getElementById('evol-edit');
-    box.value = (box.value.trim() + ' ' + extra).trim();
-  };
-  voiceEditRec.onend = () => stopVoiceEdit();
-  voiceEditRec.start();
-  voiceEditActive = true;
-  document.getElementById('voice-edit-btn').textContent = '⏹ Detener';
-  showToast('Dictando corrección... habla ahora');
-}
-function stopVoiceEdit() {
-  if (voiceEditRec) { try { voiceEditRec.stop(); } catch(e){} voiceEditRec = null; }
-  voiceEditActive = false;
-  document.getElementById('voice-edit-btn').textContent = 'Dictar corrección';
-}
-
-/* Acciones del evolutivo */
-function copyEvolutivo() {
-  const txt = getEvolContent();
-  if (!txt || txt.includes('aquí')) { showToast('Genera un evolutivo primero'); return; }
-  navigator.clipboard ? navigator.clipboard.writeText(txt).then(() => showToast('Copiado al portapapeles ✓'))
-                      : showToast('Copia manual: ' + txt.substring(0,30) + '...');
-}
-function shareEvolutivo() {
-  const txt = getEvolContent();
-  if (!txt || txt.includes('aquí')) { showToast('Genera un evolutivo primero'); return; }
-  navigator.share ? navigator.share({ title:'Evolutivo UHD', text: txt })
-                  : showToast('Función de compartir no disponible');
-}
-function saveEvolutivo() {
-  const txt = getEvolContent();
-  if (!txt || txt.includes('aquí')) { showToast('Genera un evolutivo primero'); return; }
-  State.evolText = txt;
-  showToast('Evolutivo guardado ✓');
-}
-function getEvolContent() {
-  return State.editMode
-    ? document.getElementById('evol-edit').value
-    : document.getElementById('evol-text').textContent;
-}
-
-/* ─────────────────────────────────────────────
-   MODALES GENÉRICOS
-───────────────────────────────────────────── */
+/* ──────────────────────────────
+   MODALES
+────────────────────────────── */
 function openModal(id)  { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-/* ─────────────────────────────────────────────
-   TOAST NOTIFICACIONES
-───────────────────────────────────────────── */
-let toastTimer;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+/* ──────────────────────────────
+   TOAST
+────────────────────────────── */
+let toastT;
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2800);
 }
 
-/* ─────────────────────────────────────────────
-   ✅ SERVICE WORKER (PWA instalable)
-───────────────────────────────────────────── */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
-  });
-}
-
-/* ─────────────────────────────────────────────
-   INICIALIZACIÓN
-───────────────────────────────────────────── */
+/* ──────────────────────────────
+   INIT
+────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   updateGreeting();
-  renderVisits();
-  renderTimeline();
+  if (!State.visits.length) {
+    State.visits=[
+      {id:1,addr:'C/ Ramón y Cajal, 14 – 2ºA',obs:'Cura UPP grado III sacra',priority:'alta',done:false},
+      {id:2,addr:'Av. Constitución, 88 – 4ºC',obs:'Control catéter PICC',priority:'media',done:false},
+      {id:3,addr:'C/ San Vicente, 33 – 1ºB',obs:'Seguimiento tratamiento IV',priority:'baja',done:false},
+    ];
+    State.nextVisitId=4;
+    State.distants=[{id:1,addr:'Urb. La Cantera, 12 – Bungalow 5',obs:'Fuera de zona – 22 km extra'}];
+    State.nextDistantId=2;
+    persistState();
+  }
+  updateHomeStats();
   updateNavActive('screen-home');
 });
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
 </script>
 
 </body>
