@@ -428,9 +428,32 @@
     .chat-mic-btn:hover { background:var(--gray-200); }
 
     /* MODAL */
-    .modal-backdrop { position:absolute; inset:0; z-index:60; background:rgba(0,0,0,0.35); display:none; align-items:flex-end; }
+    .modal-backdrop .modal-backdrop {
+  position: fixed;   /* ✅ CLAVE REAL */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  z-index: 10000;    /* ✅ mayor que nav */
+
+  background: rgba(0,0,0,0.35);
+  display: none;
+  align-items: flex-end;
+}
+
     .modal-backdrop.open { display:flex; }
-    .modal-sheet { background:var(--white); width:100%; border-radius:var(--r-xl) var(--r-xl) 0 0; padding:18px 18px 28px; animation:slideUp 0.25s cubic-bezier(0.4,0,0.2,1); }
+    .modal-sheet .modal-sheet {
+  position: relative;
+  z-index: 10001;
+  margin-bottom: 80px; /* ✅ evita que toque la barra */
+
+  background: var(--white);
+  width: 100%;
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  padding: 18px 18px 28px;
+  animation: slideUp 0.25s cubic-bezier(0.4,0,0.2,1);
+}
     @keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
     .modal-handle { width:36px; height:4px; background:var(--gray-200); border-radius:2px; margin:0 auto 16px; }
     .modal-title { font-size:15px; font-weight:600; color:var(--gray-800); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
