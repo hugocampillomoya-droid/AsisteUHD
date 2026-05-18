@@ -65,11 +65,13 @@
     .screen { display:none; flex-direction:column; flex:1; overflow:hidden; min-height:0; }
     .screen.active { display:flex; }
 
-    .screen-body {
-      flex:1; overflow-y:auto; overflow-x:hidden;
-      -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:90px;
-      min-height:0;
-    }
+   .screen-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding-bottom: calc(100px + env(safe-area-inset-bottom)); min-height:0; /* ✅ mejor */
+}
     .screen-body::-webkit-scrollbar { display:none; }
 
     /* INNER HEADER */
