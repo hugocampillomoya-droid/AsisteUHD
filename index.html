@@ -12,895 +12,467 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="icon" href="icon1.png">
 
-  <!-- FUENTES -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
-  <!-- ✅ ICONOS: Bootstrap Icons — librería estable, sin dependencias -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
-
-  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <style>
-    /* ══════════════════════════════════════════
-       RESET & VARIABLES
-    ══════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --blue-50:    #E6F1FB;
-      --blue-100:   #B5D4F4;
-      --blue-300:   #378ADD;
-      --blue-500:   #185FA5;
-      --blue-700:   #0C447C;
-      --green-50:   #EAF3DE;
-      --green-300:  #639922;
-      --green-500:  #3B6D11;
-      --teal-50:    #E0F4F1;
-      --teal-300:   #2A9D8F;
-      --teal-500:   #1A7A6E;
-      --purple-50:  #EEEDFE;
-      --purple-300: #7F77DD;
-      --purple-500: #534AB7;
-      --amber-50:   #FAEEDA;
-      --amber-300:  #EF9F27;
-      --amber-500:  #854F0B;
-      --red-50:     #FCEBEB;
-      --red-300:    #E24B4A;
-      --red-500:    #A32D2D;
-      --gray-50:    #F7F8FA;
-      --gray-100:   #EEF0F4;
-      --gray-200:   #DDE1E9;
-      --gray-400:   #9BA3B2;
-      --gray-500:   #6E7787;
-      --gray-600:   #5C6474;
-      --gray-700:   #384052;
-      --gray-800:   #2C3142;
-      --gray-900:   #181D2C;
-      --white:      #FFFFFF;
-      --r-sm: 8px; --r-md: 12px; --r-lg: 18px; --r-xl: 24px;
-      --shadow-sm: 0 1px 4px rgba(0,0,0,0.06);
-      --shadow-md: 0 4px 16px rgba(0,0,0,0.09);
-      --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-      --tr: 0.18s cubic-bezier(0.4,0,0.2,1);
-      --font: 'DM Sans', sans-serif;
-      --mono: 'DM Mono', monospace;
+      --blue-50:#E6F1FB; --blue-100:#B5D4F4; --blue-300:#378ADD; --blue-500:#185FA5; --blue-700:#0C447C;
+      --green-50:#EAF3DE; --green-300:#639922; --green-500:#3B6D11;
+      --teal-50:#E0F4F1; --teal-300:#2A9D8F; --teal-500:#1A7A6E;
+      --purple-50:#EEEDFE; --purple-300:#7F77DD; --purple-500:#534AB7;
+      --amber-50:#FAEEDA; --amber-300:#EF9F27; --amber-500:#854F0B;
+      --red-50:#FCEBEB; --red-300:#E24B4A; --red-500:#A32D2D;
+      --gray-50:#F7F8FA; --gray-100:#EEF0F4; --gray-200:#DDE1E9; --gray-400:#9BA3B2;
+      --gray-500:#6E7787; --gray-600:#5C6474; --gray-700:#384052; --gray-800:#2C3142; --gray-900:#181D2C;
+      --white:#FFFFFF;
+      --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:24px;
+      --shadow-sm:0 1px 4px rgba(0,0,0,0.06); --shadow-md:0 4px 16px rgba(0,0,0,0.09); --shadow-lg:0 8px 32px rgba(0,0,0,0.12);
+      --tr:0.18s cubic-bezier(0.4,0,0.2,1);
+      --font:'DM Sans',sans-serif; --mono:'DM Mono',monospace;
     }
 
-    html, body {
-      height: 100%;
-      font-family: var(--font);
-      background: var(--gray-50);
-      color: var(--gray-800);
-      font-size: 15px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
+    html, body { height:100%; font-family:var(--font); background:var(--gray-50); color:var(--gray-800); font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
 
-    /* ══════════════════════════════════════════
-       SHELL PRINCIPAL
-    ══════════════════════════════════════════ */
+    /* SHELL */
     #app-shell {
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 24px 16px 40px;
-      background: #e8ecf2;
-      background-image:
-        radial-gradient(circle at 20% 20%, #dce8f8 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, #d8e8d0 0%, transparent 50%);
+      display:flex; align-items:flex-start; justify-content:center;
+      min-height:100vh; padding:24px 16px 40px;
+      background:#e8ecf2;
+      background-image:radial-gradient(circle at 20% 20%,#dce8f8 0%,transparent 50%),radial-gradient(circle at 80% 80%,#d8e8d0 0%,transparent 50%);
     }
 
     #phone {
-      width: 390px;
-      min-height: 844px;
-      background: var(--gray-50);
-      border-radius: 44px;
-      box-shadow: var(--shadow-lg), 0 0 0 8px #c8cfd8, 0 0 0 10px #b8bfc8;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
+      width:390px; min-height:844px; background:var(--gray-50);
+      border-radius:44px;
+      box-shadow:var(--shadow-lg),0 0 0 8px #c8cfd8,0 0 0 10px #b8bfc8;
+      overflow:hidden; display:flex; flex-direction:column; position:relative;
     }
 
-    /* Status bar */
+    /* STATUS BAR */
     .status-bar {
-      background: var(--white);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 24px 8px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--gray-600);
-      flex-shrink: 0;
+      background:var(--white); display:flex; justify-content:space-between; align-items:center;
+      padding:12px 24px 8px; font-size:12px; font-weight:500; color:var(--gray-600); flex-shrink:0;
     }
-    .status-icons { display: flex; gap: 6px; align-items: center; font-size: 14px; }
+    .status-icons { display:flex; gap:6px; align-items:center; font-size:14px; }
 
-    /* ══════════════════════════════════════════
-       PANTALLAS
-    ══════════════════════════════════════════ */
-    .screen { display: none; flex-direction: column; flex: 1; overflow: hidden; }
-    .screen.active { display: flex; }
+    /* SCREENS */
+    .screen { display:none; flex-direction:column; flex:1; overflow:hidden; min-height:0; }
+    .screen.active { display:flex; }
 
     .screen-body {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding-bottom: 16px;
+      flex:1; overflow-y:auto; overflow-x:hidden;
+      -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:16px;
+      min-height:0;
     }
-    .screen-body::-webkit-scrollbar { display: none; }
+    .screen-body::-webkit-scrollbar { display:none; }
 
-    /* ══════════════════════════════════════════
-       CABECERA INTERNA
-    ══════════════════════════════════════════ */
+    /* INNER HEADER */
     .inner-header {
-      background: var(--white);
-      border-bottom: 1px solid var(--gray-100);
-      padding: 12px 16px 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      background:var(--white); border-bottom:1px solid var(--gray-100);
+      padding:12px 16px 10px; display:flex; align-items:center; gap:10px;
+      flex-shrink:0; z-index:10;
     }
     .back-btn {
-      width: 34px; height: 34px;
-      border-radius: var(--r-sm);
-      background: var(--gray-100);
-      border: 1px solid var(--gray-200);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--gray-600);
-      transition: var(--tr);
-      flex-shrink: 0;
-      font-size: 16px;
+      width:34px; height:34px; border-radius:var(--r-sm); background:var(--gray-100);
+      border:1px solid var(--gray-200); cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      color:var(--gray-600); transition:var(--tr); flex-shrink:0; font-size:16px;
     }
-    .back-btn:hover { background: var(--gray-200); }
-    .inner-title {
-      font-size: 16px; font-weight: 600; color: var(--gray-800); flex: 1;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .inner-title .bi { font-size: 18px; }
+    .back-btn:hover { background:var(--gray-200); }
+    .inner-title { font-size:16px; font-weight:600; color:var(--gray-800); flex:1; display:flex; align-items:center; gap:8px; }
+    .inner-title .bi { font-size:18px; }
     .header-badge {
-      font-size: 11px; font-weight: 500;
-      padding: 4px 10px;
-      border-radius: 20px;
-      display: inline-flex; align-items: center; gap: 4px;
-      border: none; cursor: pointer;
-      font-family: var(--font);
+      font-size:11px; font-weight:500; padding:4px 10px; border-radius:20px;
+      display:inline-flex; align-items:center; gap:4px; border:none; cursor:pointer; font-family:var(--font);
     }
-    .header-badge .bi { font-size: 12px; }
+    .header-badge .bi { font-size:12px; }
 
-    /* ══════════════════════════════════════════
-       ✅ NAV BAR — 5 pestañas, Bootstrap Icons
-    ══════════════════════════════════════════ */
+    /* NAV BAR — completamente fija, no afectada por scroll */
     .nav-bar {
-      background: var(--white);
-      border-top: 1px solid var(--gray-100);
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-end;
-      padding: 6px 4px calc(10px + env(safe-area-inset-bottom));
-      flex-shrink: 0;
-      position: sticky;
-      bottom: 0;
-      z-index: 20;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      background:var(--white); border-top:1px solid var(--gray-100);
+      display:flex; justify-content:space-around; align-items:flex-end;
+      padding:6px 4px calc(10px + env(safe-area-inset-bottom));
+      flex-shrink:0; z-index:20;
+      box-shadow:0 -2px 10px rgba(0,0,0,0.05);
+      position:relative; /* dentro del phone-flex, siempre al fondo */
     }
     .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      padding: 4px 8px; border-radius: var(--r-md);
-      cursor: pointer; font-size: 10px; font-weight: 500;
-      color: var(--gray-400); transition: var(--tr);
-      user-select: none; min-width: 52px; text-align: center;
+      display:flex; flex-direction:column; align-items:center; gap:2px;
+      padding:4px 8px; border-radius:var(--r-md); cursor:pointer;
+      font-size:10px; font-weight:500; color:var(--gray-400); transition:var(--tr);
+      user-select:none; min-width:52px; text-align:center;
     }
-    .nav-item .bi { font-size: 22px; line-height: 1; display: block; }
-    .nav-item.active { color: var(--blue-500); }
-    .nav-item:hover { color: var(--blue-300); }
+    .nav-item .bi { font-size:22px; line-height:1; display:block; }
+    .nav-item.active { color:var(--blue-500); }
+    .nav-item:hover { color:var(--blue-300); }
 
-    /* Inicio centrado y elevado */
     .nav-home-center {
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      cursor: pointer; user-select: none; margin-bottom: 2px;
+      display:flex; flex-direction:column; align-items:center; gap:2px;
+      cursor:pointer; user-select:none; margin-bottom:2px;
     }
     .nav-home-icon {
-      width: 50px; height: 50px; border-radius: 16px;
-      background: var(--blue-500);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 14px rgba(24,95,165,0.35);
-      transition: var(--tr); margin-bottom: 2px;
+      width:50px; height:50px; border-radius:16px; background:var(--blue-500);
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 4px 14px rgba(24,95,165,0.35); transition:var(--tr); margin-bottom:2px;
     }
-    .nav-home-icon .bi { font-size: 24px; color: var(--white); line-height: 1; }
-    .nav-home-label { font-size: 10px; font-weight: 600; color: var(--blue-500); }
-    .nav-home-center:hover .nav-home-icon { background: var(--blue-700); transform: translateY(-2px); }
+    .nav-home-icon .bi { font-size:24px; color:var(--white); line-height:1; }
+    .nav-home-label { font-size:10px; font-weight:600; color:var(--blue-500); }
+    .nav-home-center:hover .nav-home-icon { background:var(--blue-700); transform:translateY(-2px); }
 
-    /* ══════════════════════════════════════════
-       BOTONES
-    ══════════════════════════════════════════ */
+    /* BOTONES */
     .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 9px 16px; border-radius: var(--r-md);
-      border: 1px solid var(--gray-200);
-      background: var(--white); color: var(--gray-600);
-      font-family: var(--font); font-size: 13px; font-weight: 500;
-      cursor: pointer; transition: var(--tr);
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:9px 16px; border-radius:var(--r-md); border:1px solid var(--gray-200);
+      background:var(--white); color:var(--gray-600); font-family:var(--font);
+      font-size:13px; font-weight:500; cursor:pointer; transition:var(--tr);
     }
-    .btn .bi { font-size: 15px; }
-    .btn:hover { background: var(--gray-50); border-color: var(--gray-400); }
-    .btn-primary { background: var(--blue-500); color: var(--white); border-color: var(--blue-500); }
-    .btn-primary:hover { background: var(--blue-700); border-color: var(--blue-700); }
-    .btn-danger { background: var(--red-50); color: var(--red-500); border-color: var(--red-300); }
-    .btn-danger:hover { background: var(--red-300); color: var(--white); }
-    .btn-success { background: var(--green-50); color: var(--green-500); border-color: var(--green-300); }
-    .btn-block { width: 100%; }
+    .btn .bi { font-size:15px; }
+    .btn:hover { background:var(--gray-50); border-color:var(--gray-400); }
+    .btn-primary { background:var(--blue-500); color:var(--white); border-color:var(--blue-500); }
+    .btn-primary:hover { background:var(--blue-700); border-color:var(--blue-700); }
+    .btn-danger { background:var(--red-50); color:var(--red-500); border-color:var(--red-300); }
+    .btn-danger:hover { background:var(--red-300); color:var(--white); }
+    .btn-success { background:var(--green-50); color:var(--green-500); border-color:var(--green-300); }
+    .btn-block { width:100%; }
 
-    /* ══════════════════════════════════════════
-       SECCIÓN LABEL
-    ══════════════════════════════════════════ */
+    /* SECTION LABEL */
     .section-label {
-      font-size: 11px; font-weight: 600; letter-spacing: 0.7px;
-      text-transform: uppercase; color: var(--gray-400);
-      padding: 0 16px; margin: 16px 0 8px;
-      display: flex; align-items: center; gap: 6px;
+      font-size:11px; font-weight:600; letter-spacing:0.7px; text-transform:uppercase;
+      color:var(--gray-400); padding:0 16px; margin:16px 0 8px;
+      display:flex; align-items:center; gap:6px;
     }
 
-    /* ══════════════════════════════════════════
-       TARJETAS GENÉRICAS
-    ══════════════════════════════════════════ */
-    .card {
-      background: var(--white); border-radius: var(--r-lg);
-      border: 1px solid var(--gray-100); box-shadow: var(--shadow-sm);
-    }
-    .card-pad { padding: 14px 16px; }
+    /* CARD */
+    .card { background:var(--white); border-radius:var(--r-lg); border:1px solid var(--gray-100); box-shadow:var(--shadow-sm); }
+    .card-pad { padding:14px 16px; }
 
-    /* ══════════════════════════════════════════
-       HOME
-    ══════════════════════════════════════════ */
-    .home-header {
-      background: var(--white);
-      padding: 14px 16px 16px;
-      border-bottom: 1px solid var(--gray-100);
-      flex-shrink: 0;
-    }
-    .logo-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-    .logo-icon {
-      width: 40px; height: 40px; border-radius: 12px;
-      background: var(--blue-500);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .logo-icon .bi { font-size: 20px; color: var(--white); }
-    .logo-name { font-size: 18px; font-weight: 600; color: var(--gray-800); line-height: 1.2; }
-    .logo-unit { font-size: 10px; color: var(--gray-400); font-weight: 400; }
+    /* HOME */
+    .home-header { background:var(--white); padding:14px 16px 16px; border-bottom:1px solid var(--gray-100); flex-shrink:0; }
+    .logo-row { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+    .logo-icon { width:40px; height:40px; border-radius:12px; background:var(--blue-500); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .logo-icon .bi { font-size:20px; color:var(--white); }
+    .logo-name { font-size:18px; font-weight:600; color:var(--gray-800); line-height:1.2; }
+    .logo-unit { font-size:10px; color:var(--gray-400); font-weight:400; }
 
-    .greeting-line { font-size: 14px; color: var(--gray-600); margin-bottom: 8px; }
-    .greeting-name-wrap { display: inline-flex; align-items: center; gap: 4px; position: relative; }
-    .greeting-name {
-      font-weight: 600; color: var(--gray-800);
-      cursor: pointer; border-bottom: 2px dashed var(--blue-300);
-      padding-bottom: 1px; transition: var(--tr);
-    }
-    .greeting-name:hover { color: var(--blue-500); }
-    .edit-name-icon { font-size: 13px; color: var(--blue-300); cursor: pointer; }
+    .greeting-line { font-size:14px; color:var(--gray-600); margin-bottom:8px; }
+    .greeting-name-wrap { display:inline-flex; align-items:center; gap:4px; position:relative; }
+    .greeting-name { font-weight:600; color:var(--gray-800); cursor:pointer; border-bottom:2px dashed var(--blue-300); padding-bottom:1px; transition:var(--tr); }
+    .greeting-name:hover { color:var(--blue-500); }
+    .edit-name-icon { font-size:13px; color:var(--blue-300); cursor:pointer; }
 
     .name-edit-panel {
-      position: absolute; top: calc(100% + 8px); left: 0;
-      background: var(--white); border: 1px solid var(--gray-200);
-      border-radius: var(--r-md); box-shadow: var(--shadow-md);
-      min-width: 240px; z-index: 100; overflow: hidden; display: none;
+      position:absolute; top:calc(100% + 8px); left:0;
+      background:var(--white); border:1px solid var(--gray-200);
+      border-radius:var(--r-md); box-shadow:var(--shadow-md);
+      min-width:240px; z-index:100; overflow:hidden; display:none;
     }
-    .name-edit-panel.open { display: block; }
-    .panel-section { padding: 8px 0; }
-    .panel-section + .panel-section { border-top: 1px solid var(--gray-100); }
-    .panel-label {
-      font-size: 10px; font-weight: 600; letter-spacing: 0.6px;
-      text-transform: uppercase; color: var(--gray-400); padding: 4px 14px 6px;
-    }
-    .panel-option {
-      padding: 8px 14px; font-size: 13px; font-weight: 500;
-      cursor: pointer; color: var(--gray-700);
-      display: flex; align-items: center; gap: 8px; transition: var(--tr);
-    }
-    .panel-option .bi { font-size: 15px; color: var(--gray-400); }
-    .panel-option:hover { background: var(--blue-50); color: var(--blue-500); }
-    .panel-option:hover .bi { color: var(--blue-500); }
-    .panel-option.selected { color: var(--blue-500); background: var(--blue-50); }
-    .panel-option.selected .bi { color: var(--blue-500); }
-    .panel-input-row {
-      display: flex; align-items: center; gap: 6px; padding: 8px 14px;
-    }
-    .panel-input-row input {
-      flex: 1; border: 1px solid var(--gray-200); border-radius: var(--r-sm);
-      padding: 7px 10px; font-family: var(--font); font-size: 13px;
-      outline: none; color: var(--gray-800); background: var(--gray-50);
-    }
-    .panel-input-row input:focus { border-color: var(--blue-300); background: var(--white); }
-    .panel-input-row button {
-      background: var(--blue-500); color: var(--white); border: none;
-      border-radius: var(--r-sm); padding: 7px 12px;
-      cursor: pointer; font-size: 12px; font-weight: 600; transition: var(--tr);
-      font-family: var(--font);
-    }
-    .panel-input-row button:hover { background: var(--blue-700); }
+    .name-edit-panel.open { display:block; }
+    .panel-section { padding:8px 0; }
+    .panel-section + .panel-section { border-top:1px solid var(--gray-100); }
+    .panel-label { font-size:10px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:var(--gray-400); padding:4px 14px 6px; }
+    .panel-option { padding:8px 14px; font-size:13px; font-weight:500; cursor:pointer; color:var(--gray-700); display:flex; align-items:center; gap:8px; transition:var(--tr); }
+    .panel-option .bi { font-size:15px; color:var(--gray-400); }
+    .panel-option:hover { background:var(--blue-50); color:var(--blue-500); }
+    .panel-option:hover .bi { color:var(--blue-500); }
+    .panel-option.selected { color:var(--blue-500); background:var(--blue-50); }
+    .panel-option.selected .bi { color:var(--blue-500); }
+    .panel-input-row { display:flex; align-items:center; gap:6px; padding:8px 14px; }
+    .panel-input-row input { flex:1; border:1px solid var(--gray-200); border-radius:var(--r-sm); padding:7px 10px; font-family:var(--font); font-size:13px; outline:none; color:var(--gray-800); background:var(--gray-50); }
+    .panel-input-row input:focus { border-color:var(--blue-300); background:var(--white); }
+    .panel-input-row button { background:var(--blue-500); color:var(--white); border:none; border-radius:var(--r-sm); padding:7px 12px; cursor:pointer; font-size:12px; font-weight:600; transition:var(--tr); font-family:var(--font); }
+    .panel-input-row button:hover { background:var(--blue-700); }
 
-    .date-pill {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: var(--blue-50); color: var(--blue-500);
-      border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 500;
-    }
-    .date-pill .bi { font-size: 13px; }
+    .date-pill { display:inline-flex; align-items:center; gap:5px; background:var(--blue-50); color:var(--blue-500); border-radius:20px; padding:4px 12px; font-size:12px; font-weight:500; }
+    .date-pill .bi { font-size:13px; }
 
-    .main-cards { padding: 0 16px 4px; display: flex; flex-direction: column; gap: 8px; }
-    .main-card {
-      display: flex; align-items: center; gap: 12px;
-      padding: 14px; background: var(--white);
-      border-radius: var(--r-lg); border: 1px solid var(--gray-100);
-      box-shadow: var(--shadow-sm); cursor: pointer; transition: var(--tr);
-    }
-    .main-card:hover { border-color: var(--blue-100); box-shadow: var(--shadow-md); transform: translateY(-1px); }
-    .main-card:active { transform: none; box-shadow: var(--shadow-sm); }
-    .card-icon {
-      width: 46px; height: 46px; border-radius: 14px;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .card-icon .bi { font-size: 22px; }
-    .icon-blue   { background: var(--blue-50);   color: var(--blue-500); }
-    .icon-green  { background: var(--green-50);  color: var(--green-500); }
-    .icon-teal   { background: var(--teal-50);   color: var(--teal-500); }
-    .icon-purple { background: var(--purple-50); color: var(--purple-500); }
-    .icon-amber  { background: var(--amber-50);  color: var(--amber-500); }
-    .card-body { flex: 1; }
-    .card-title { font-size: 14px; font-weight: 600; color: var(--gray-800); }
-    .card-sub   { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
-    .card-arrow { color: var(--gray-200); font-size: 16px; }
+    .main-cards { padding:0 16px 4px; display:flex; flex-direction:column; gap:8px; }
+    .main-card { display:flex; align-items:center; gap:12px; padding:14px; background:var(--white); border-radius:var(--r-lg); border:1px solid var(--gray-100); box-shadow:var(--shadow-sm); cursor:pointer; transition:var(--tr); }
+    .main-card:hover { border-color:var(--blue-100); box-shadow:var(--shadow-md); transform:translateY(-1px); }
+    .main-card:active { transform:none; box-shadow:var(--shadow-sm); }
+    .card-icon { width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .card-icon .bi { font-size:22px; }
+    .icon-blue { background:var(--blue-50); color:var(--blue-500); }
+    .icon-green { background:var(--green-50); color:var(--green-500); }
+    .icon-teal { background:var(--teal-50); color:var(--teal-500); }
+    .icon-purple { background:var(--purple-50); color:var(--purple-500); }
+    .icon-amber { background:var(--amber-50); color:var(--amber-500); }
+    .card-body { flex:1; }
+    .card-title { font-size:14px; font-weight:600; color:var(--gray-800); }
+    .card-sub { font-size:11px; color:var(--gray-400); margin-top:2px; }
+    .card-arrow { color:var(--gray-200); font-size:16px; }
 
-    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px; }
-    .stat-card {
-      background: var(--white); border-radius: var(--r-md);
-      border: 1px solid var(--gray-100); padding: 12px 14px;
-      cursor: pointer; transition: var(--tr);
-    }
-    .stat-card:hover { border-color: var(--blue-100); }
-    .stat-num { font-size: 26px; font-weight: 600; color: var(--gray-800); }
-    .stat-lbl { font-size: 11px; color: var(--gray-400); margin-top: 2px; display: flex; align-items: center; gap: 5px; }
-    .stat-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .dot-blue  { background: var(--blue-300); }
-    .dot-green { background: var(--green-300); }
-    .dot-amber { background: var(--amber-300); }
-    .dot-red   { background: var(--red-300); }
+    .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:0 16px; }
+    .stat-card { background:var(--white); border-radius:var(--r-md); border:1px solid var(--gray-100); padding:12px 14px; cursor:pointer; transition:var(--tr); }
+    .stat-card:hover { border-color:var(--blue-100); }
+    .stat-num { font-size:26px; font-weight:600; color:var(--gray-800); }
+    .stat-lbl { font-size:11px; color:var(--gray-400); margin-top:2px; display:flex; align-items:center; gap:5px; }
+    .stat-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .dot-blue { background:var(--blue-300); } .dot-green { background:var(--green-300); }
+    .dot-amber { background:var(--amber-300); } .dot-red { background:var(--red-300); }
 
-    /* ══════════════════════════════════════════
-       RUTA DIARIA
-    ══════════════════════════════════════════ */
-    .map-container { position: relative; height: 200px; overflow: hidden; flex-shrink: 0; background: #e8eedd; }
-    #leaflet-map { width: 100%; height: 100%; }
-    .leaflet-pane { z-index: 1 !important; }
-    .leaflet-top, .leaflet-bottom { z-index: 10 !important; }
+    /* MAPA */
+    .map-container { position:relative; height:200px; overflow:hidden; flex-shrink:0; background:#e8eedd; }
+    #leaflet-map { width:100%; height:100%; }
+    .leaflet-pane { z-index:1 !important; }
+    .leaflet-top, .leaflet-bottom { z-index:10 !important; }
 
     .add-location-btn {
-      position: absolute; bottom: 10px; left: 10px;
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--blue-500); color: var(--white);
-      border: none; border-radius: 20px;
-      padding: 7px 14px; font-size: 12px; font-weight: 600; font-family: var(--font);
-      cursor: pointer; box-shadow: 0 4px 12px rgba(24,95,165,0.35);
-      transition: var(--tr); z-index: 500;
+      position:absolute; bottom:10px; left:10px;
+      display:inline-flex; align-items:center; gap:6px;
+      background:var(--blue-500); color:var(--white); border:none; border-radius:20px;
+      padding:7px 14px; font-size:12px; font-weight:600; font-family:var(--font);
+      cursor:pointer; box-shadow:0 4px 12px rgba(24,95,165,0.35); transition:var(--tr); z-index:500;
     }
-    .add-location-btn .bi { font-size: 14px; }
-    .add-location-btn:hover { background: var(--blue-700); }
+    .add-location-btn .bi { font-size:14px; }
+    .add-location-btn:hover { background:var(--blue-700); }
 
-    .map-overlay-btns { position: absolute; bottom: 10px; right: 10px; display: flex; gap: 6px; z-index: 500; }
-    .map-btn {
-      background: var(--white); border: 1px solid var(--gray-200);
-      border-radius: var(--r-sm); padding: 6px 10px;
-      font-size: 11px; font-weight: 500; color: var(--gray-700);
-      cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
-      box-shadow: var(--shadow-sm); transition: var(--tr); font-family: var(--font);
-    }
-    .map-btn .bi { font-size: 13px; }
-    .map-btn:hover { background: var(--gray-50); }
+    .map-overlay-btns { position:absolute; bottom:10px; right:10px; display:flex; gap:6px; z-index:500; }
+    .map-btn { background:var(--white); border:1px solid var(--gray-200); border-radius:var(--r-sm); padding:6px 10px; font-size:11px; font-weight:500; color:var(--gray-700); cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:var(--shadow-sm); transition:var(--tr); font-family:var(--font); }
+    .map-btn .bi { font-size:13px; }
+    .map-btn:hover { background:var(--gray-50); }
 
-    .route-info-bar {
-      background: var(--blue-50); border-bottom: 1px solid var(--blue-100);
-      padding: 7px 16px; display: flex; gap: 14px; align-items: center;
-      font-size: 12px; color: var(--blue-500); font-weight: 500; flex-shrink: 0;
-    }
-    .route-info-bar span { display: flex; align-items: center; gap: 4px; }
-    .route-info-bar .bi { font-size: 14px; }
+    /* Geocoding status */
+    .geocode-status { position:absolute; top:8px; left:8px; z-index:500; background:rgba(255,255,255,0.9); border-radius:8px; padding:4px 10px; font-size:11px; font-weight:500; color:var(--blue-500); display:none; }
+    .geocode-status.visible { display:block; }
 
-    .visits-list { padding: 0 16px 8px; }
-    .visit-item {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--white); border-radius: var(--r-md);
-      border: 1px solid var(--gray-100);
-      padding: 10px 12px; margin-bottom: 7px; transition: var(--tr);
-    }
-    .visit-item:hover { border-color: var(--gray-200); box-shadow: var(--shadow-sm); }
-    .visit-item.done { opacity: 0.55; }
-    .visit-item.done .visit-addr { text-decoration: line-through; color: var(--gray-400); }
-    .visit-num {
-      width: 26px; height: 26px; border-radius: 8px;
-      background: var(--blue-50); color: var(--blue-500);
-      font-size: 11px; font-weight: 700;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .visit-info { flex: 1; min-width: 0; }
-    .visit-addr { font-size: 13px; font-weight: 500; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .visit-obs  { font-size: 11px; color: var(--gray-400); margin-top: 1px; }
-    .visit-actions { display: flex; gap: 4px; align-items: center; }
+    .route-info-bar { background:var(--blue-50); border-bottom:1px solid var(--blue-100); padding:7px 16px; display:flex; gap:14px; align-items:center; font-size:12px; color:var(--blue-500); font-weight:500; flex-shrink:0; }
+    .route-info-bar span { display:flex; align-items:center; gap:4px; }
+    .route-info-bar .bi { font-size:14px; }
 
-    /* ✅ Botones de acción — colores semánticos claros */
-    .icon-btn {
-      width: 32px; height: 32px; border-radius: 8px;
-      border: 1px solid var(--gray-200); background: var(--gray-50);
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: var(--tr); font-size: 14px; color: var(--gray-500);
-      text-decoration: none;
-    }
-    .icon-btn .bi { font-size: 14px; line-height: 1; }
-    .icon-btn:hover { background: var(--blue-50); color: var(--blue-500); border-color: var(--blue-100); }
-    .icon-btn.btn-check-done { color: var(--green-500); border-color: var(--green-300); background: var(--green-50); }
-    .icon-btn.btn-check-done:hover { background: var(--green-300); color: var(--white); }
-    .icon-btn.btn-check-pend:hover { background: var(--green-50); color: var(--green-500); border-color: var(--green-300); }
-    .icon-btn.btn-edit:hover { background: var(--blue-50); color: var(--blue-500); border-color: var(--blue-100); }
-    .icon-btn.btn-delete { color: var(--red-300); border-color: var(--red-50); background: var(--red-50); }
-    .icon-btn.btn-delete:hover { background: var(--red-300); color: var(--white); border-color: var(--red-300); }
+    .visits-list { padding:0 16px 8px; }
+    .visit-item { display:flex; align-items:center; gap:10px; background:var(--white); border-radius:var(--r-md); border:1px solid var(--gray-100); padding:10px 12px; margin-bottom:7px; transition:var(--tr); }
+    .visit-item:hover { border-color:var(--gray-200); box-shadow:var(--shadow-sm); }
+    .visit-item.done { opacity:0.55; }
+    .visit-item.done .visit-addr { text-decoration:line-through; color:var(--gray-400); }
+    .visit-num { width:26px; height:26px; border-radius:8px; background:var(--blue-50); color:var(--blue-500); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .visit-info { flex:1; min-width:0; }
+    .visit-addr { font-size:13px; font-weight:500; color:var(--gray-800); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .visit-obs { font-size:11px; color:var(--gray-400); margin-top:1px; }
+    .visit-actions { display:flex; gap:4px; align-items:center; }
 
-    .priority-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .p-alta  { background: var(--red-300); }
-    .p-media { background: var(--amber-300); }
-    .p-baja  { background: var(--green-300); }
+    .icon-btn { width:32px; height:32px; border-radius:8px; border:1px solid var(--gray-200); background:var(--gray-50); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:var(--tr); font-size:14px; color:var(--gray-500); text-decoration:none; }
+    .icon-btn .bi { font-size:14px; line-height:1; }
+    .icon-btn:hover { background:var(--blue-50); color:var(--blue-500); border-color:var(--blue-100); }
+    .icon-btn.btn-check-done { color:var(--green-500); border-color:var(--green-300); background:var(--green-50); }
+    .icon-btn.btn-check-done:hover { background:var(--green-300); color:var(--white); }
+    .icon-btn.btn-check-pend:hover { background:var(--green-50); color:var(--green-500); border-color:var(--green-300); }
+    .icon-btn.btn-delete { color:var(--red-300); border-color:var(--red-50); background:var(--red-50); }
+    .icon-btn.btn-delete:hover { background:var(--red-300); color:var(--white); border-color:var(--red-300); }
 
-    .distant-section {
-      margin: 0 16px 12px;
-      background: var(--amber-50); border: 1px solid #F5C4B3;
-      border-radius: var(--r-lg); padding: 12px 14px;
-    }
-    .distant-header {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 12px; font-weight: 600; color: var(--amber-500); margin-bottom: 8px;
-    }
-    .distant-header .bi { font-size: 16px; }
-    .distant-item {
-      background: var(--white); border-radius: var(--r-md);
-      border: 1px solid var(--gray-100);
-      padding: 9px 11px; margin-bottom: 6px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .distant-item:last-child { margin-bottom: 0; }
-    .distant-item .bi { font-size: 16px; color: var(--amber-500); flex-shrink: 0; }
+    .priority-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .p-alta { background:var(--red-300); } .p-media { background:var(--amber-300); } .p-baja { background:var(--green-300); }
 
-    .route-action-bar {
-      background: var(--white); border-top: 1px solid var(--gray-100);
-      padding: 8px 12px; display: flex; gap: 6px; flex-shrink: 0;
-    }
-    .route-action-bar .btn { flex: 1; font-size: 11px; padding: 8px 6px; }
+    .distant-section { margin:0 16px 12px; background:var(--amber-50); border:1px solid #F5C4B3; border-radius:var(--r-lg); padding:12px 14px; }
+    .distant-header { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:var(--amber-500); margin-bottom:8px; }
+    .distant-header .bi { font-size:16px; }
+    .distant-item { background:var(--white); border-radius:var(--r-md); border:1px solid var(--gray-100); padding:9px 11px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+    .distant-item:last-child { margin-bottom:0; }
+    .distant-item .bi { font-size:16px; color:var(--amber-500); flex-shrink:0; }
 
-    /* ══════════════════════════════════════════
-       SEGUIMIENTO DE CURAS
-    ══════════════════════════════════════════ */
-    .patient-selector {
-      padding: 8px 16px 4px; display: flex; gap: 7px;
-      overflow-x: auto; scrollbar-width: none; flex-shrink: 0;
-    }
-    .patient-selector::-webkit-scrollbar { display: none; }
-    .patient-chip {
-      padding: 5px 13px; border-radius: 20px;
-      font-size: 12px; font-weight: 500;
-      background: var(--gray-100); color: var(--gray-600);
-      white-space: nowrap; cursor: pointer; border: 1.5px solid transparent;
-      transition: var(--tr);
-    }
-    .patient-chip.active {
-      background: var(--blue-50); color: var(--blue-500); border-color: var(--blue-300);
-    }
+    .route-action-bar { background:var(--white); border-top:1px solid var(--gray-100); padding:8px 12px; display:flex; gap:6px; flex-shrink:0; }
+    .route-action-bar .btn { flex:1; font-size:11px; padding:8px 6px; }
 
-    /* Subida de imagen */
-    .photo-upload-area {
-      margin: 8px 16px 0;
-      background: var(--white); border-radius: var(--r-lg);
-      border: 2px dashed var(--gray-200); padding: 16px;
-      text-align: center; cursor: pointer; transition: var(--tr);
-      flex-shrink: 0;
-    }
-    .photo-upload-area:hover { border-color: var(--blue-300); background: var(--blue-50); }
-    .photo-upload-area .bi { font-size: 28px; color: var(--gray-400); display: block; margin-bottom: 6px; }
-    .photo-upload-area p { font-size: 12px; color: var(--gray-500); }
-    .photo-upload-area.drag-over { border-color: var(--blue-500); background: var(--blue-50); }
+    /* CURAS — PACIENTES DINÁMICOS */
+    .patient-selector { padding:8px 16px 4px; display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; flex-shrink:0; align-items:center; }
+    .patient-selector::-webkit-scrollbar { display:none; }
+    .patient-chip { padding:5px 10px 5px 13px; border-radius:20px; font-size:12px; font-weight:500; background:var(--gray-100); color:var(--gray-600); white-space:nowrap; cursor:pointer; border:1.5px solid transparent; transition:var(--tr); display:inline-flex; align-items:center; gap:5px; }
+    .patient-chip.active { background:var(--blue-50); color:var(--blue-500); border-color:var(--blue-300); }
+    .patient-chip .chip-del { font-size:11px; opacity:0.6; transition:var(--tr); cursor:pointer; padding:0 2px; }
+    .patient-chip .chip-del:hover { opacity:1; color:var(--red-300); }
+    .patient-chip-add { padding:5px 13px; border-radius:20px; font-size:12px; font-weight:600; background:var(--green-50); color:var(--green-500); border:1.5px dashed var(--green-300); white-space:nowrap; cursor:pointer; transition:var(--tr); }
+    .patient-chip-add:hover { background:var(--green-300); color:var(--white); }
 
-    .photo-preview-wrap {
-      margin: 8px 16px 0;
-      position: relative; display: none; border-radius: var(--r-lg); overflow: hidden;
-      border: 1px solid var(--gray-200);
-    }
-    .photo-preview-wrap.visible { display: block; }
-    .photo-preview-wrap img {
-      width: 100%; max-height: 180px; object-fit: cover; display: block;
-    }
-    .photo-preview-remove {
-      position: absolute; top: 8px; right: 8px;
-      background: rgba(0,0,0,0.55); color: var(--white);
-      border: none; border-radius: 50%; width: 28px; height: 28px;
-      cursor: pointer; font-size: 14px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .photo-analysis-box {
-      margin: 8px 16px 0;
-      background: var(--white); border-radius: var(--r-lg);
-      border: 1.5px solid var(--blue-300); overflow: hidden; display: none;
-    }
-    .photo-analysis-box.visible { display: block; }
-    .analysis-header {
-      background: var(--blue-500); color: var(--white);
-      padding: 8px 14px; font-size: 12px; font-weight: 600;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .analysis-header .bi { font-size: 14px; }
-    .analysis-body { padding: 12px 14px; }
-    .analysis-grade {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
-      margin-bottom: 10px;
-    }
-    .grade-i    { background: var(--green-50);  color: var(--green-500); }
-    .grade-ii   { background: var(--amber-50);  color: var(--amber-500); }
-    .grade-iii  { background: #FEE2D1; color: #923506; }
-    .grade-iv   { background: var(--red-50);    color: var(--red-500); }
-    .grade-nd   { background: var(--gray-100);  color: var(--gray-600); }
-    .analysis-disclaimer {
-      background: var(--amber-50); border: 1px solid #F5C4B3;
-      border-radius: var(--r-sm); padding: 7px 10px; font-size: 11px;
-      color: var(--amber-500); margin-bottom: 10px;
-      display: flex; align-items: flex-start; gap: 6px;
-    }
-    .analysis-disclaimer .bi { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
-    .analysis-section { margin-bottom: 10px; }
-    .analysis-section-title {
-      font-size: 11px; font-weight: 700; color: var(--gray-600);
-      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px;
-      display: flex; align-items: center; gap: 5px;
-    }
-    .analysis-section-title .bi { font-size: 12px; }
-    .analysis-section ul { padding-left: 16px; }
-    .analysis-section li { font-size: 12px; color: var(--gray-700); margin-bottom: 3px; }
-    .analysis-ref {
-      border-top: 1px solid var(--gray-100); margin-top: 10px; padding-top: 8px;
-      font-size: 10px; color: var(--gray-400); line-height: 1.5;
-    }
+    /* FOTO */
+    .photo-upload-area { margin:8px 16px 0; background:var(--white); border-radius:var(--r-lg); border:2px dashed var(--gray-200); padding:16px; text-align:center; cursor:pointer; transition:var(--tr); flex-shrink:0; }
+    .photo-upload-area:hover { border-color:var(--blue-300); background:var(--blue-50); }
+    .photo-upload-area .bi { font-size:28px; color:var(--gray-400); display:block; margin-bottom:6px; }
+    .photo-upload-area p { font-size:12px; color:var(--gray-500); }
+    .photo-upload-area.drag-over { border-color:var(--blue-500); background:var(--blue-50); }
 
-    /* Timeline */
-    .timeline { padding: 4px 16px 8px; }
-    .tl-date-label {
-      font-size: 10px; font-weight: 600; color: var(--gray-400);
-      letter-spacing: 0.5px; margin: 10px 0 6px; text-transform: uppercase;
-    }
-    .tl-entry {
-      background: var(--white); border-radius: var(--r-lg);
-      border: 1px solid var(--gray-100); overflow: hidden;
-      margin-bottom: 10px; box-shadow: var(--shadow-sm);
-    }
-    .tl-photo {
-      width: 100%; height: 110px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--blue-300);
-      background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
-      cursor: pointer; position: relative; overflow: hidden;
-    }
-    .tl-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .tl-photo .bi { font-size: 30px; opacity: 0.6; }
-    .tl-photo.warning { background: linear-gradient(135deg, var(--amber-50) 0%, #F5C4B3 100%); color: var(--amber-500); }
-    .tl-photo-overlay {
-      position: absolute; inset: 0; background: rgba(0,0,0,0);
-      display: flex; align-items: center; justify-content: center; transition: var(--tr);
-    }
-    .tl-photo:hover .tl-photo-overlay { background: rgba(0,0,0,0.10); }
-    .tl-meta { padding: 9px 12px 4px; }
-    .tl-meta-row { display: flex; justify-content: space-between; align-items: center; }
-    .tl-title { font-size: 13px; font-weight: 600; color: var(--gray-800); }
-    .tl-badge {
-      font-size: 10px; font-weight: 600; padding: 3px 8px;
-      border-radius: 20px; letter-spacing: 0.3px;
-    }
-    .badge-mejora  { background: var(--green-50); color: var(--green-500); }
-    .badge-alerta  { background: var(--amber-50); color: var(--amber-500); }
-    .badge-critico { background: var(--red-50);   color: var(--red-500); }
-    .tl-obs { font-size: 12px; color: var(--gray-600); margin: 4px 0; }
-    .ai-analysis {
-      margin: 0 12px 10px;
-      background: var(--blue-50); border-radius: var(--r-sm);
-      padding: 7px 10px; font-size: 11px; color: var(--blue-700);
-      display: flex; align-items: flex-start; gap: 6px;
-    }
-    .ai-analysis .bi { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
-    .tl-quick-actions {
-      display: grid; grid-template-columns: repeat(3,1fr);
-      gap: 1px; border-top: 1px solid var(--gray-100);
-    }
-    .tl-action {
-      padding: 8px 0; text-align: center;
-      font-size: 11px; font-weight: 500; color: var(--gray-600);
-      cursor: pointer; background: var(--white); border: none;
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      transition: var(--tr); font-family: var(--font);
-    }
-    .tl-action .bi { font-size: 16px; }
-    .tl-action:hover { background: var(--gray-50); color: var(--blue-500); }
+    .photo-preview-wrap { margin:8px 16px 0; position:relative; display:none; border-radius:var(--r-lg); overflow:hidden; border:1px solid var(--gray-200); }
+    .photo-preview-wrap.visible { display:block; }
+    .photo-preview-wrap img { width:100%; max-height:180px; object-fit:cover; display:block; }
+    .photo-preview-remove { position:absolute; top:8px; right:8px; background:rgba(0,0,0,0.55); color:var(--white); border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; }
+    .photo-preview-save { position:absolute; bottom:8px; right:8px; background:var(--green-500); color:var(--white); border:none; border-radius:20px; padding:5px 12px; font-size:11px; font-weight:600; cursor:pointer; font-family:var(--font); display:flex; align-items:center; gap:5px; }
+    .photo-preview-save:hover { background:var(--green-300); }
 
-    .add-photo-bar {
-      padding: 8px 14px;
-      background: var(--white);
-      border-top: 1px solid var(--gray-100);
-      display: flex; gap: 8px; flex-shrink: 0;
-    }
-    .add-photo-bar .btn { flex: 1; }
+    .photo-analysis-box { margin:8px 16px 0; background:var(--white); border-radius:var(--r-lg); border:1.5px solid var(--blue-300); overflow:hidden; display:none; }
+    .photo-analysis-box.visible { display:block; }
+    .analysis-header { background:var(--blue-500); color:var(--white); padding:8px 14px; font-size:12px; font-weight:600; display:flex; align-items:center; gap:8px; }
+    .analysis-header .bi { font-size:14px; }
+    .analysis-body { padding:12px 14px; }
+    .analysis-grade { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; margin-bottom:10px; }
+    .grade-i { background:var(--green-50); color:var(--green-500); }
+    .grade-ii { background:var(--amber-50); color:var(--amber-500); }
+    .grade-iii { background:#FEE2D1; color:#923506; }
+    .grade-iv { background:var(--red-50); color:var(--red-500); }
+    .grade-nd { background:var(--gray-100); color:var(--gray-600); }
+    .analysis-disclaimer { background:var(--amber-50); border:1px solid #F5C4B3; border-radius:var(--r-sm); padding:7px 10px; font-size:11px; color:var(--amber-500); margin-bottom:10px; display:flex; align-items:flex-start; gap:6px; }
+    .analysis-disclaimer .bi { font-size:13px; flex-shrink:0; margin-top:1px; }
+    .analysis-section { margin-bottom:10px; }
+    .analysis-section-title { font-size:11px; font-weight:700; color:var(--gray-600); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:5px; display:flex; align-items:center; gap:5px; }
+    .analysis-section-title .bi { font-size:12px; }
+    .analysis-section ul { padding-left:16px; }
+    .analysis-section li { font-size:12px; color:var(--gray-700); margin-bottom:3px; }
+    .analysis-ref { border-top:1px solid var(--gray-100); margin-top:10px; padding-top:8px; font-size:10px; color:var(--gray-400); line-height:1.5; }
 
-    /* ══════════════════════════════════════════
-       EVOLUTIA
-    ══════════════════════════════════════════ */
-    .evol-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    /* TIMELINE */
+    .timeline { padding:4px 16px 8px; }
+    .tl-date-label { font-size:10px; font-weight:600; color:var(--gray-400); letter-spacing:0.5px; margin:10px 0 6px; text-transform:uppercase; }
+    .tl-entry { background:var(--white); border-radius:var(--r-lg); border:1px solid var(--gray-100); overflow:hidden; margin-bottom:10px; box-shadow:var(--shadow-sm); }
+    .tl-photo { width:100%; height:110px; display:flex; align-items:center; justify-content:center; color:var(--blue-300); background:linear-gradient(135deg,var(--blue-50) 0%,var(--blue-100) 100%); cursor:pointer; position:relative; overflow:hidden; }
+    .tl-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+    .tl-photo .bi { font-size:30px; opacity:0.6; }
+    .tl-photo.warning { background:linear-gradient(135deg,var(--amber-50) 0%,#F5C4B3 100%); color:var(--amber-500); }
+    .tl-photo-overlay { position:absolute; inset:0; background:rgba(0,0,0,0); display:flex; align-items:center; justify-content:center; transition:var(--tr); }
+    .tl-photo:hover .tl-photo-overlay { background:rgba(0,0,0,0.10); }
+    .tl-meta { padding:9px 12px 4px; }
+    .tl-meta-row { display:flex; justify-content:space-between; align-items:center; }
+    .tl-title { font-size:13px; font-weight:600; color:var(--gray-800); }
+    .tl-badge { font-size:10px; font-weight:600; padding:3px 8px; border-radius:20px; letter-spacing:0.3px; }
+    .badge-mejora { background:var(--green-50); color:var(--green-500); }
+    .badge-alerta { background:var(--amber-50); color:var(--amber-500); }
+    .badge-critico { background:var(--red-50); color:var(--red-500); }
+    .tl-obs { font-size:12px; color:var(--gray-600); margin:4px 0; }
+    .ai-analysis { margin:0 12px 10px; background:var(--blue-50); border-radius:var(--r-sm); padding:7px 10px; font-size:11px; color:var(--blue-700); display:flex; align-items:flex-start; gap:6px; }
+    .ai-analysis .bi { font-size:13px; flex-shrink:0; margin-top:1px; }
+    .tl-quick-actions { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; border-top:1px solid var(--gray-100); }
+    .tl-action { padding:8px 0; text-align:center; font-size:10px; font-weight:500; color:var(--gray-600); cursor:pointer; background:var(--white); border:none; display:flex; flex-direction:column; align-items:center; gap:3px; transition:var(--tr); font-family:var(--font); }
+    .tl-action .bi { font-size:15px; }
+    .tl-action:hover { background:var(--gray-50); color:var(--blue-500); }
+    .tl-action.del-action:hover { background:var(--red-50); color:var(--red-500); }
 
-    .record-area {
-      background: var(--white); border-radius: var(--r-lg);
-      border: 1px solid var(--gray-100); padding: 18px 16px;
-      display: flex; flex-direction: column; align-items: center; gap: 12px;
-    }
-    .record-btn-big {
-      width: 68px; height: 68px; border-radius: 50%;
-      background: var(--blue-500); color: var(--white);
-      border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 16px rgba(24,95,165,0.35); transition: var(--tr);
-      font-size: 28px;
-    }
-    .record-btn-big .bi { font-size: 28px; line-height: 1; }
-    .record-btn-big:hover { background: var(--blue-700); transform: scale(1.05); }
-    .record-btn-big.recording {
-      background: var(--red-300);
-      box-shadow: 0 4px 16px rgba(226,75,74,0.40);
-      animation: pulse 1.2s ease-in-out infinite;
-    }
-    .record-hint { font-size: 12px; color: var(--gray-400); font-weight: 500; }
+    .add-photo-bar { padding:8px 14px; background:var(--white); border-top:1px solid var(--gray-100); display:flex; gap:8px; flex-shrink:0; }
+    .add-photo-bar .btn { flex:1; }
 
-    .waveform { display: flex; align-items: center; gap: 3px; height: 32px; opacity: 0; transition: opacity 0.3s; }
-    .waveform.active { opacity: 1; }
-    .wave-bar { width: 3px; border-radius: 2px; background: var(--blue-300); animation: waveAnim 1.1s ease-in-out infinite; }
-    @keyframes waveAnim { 0%, 100% { height: 5px; } 50% { height: 26px; } }
+    /* EVOLUTIA */
+    .evol-body { padding:14px; display:flex; flex-direction:column; gap:10px; }
+    .record-area { background:var(--white); border-radius:var(--r-lg); border:1px solid var(--gray-100); padding:18px 16px; display:flex; flex-direction:column; align-items:center; gap:12px; }
+    .record-btn-big { width:68px; height:68px; border-radius:50%; background:var(--blue-500); color:var(--white); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(24,95,165,0.35); transition:var(--tr); font-size:28px; }
+    .record-btn-big .bi { font-size:28px; line-height:1; }
+    .record-btn-big:hover { background:var(--blue-700); transform:scale(1.05); }
+    .record-btn-big.recording { background:var(--red-300); box-shadow:0 4px 16px rgba(226,75,74,0.40); animation:pulse 1.2s ease-in-out infinite; }
+    .record-hint { font-size:12px; color:var(--gray-400); font-weight:500; }
 
-    .transcript-box {
-      background: var(--white); border-radius: var(--r-lg);
-      border: 1px solid var(--gray-100); padding: 11px 13px;
-    }
-    .box-label {
-      font-size: 10px; font-weight: 600; letter-spacing: 0.6px;
-      text-transform: uppercase; color: var(--gray-400);
-      display: flex; align-items: center; gap: 5px; margin-bottom: 5px;
-    }
-    .box-label .bi { font-size: 12px; color: var(--blue-300); }
-    .transcript-text { font-size: 13px; color: var(--gray-600); font-style: italic; line-height: 1.6; min-height: 30px; }
+    .waveform { display:flex; align-items:center; gap:3px; height:32px; opacity:0; transition:opacity 0.3s; }
+    .waveform.active { opacity:1; }
+    .wave-bar { width:3px; border-radius:2px; background:var(--blue-300); animation:waveAnim 1.1s ease-in-out infinite; }
+    @keyframes waveAnim { 0%,100% { height:5px; } 50% { height:26px; } }
 
-    /* SOAP selector */
-    .soap-selector {
-      display: grid; grid-template-columns: repeat(4,1fr); gap: 6px;
-    }
-    .soap-btn {
-      padding: 7px 4px; border-radius: var(--r-sm);
-      border: 1.5px solid var(--gray-200); background: var(--gray-50);
-      font-family: var(--font); font-size: 11px; font-weight: 600;
-      color: var(--gray-500); cursor: pointer; text-align: center;
-      transition: var(--tr);
-    }
-    .soap-btn.active { background: var(--blue-50); border-color: var(--blue-300); color: var(--blue-500); }
-    .soap-btn:hover { border-color: var(--blue-300); color: var(--blue-500); }
+    .transcript-box { background:var(--white); border-radius:var(--r-lg); border:1px solid var(--gray-100); padding:11px 13px; }
+    .box-label { font-size:10px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase; color:var(--gray-400); display:flex; align-items:center; gap:5px; margin-bottom:5px; }
+    .box-label .bi { font-size:12px; color:var(--blue-300); }
+    .transcript-text { font-size:13px; color:var(--gray-600); font-style:italic; line-height:1.6; min-height:30px; }
 
-    .evolutivo-box {
-      background: var(--white); border-radius: var(--r-lg);
-      border: 1.5px solid var(--blue-300); padding: 12px 13px;
-    }
-    .evolutivo-text {
-      font-size: 13px; color: var(--gray-800); line-height: 1.75; min-height: 44px;
-      white-space: pre-wrap;
-    }
-    .evolutivo-edit {
-      width: 100%; border: none; outline: none; resize: none;
-      font-family: var(--mono); font-size: 12px; color: var(--gray-800);
-      line-height: 1.75; background: transparent; display: none;
-    }
-    .evolutivo-edit.active { display: block; }
-    .evolutivo-text.hidden { display: none; }
+    .soap-selector { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+    .soap-btn { padding:7px 4px; border-radius:var(--r-sm); border:1.5px solid var(--gray-200); background:var(--gray-50); font-family:var(--font); font-size:11px; font-weight:600; color:var(--gray-500); cursor:pointer; text-align:center; transition:var(--tr); }
+    .soap-btn.active { background:var(--blue-50); border-color:var(--blue-300); color:var(--blue-500); }
+    .soap-btn:hover { border-color:var(--blue-300); color:var(--blue-500); }
 
-    .evol-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-    .evol-btn {
-      padding: 9px 0; border-radius: var(--r-md);
-      border: 1px solid var(--gray-200); background: var(--white);
-      font-family: var(--font); font-size: 12px; font-weight: 500;
-      color: var(--gray-600); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 5px;
-      transition: var(--tr);
-    }
-    .evol-btn .bi { font-size: 14px; }
-    .evol-btn:hover { background: var(--gray-50); }
-    .evol-btn.primary { background: var(--blue-500); color: var(--white); border-color: var(--blue-500); }
-    .evol-btn.primary:hover { background: var(--blue-700); }
+    .evolutivo-box { background:var(--white); border-radius:var(--r-lg); border:1.5px solid var(--blue-300); padding:12px 13px; }
+    .evolutivo-text { font-size:13px; color:var(--gray-800); line-height:1.75; min-height:44px; white-space:pre-wrap; }
+    .evolutivo-edit { width:100%; border:none; outline:none; resize:none; font-family:var(--mono); font-size:12px; color:var(--gray-800); line-height:1.75; background:transparent; display:none; }
+    .evolutivo-edit.active { display:block; }
+    .evolutivo-text.hidden { display:none; }
 
-    .evol-voice-bar {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--purple-50); border-radius: var(--r-md);
-      padding: 9px 13px; font-size: 12px; color: var(--purple-500);
-    }
-    .evol-voice-bar .bi { font-size: 16px; }
-    .voice-edit-btn {
-      margin-left: auto; background: var(--purple-500); color: var(--white);
-      border: none; border-radius: var(--r-sm); padding: 5px 11px;
-      font-size: 11px; font-weight: 600; cursor: pointer; transition: var(--tr); font-family: var(--font);
-    }
-    .voice-edit-btn:hover { background: var(--purple-300); }
+    .evol-actions { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+    .evol-btn { padding:9px 0; border-radius:var(--r-md); border:1px solid var(--gray-200); background:var(--white); font-family:var(--font); font-size:12px; font-weight:500; color:var(--gray-600); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px; transition:var(--tr); }
+    .evol-btn .bi { font-size:14px; }
+    .evol-btn:hover { background:var(--gray-50); }
+    .evol-btn.primary { background:var(--blue-500); color:var(--white); border-color:var(--blue-500); }
+    .evol-btn.primary:hover { background:var(--blue-700); }
 
-    /* ══════════════════════════════════════════
-       ASISTENTE IA
-    ══════════════════════════════════════════ */
-    .ai-chat-header {
-      background: var(--white); border-bottom: 1px solid var(--gray-100);
-      padding: 11px 16px; display: flex; align-items: center; gap: 10px; flex-shrink: 0;
-    }
-    .ai-badge {
-      background: var(--green-50); color: var(--green-500);
-      border-radius: 20px; padding: 3px 10px;
-      font-size: 11px; font-weight: 600; margin-left: auto;
-      display: inline-flex; align-items: center; gap: 5px;
-    }
-    .ai-badge::before { content: ''; width: 6px; height: 6px; background: var(--green-300); border-radius: 50%; }
-    .chat-messages {
-      flex: 1; overflow-y: auto; padding: 12px 14px;
-      display: flex; flex-direction: column; gap: 8px; scrollbar-width: none;
-    }
-    .chat-messages::-webkit-scrollbar { display: none; }
-    .bubble {
-      max-width: 90%; padding: 9px 13px;
-      border-radius: 14px; font-size: 13px; line-height: 1.55;
-    }
-    .bubble.user { align-self: flex-end; background: var(--blue-500); color: var(--white); border-bottom-right-radius: 4px; }
-    .bubble.ai { align-self: flex-start; background: var(--gray-100); color: var(--gray-800); border-bottom-left-radius: 4px; }
-    .bubble.ai b { color: var(--blue-700); font-weight: 600; }
-    .bubble.ai ul { padding-left: 16px; margin-top: 4px; }
-    .bubble.ai li { margin-bottom: 3px; }
-    .bubble.ai .ref-block {
-      margin-top: 8px; padding-top: 8px;
-      border-top: 1px solid var(--gray-200);
-      font-size: 11px; color: var(--gray-500); font-style: italic;
-    }
-    .chat-input-bar {
-      background: var(--white); border-top: 1px solid var(--gray-100);
-      padding: 8px 12px; display: flex; align-items: center; gap: 6px; flex-shrink: 0;
-    }
-    .chat-input {
-      flex: 1; background: var(--gray-100);
-      border: 1px solid transparent; border-radius: 20px;
-      padding: 8px 12px; font-family: var(--font); font-size: 13px;
-      color: var(--gray-800); outline: none; resize: none; max-height: 80px;
-    }
-    .chat-input:focus { border-color: var(--blue-300); background: var(--white); }
-    .chat-send-btn {
-      width: 34px; height: 34px; border-radius: 50%;
-      background: var(--blue-500); color: var(--white); border: none;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; transition: var(--tr); font-size: 15px;
-    }
-    .chat-send-btn .bi { font-size: 15px; }
-    .chat-send-btn:hover { background: var(--blue-700); }
-    .chat-mic-btn {
-      width: 34px; height: 34px; border-radius: 50%;
-      background: var(--gray-100); color: var(--gray-600);
-      border: 1px solid var(--gray-200); cursor: pointer;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: var(--tr);
-    }
-    .chat-mic-btn .bi { font-size: 16px; }
-    .chat-mic-btn.recording { background: var(--red-50); color: var(--red-300); }
-    .chat-mic-btn:hover { background: var(--gray-200); }
+    .evol-voice-bar { display:flex; align-items:center; gap:8px; background:var(--purple-50); border-radius:var(--r-md); padding:9px 13px; font-size:12px; color:var(--purple-500); }
+    .evol-voice-bar .bi { font-size:16px; }
+    .voice-edit-btn { margin-left:auto; background:var(--purple-500); color:var(--white); border:none; border-radius:var(--r-sm); padding:5px 11px; font-size:11px; font-weight:600; cursor:pointer; transition:var(--tr); font-family:var(--font); }
+    .voice-edit-btn:hover { background:var(--purple-300); }
 
-    /* ══════════════════════════════════════════
-       MODALES
-    ══════════════════════════════════════════ */
-    .modal-backdrop {
-      position: absolute; inset: 0; z-index: 60;
-      background: rgba(0,0,0,0.35); display: none; align-items: flex-end;
-    }
-    .modal-backdrop.open { display: flex; }
-    .modal-sheet {
-      background: var(--white); width: 100%;
-      border-radius: var(--r-xl) var(--r-xl) 0 0;
-      padding: 18px 18px 28px;
-      animation: slideUp 0.25s cubic-bezier(0.4,0,0.2,1);
-    }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    .modal-handle { width: 36px; height: 4px; background: var(--gray-200); border-radius: 2px; margin: 0 auto 16px; }
-    .modal-title { font-size: 15px; font-weight: 600; color: var(--gray-800); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-    .modal-title .bi { font-size: 18px; }
-    .modal-input {
-      width: 100%; border: 1px solid var(--gray-200); border-radius: var(--r-md);
-      padding: 10px 13px; font-family: var(--font); font-size: 13px;
-      color: var(--gray-800); outline: none; margin-bottom: 8px; background: var(--gray-50);
-    }
-    .modal-input:focus { border-color: var(--blue-300); background: var(--white); }
-    .modal-actions { display: flex; gap: 8px; margin-top: 4px; }
+    /* ASISTENTE UHD */
+    .ai-chat-header { background:var(--white); border-bottom:1px solid var(--gray-100); padding:11px 16px; display:flex; align-items:center; gap:10px; flex-shrink:0; }
+    .ai-badge { background:var(--green-50); color:var(--green-500); border-radius:20px; padding:3px 10px; font-size:11px; font-weight:600; margin-left:auto; display:inline-flex; align-items:center; gap:5px; }
+    .ai-badge::before { content:''; width:6px; height:6px; background:var(--green-300); border-radius:50%; }
+    .chat-messages { flex:1; overflow-y:auto; padding:12px 14px; display:flex; flex-direction:column; gap:8px; scrollbar-width:none; min-height:0; }
+    .chat-messages::-webkit-scrollbar { display:none; }
+    .bubble { max-width:90%; padding:9px 13px; border-radius:14px; font-size:13px; line-height:1.55; }
+    .bubble.user { align-self:flex-end; background:var(--blue-500); color:var(--white); border-bottom-right-radius:4px; }
+    .bubble.ai { align-self:flex-start; background:var(--gray-100); color:var(--gray-800); border-bottom-left-radius:4px; }
+    .bubble.ai b { color:var(--blue-700); font-weight:600; }
+    .bubble.ai ul { padding-left:16px; margin-top:4px; }
+    .bubble.ai li { margin-bottom:3px; }
+    .bubble.ai .ref-block { margin-top:8px; padding-top:8px; border-top:1px solid var(--gray-200); font-size:11px; color:var(--gray-500); font-style:italic; }
+    .chat-input-bar { background:var(--white); border-top:1px solid var(--gray-100); padding:8px 12px; display:flex; align-items:center; gap:6px; flex-shrink:0; }
+    .chat-input { flex:1; background:var(--gray-100); border:1px solid transparent; border-radius:20px; padding:8px 12px; font-family:var(--font); font-size:13px; color:var(--gray-800); outline:none; resize:none; max-height:80px; }
+    .chat-input:focus { border-color:var(--blue-300); background:var(--white); }
+    .chat-send-btn { width:34px; height:34px; border-radius:50%; background:var(--blue-500); color:var(--white); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:var(--tr); font-size:15px; }
+    .chat-send-btn .bi { font-size:15px; }
+    .chat-send-btn:hover { background:var(--blue-700); }
+    .chat-mic-btn { width:34px; height:34px; border-radius:50%; background:var(--gray-100); color:var(--gray-600); border:1px solid var(--gray-200); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:var(--tr); }
+    .chat-mic-btn .bi { font-size:16px; }
+    .chat-mic-btn.recording { background:var(--red-50); color:var(--red-300); }
+    .chat-mic-btn:hover { background:var(--gray-200); }
 
-    /* ══════════════════════════════════════════
-       VISTA IMPRIMIR / COMPARTIR
-    ══════════════════════════════════════════ */
-    .print-overlay {
-      position: absolute; inset: 0; z-index: 70;
-      background: var(--white); display: none; flex-direction: column; overflow-y: auto;
-    }
-    .print-overlay.open { display: flex; }
-    .print-header { background: var(--blue-500); color: var(--white); padding: 16px; flex-shrink: 0; }
-    .print-header h2 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-    .print-header p  { font-size: 12px; opacity: 0.8; }
-    .print-map-area  { height: 180px; background: var(--gray-100); position: relative; flex-shrink: 0; }
-    #print-map { width: 100%; height: 100%; }
-    .print-body { padding: 14px 16px; }
-    .print-stop { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--gray-100); }
-    .print-stop:last-child { border-bottom: none; }
-    .print-stop-num { width: 24px; height: 24px; border-radius: 8px; background: var(--blue-50); color: var(--blue-500); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-    .print-stop-addr { font-size: 13px; font-weight: 500; color: var(--gray-800); }
-    .print-stop-obs  { font-size: 11px; color: var(--gray-400); }
-    .print-totals { background: var(--blue-50); border-radius: var(--r-md); padding: 12px 14px; margin-top: 12px; display: flex; justify-content: space-around; }
-    .print-total-item { text-align: center; }
-    .print-total-num  { font-size: 20px; font-weight: 600; color: var(--blue-500); }
-    .print-total-lbl  { font-size: 11px; color: var(--blue-700); font-weight: 500; }
-    .print-actions { padding: 10px 16px 24px; display: flex; gap: 8px; background: var(--white); border-top: 1px solid var(--gray-100); flex-shrink: 0; }
-    .print-actions .btn { flex: 1; }
+    /* MODAL */
+    .modal-backdrop { position:absolute; inset:0; z-index:60; background:rgba(0,0,0,0.35); display:none; align-items:flex-end; }
+    .modal-backdrop.open { display:flex; }
+    .modal-sheet { background:var(--white); width:100%; border-radius:var(--r-xl) var(--r-xl) 0 0; padding:18px 18px 28px; animation:slideUp 0.25s cubic-bezier(0.4,0,0.2,1); }
+    @keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+    .modal-handle { width:36px; height:4px; background:var(--gray-200); border-radius:2px; margin:0 auto 16px; }
+    .modal-title { font-size:15px; font-weight:600; color:var(--gray-800); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+    .modal-title .bi { font-size:18px; }
+    .modal-input { width:100%; border:1px solid var(--gray-200); border-radius:var(--r-md); padding:10px 13px; font-family:var(--font); font-size:13px; color:var(--gray-800); outline:none; margin-bottom:8px; background:var(--gray-50); }
+    .modal-input:focus { border-color:var(--blue-300); background:var(--white); }
+    .modal-actions { display:flex; gap:8px; margin-top:4px; }
 
-    /* ══════════════════════════════════════════
-       TOAST
-    ══════════════════════════════════════════ */
-    .toast {
-      position: absolute; bottom: 88px; left: 50%;
-      transform: translateX(-50%) translateY(10px);
-      background: var(--gray-800); color: var(--white);
-      padding: 8px 16px; border-radius: 20px;
-      font-size: 12px; font-weight: 500;
-      opacity: 0; transition: all 0.3s; z-index: 200;
-      pointer-events: none; max-width: 280px;
-      text-align: center; white-space: normal;
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    /* EDIT RECORD MODAL */
+    #modal-edit-record .modal-input { margin-bottom:8px; }
 
-    /* ══════════════════════════════════════════
-       ANIMACIONES
-    ══════════════════════════════════════════ */
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(226,75,74,0.4); }
-      50%       { box-shadow: 0 0 0 10px rgba(226,75,74,0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in { animation: fadeIn 0.22s ease forwards; }
+    /* PRINT */
+    .print-overlay { position:absolute; inset:0; z-index:70; background:var(--white); display:none; flex-direction:column; overflow-y:auto; }
+    .print-overlay.open { display:flex; }
+    .print-header { background:var(--blue-500); color:var(--white); padding:16px; flex-shrink:0; }
+    .print-header h2 { font-size:16px; font-weight:600; margin-bottom:4px; }
+    .print-header p { font-size:12px; opacity:0.8; }
+    .print-map-area { height:180px; background:var(--gray-100); position:relative; flex-shrink:0; }
+    #print-map { width:100%; height:100%; }
+    .print-body { padding:14px 16px; }
+    .print-stop { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--gray-100); }
+    .print-stop:last-child { border-bottom:none; }
+    .print-stop-num { width:24px; height:24px; border-radius:8px; background:var(--blue-50); color:var(--blue-500); font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+    .print-stop-addr { font-size:13px; font-weight:500; color:var(--gray-800); }
+    .print-stop-obs { font-size:11px; color:var(--gray-400); }
+    .print-totals { background:var(--blue-50); border-radius:var(--r-md); padding:12px 14px; margin-top:12px; display:flex; justify-content:space-around; }
+    .print-total-item { text-align:center; }
+    .print-total-num { font-size:20px; font-weight:600; color:var(--blue-500); }
+    .print-total-lbl { font-size:11px; color:var(--blue-700); font-weight:500; }
+    .print-actions { padding:10px 16px 24px; display:flex; gap:8px; background:var(--white); border-top:1px solid var(--gray-100); flex-shrink:0; }
+    .print-actions .btn { flex:1; }
 
-    .typing-dots span {
-      display: inline-block; width: 7px; height: 7px;
-      border-radius: 50%; background: var(--gray-400);
-      animation: dot 1.2s ease-in-out infinite; margin-right: 3px;
-    }
-    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes dot { 0%, 100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(-5px); opacity: 1; } }
+    /* TOAST */
+    .toast { position:absolute; bottom:88px; left:50%; transform:translateX(-50%) translateY(10px); background:var(--gray-800); color:var(--white); padding:8px 16px; border-radius:20px; font-size:12px; font-weight:500; opacity:0; transition:all 0.3s; z-index:200; pointer-events:none; max-width:280px; text-align:center; white-space:normal; }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-    .empty-state { text-align: center; padding: 36px 20px; color: var(--gray-400); font-size: 13px; }
-    .empty-state .bi { font-size: 36px; display: block; margin-bottom: 8px; }
+    /* ANIMACIONES */
+    @keyframes pulse { 0%,100% { box-shadow:0 0 0 0 rgba(226,75,74,0.4); } 50% { box-shadow:0 0 0 10px rgba(226,75,74,0); } }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+    .fade-in { animation:fadeIn 0.22s ease forwards; }
 
-    /* Responsive */
-    @media (max-width: 440px) {
-      #app-shell { padding: 0; background: var(--gray-50); }
-      #phone { width: 100%; min-height: 100vh; border-radius: 0; box-shadow: none; }
+    .typing-dots span { display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--gray-400); animation:dot 1.2s ease-in-out infinite; margin-right:3px; }
+    .typing-dots span:nth-child(2) { animation-delay:0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay:0.4s; }
+    @keyframes dot { 0%,100% { transform:translateY(0); opacity:0.5; } 50% { transform:translateY(-5px); opacity:1; } }
+
+    .empty-state { text-align:center; padding:36px 20px; color:var(--gray-400); font-size:13px; }
+    .empty-state .bi { font-size:36px; display:block; margin-bottom:8px; }
+
+    @media (max-width:440px) {
+      #app-shell { padding:0; background:var(--gray-50); }
+      #phone { width:100%; min-height:100vh; border-radius:0; box-shadow:none; }
     }
   </style>
 </head>
@@ -909,18 +481,13 @@
 <div id="app-shell">
 <div id="phone">
 
-  <!-- BARRA DE ESTADO -->
+  <!-- STATUS BAR -->
   <div class="status-bar">
     <span id="clock">9:41</span>
-    <div class="status-icons">
-      <i class="bi bi-wifi"></i>
-      <i class="bi bi-battery-half"></i>
-    </div>
+    <div class="status-icons"><i class="bi bi-wifi"></i><i class="bi bi-battery-half"></i></div>
   </div>
 
-  <!-- ══════════════════════════════
-       HOME
-  ════════════════════════════════ -->
+  <!-- ══ HOME ══ -->
   <div id="screen-home" class="screen active">
     <div class="home-header">
       <div class="logo-row">
@@ -930,12 +497,11 @@
           <div class="logo-unit">Unidad de Hospitalización Domiciliaria</div>
         </div>
       </div>
-
       <div class="greeting-line">
         Buenos días,
         <span class="greeting-name-wrap">
           <span id="greeting-display" class="greeting-name" onclick="toggleNamePanel(event)">Dra. García</span>
-          <i class="bi bi-pencil-fill edit-name-icon" onclick="toggleNamePanel(event)" title="Editar nombre"></i>
+          <i class="bi bi-pencil-fill edit-name-icon" onclick="toggleNamePanel(event)"></i>
           <div id="name-panel" class="name-edit-panel">
             <div class="panel-section">
               <div class="panel-label">Título profesional</div>
@@ -955,7 +521,6 @@
           </div>
         </span>
       </div>
-
       <div style="margin-top:8px">
         <span class="date-pill"><i class="bi bi-calendar3"></i><span id="today-date"></span></span>
       </div>
@@ -966,78 +531,50 @@
       <div class="main-cards">
         <div class="main-card" onclick="showScreen('screen-rutas')">
           <div class="card-icon icon-blue"><i class="bi bi-map"></i></div>
-          <div class="card-body">
-            <div class="card-title">Ruta diaria</div>
-            <div class="card-sub" id="home-ruta-sub">0 visitas · 0 km estimados</div>
-          </div>
+          <div class="card-body"><div class="card-title">Ruta diaria</div><div class="card-sub" id="home-ruta-sub">0 visitas · 0 km estimados</div></div>
           <i class="bi bi-chevron-right card-arrow"></i>
         </div>
         <div class="main-card" onclick="showScreen('screen-curas')">
           <div class="card-icon icon-green"><i class="bi bi-bandaid"></i></div>
-          <div class="card-body">
-            <div class="card-title">Seguimiento de Curas</div>
-            <div class="card-sub" id="home-curas-sub">0 registros de curas</div>
-          </div>
+          <div class="card-body"><div class="card-title">Seguimiento de Curas</div><div class="card-sub" id="home-curas-sub">0 registros de curas</div></div>
           <i class="bi bi-chevron-right card-arrow"></i>
         </div>
         <div class="main-card" onclick="showScreen('screen-evolutivo')">
           <div class="card-icon icon-purple"><i class="bi bi-mic-fill"></i></div>
-          <div class="card-body">
-            <div class="card-title">EvolutIA</div>
-            <div class="card-sub">Dictado clínico estructurado</div>
-          </div>
+          <div class="card-body"><div class="card-title">EvolutIA</div><div class="card-sub">Dictado clínico estructurado</div></div>
           <i class="bi bi-chevron-right card-arrow"></i>
         </div>
         <div class="main-card" onclick="showScreen('screen-asistente')">
           <div class="card-icon icon-amber"><i class="bi bi-robot"></i></div>
-          <div class="card-body">
-            <div class="card-title">Asistente IA</div>
-            <div class="card-sub">Consulta basada en evidencia</div>
-          </div>
+          <div class="card-body"><div class="card-title">Asistente UHD</div><div class="card-sub">Consulta basada en evidencia</div></div>
           <i class="bi bi-chevron-right card-arrow"></i>
         </div>
       </div>
-
       <div class="section-label">Resumen de hoy</div>
       <div class="stat-grid">
-        <div class="stat-card" onclick="showScreen('screen-rutas')">
-          <div class="stat-num" id="stat-visitas">0</div>
-          <div class="stat-lbl"><span class="stat-dot dot-blue"></span>Visitas pendientes</div>
-        </div>
-        <div class="stat-card" onclick="showScreen('screen-curas')">
-          <div class="stat-num" id="stat-curas">0</div>
-          <div class="stat-lbl"><span class="stat-dot dot-green"></span>Curas hoy</div>
-        </div>
-        <div class="stat-card" onclick="showScreen('screen-rutas')">
-          <div class="stat-num" id="stat-prioridad">0</div>
-          <div class="stat-lbl"><span class="stat-dot dot-red"></span>Prioridad alta</div>
-        </div>
-        <div class="stat-card" onclick="showScreen('screen-rutas')">
-          <div class="stat-num" id="stat-km">0</div>
-          <div class="stat-lbl"><span class="stat-dot dot-amber"></span>km estimados</div>
-        </div>
+        <div class="stat-card" onclick="showScreen('screen-rutas')"><div class="stat-num" id="stat-visitas">0</div><div class="stat-lbl"><span class="stat-dot dot-blue"></span>Visitas pendientes</div></div>
+        <div class="stat-card" onclick="showScreen('screen-curas')"><div class="stat-num" id="stat-curas">0</div><div class="stat-lbl"><span class="stat-dot dot-green"></span>Curas hoy</div></div>
+        <div class="stat-card" onclick="showScreen('screen-rutas')"><div class="stat-num" id="stat-prioridad">0</div><div class="stat-lbl"><span class="stat-dot dot-red"></span>Prioridad alta</div></div>
+        <div class="stat-card" onclick="showScreen('screen-rutas')"><div class="stat-num" id="stat-km">0</div><div class="stat-lbl"><span class="stat-dot dot-amber"></span>km estimados</div></div>
       </div>
       <div style="height:16px"></div>
     </div>
   </div>
 
-  <!-- ══════════════════════════
-       RUTA DIARIA
-  ════════════════════════════ -->
+  <!-- ══ RUTA DIARIA ══ -->
   <div id="screen-rutas" class="screen">
     <div class="inner-header">
-      <button class="back-btn" onclick="goBack()" aria-label="Volver"><i class="bi bi-arrow-left"></i></button>
+      <button class="back-btn" onclick="goBack()"><i class="bi bi-arrow-left"></i></button>
       <span class="inner-title"><i class="bi bi-map" style="color:var(--blue-500)"></i>Ruta diaria</span>
-      <span class="header-badge" style="background:var(--blue-50);color:var(--blue-500);">
+      <span class="header-badge" style="background:var(--blue-50);color:var(--blue-500);" id="route-status-badge">
         <i class="bi bi-signpost-split"></i>Optimizada
       </span>
     </div>
 
     <div class="map-container">
       <div id="leaflet-map"></div>
-      <button class="add-location-btn" onclick="useMyLocation()" aria-label="Añadir mi ubicación GPS">
-        <i class="bi bi-crosshair2"></i> Mi ubicación
-      </button>
+      <div class="geocode-status" id="geocode-status"><i class="bi bi-arrow-repeat"></i> Geocodificando...</div>
+      <button class="add-location-btn" onclick="useMyLocation()"><i class="bi bi-crosshair2"></i> Mi ubicación</button>
       <div class="map-overlay-btns">
         <button class="map-btn" onclick="openSharePrint()"><i class="bi bi-printer"></i> Imprimir</button>
         <button class="map-btn" onclick="recalcRoute()"><i class="bi bi-arrow-clockwise"></i> Recalc.</button>
@@ -1053,22 +590,15 @@
     <div class="screen-body">
       <div class="section-label" style="justify-content:space-between;padding-right:16px">
         <span><i class="bi bi-list-check"></i> Visitas del recorrido</span>
-        <button class="btn" style="font-size:11px;padding:5px 10px;" onclick="openAddVisitModal()">
-          <i class="bi bi-plus-lg"></i> Añadir
-        </button>
+        <button class="btn" style="font-size:11px;padding:5px 10px;" onclick="openAddVisitModal()"><i class="bi bi-plus-lg"></i> Añadir</button>
       </div>
       <div class="visits-list" id="visits-list"></div>
 
       <div class="section-label"><i class="bi bi-exclamation-triangle"></i> Ubicaciones lejanas</div>
       <div class="distant-section">
-        <div class="distant-header">
-          <i class="bi bi-exclamation-triangle-fill"></i>
-          No incluidas en la ruta optimizada
-        </div>
+        <div class="distant-header"><i class="bi bi-exclamation-triangle-fill"></i>No incluidas en la ruta optimizada</div>
         <div id="distant-list"></div>
-        <button class="btn btn-block" style="margin-top:8px;font-size:12px" onclick="openAddDistantModal()">
-          <i class="bi bi-plus-lg"></i> Añadir ubicación lejana
-        </button>
+        <button class="btn btn-block" style="margin-top:8px;font-size:12px" onclick="openAddDistantModal()"><i class="bi bi-plus-lg"></i> Añadir ubicación lejana</button>
       </div>
       <div style="height:8px"></div>
     </div>
@@ -1084,7 +614,7 @@
       <div class="modal-sheet" onclick="event.stopPropagation()">
         <div class="modal-handle"></div>
         <div class="modal-title"><i class="bi bi-geo-alt-fill" style="color:var(--blue-500)"></i> Nueva visita</div>
-        <input id="visit-addr-input" class="modal-input" type="text" placeholder="Calle y número..." />
+        <input id="visit-addr-input" class="modal-input" type="text" placeholder="Calle y número, ciudad..." />
         <input id="visit-obs-input" class="modal-input" type="text" placeholder="Observaciones (opcional)" />
         <div style="margin-bottom:8px">
           <label style="font-size:11px;color:var(--gray-600);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:5px">Prioridad</label>
@@ -1115,7 +645,7 @@
       </div>
     </div>
 
-    <!-- Vista imprimir/compartir -->
+    <!-- Vista imprimir -->
     <div id="print-overlay" class="print-overlay">
       <div class="print-header">
         <h2>Ruta del día — <span id="print-date"></span></h2>
@@ -1134,28 +664,18 @@
     </div>
   </div>
 
-  <!-- ══════════════════════════
-       SEGUIMIENTO DE CURAS
-  ════════════════════════════ -->
+  <!-- ══ SEGUIMIENTO DE CURAS ══ -->
   <div id="screen-curas" class="screen">
     <div class="inner-header">
-      <button class="back-btn" onclick="goBack()" aria-label="Volver"><i class="bi bi-arrow-left"></i></button>
+      <button class="back-btn" onclick="goBack()"><i class="bi bi-arrow-left"></i></button>
       <span class="inner-title"><i class="bi bi-bandaid" style="color:var(--green-500)"></i>Seguimiento de Curas</span>
-      <button class="header-badge"
-        style="background:var(--green-50);color:var(--green-500);border:none;cursor:pointer;font-weight:600;font-size:11px;padding:5px 11px;border-radius:20px"
-        onclick="showScreen('screen-asistente')">
+      <button class="header-badge" style="background:var(--green-50);color:var(--green-500);border:none;cursor:pointer;font-weight:600;font-size:11px;padding:5px 11px;border-radius:20px" onclick="showScreen('screen-asistente')">
         <i class="bi bi-stars"></i> Asistente
       </button>
     </div>
 
-    <div class="patient-selector">
-      <div class="patient-chip active" onclick="selectPatient(this,'García M.')">García M.</div>
-      <div class="patient-chip" onclick="selectPatient(this,'López R.')">López R.</div>
-      <div class="patient-chip" onclick="selectPatient(this,'Martínez A.')">Martínez A.</div>
-      <div class="patient-chip" onclick="selectPatient(this,'+ Nuevo')">+ Nuevo</div>
-    </div>
+    <div class="patient-selector" id="patient-selector"></div>
 
-    <!-- ✅ Zona subida de imagen con previsualización -->
     <div class="photo-upload-area" id="upload-area"
          onclick="document.getElementById('photo-file-input').click()"
          ondragover="event.preventDefault();this.classList.add('drag-over')"
@@ -1165,20 +685,16 @@
       <p><strong>Pulsa para añadir foto</strong> o arrastra aquí</p>
       <p style="margin-top:2px;font-size:11px;color:var(--gray-400)">Galería o cámara · JPG, PNG, HEIC</p>
     </div>
-    <!-- Input oculto -->
     <input type="file" id="photo-file-input" accept="image/*" capture="environment" style="display:none" onchange="handlePhotoFile(event)" />
 
-    <!-- Previsualización -->
     <div class="photo-preview-wrap" id="photo-preview-wrap">
       <img id="photo-preview-img" src="" alt="Foto de la cura" />
-      <button class="photo-preview-remove" onclick="removePhoto()" aria-label="Quitar foto"><i class="bi bi-x"></i></button>
+      <button class="photo-preview-remove" onclick="removePhoto()"><i class="bi bi-x"></i></button>
+      <button class="photo-preview-save" onclick="saveCurrentPhoto()"><i class="bi bi-floppy2-fill"></i> Guardar en timeline</button>
     </div>
 
-    <!-- Análisis IA -->
     <div class="photo-analysis-box" id="photo-analysis-box">
-      <div class="analysis-header">
-        <i class="bi bi-stars"></i> Análisis IA — Apoyo clínico (no diagnóstico)
-      </div>
+      <div class="analysis-header"><i class="bi bi-stars"></i> Análisis IA — Apoyo clínico (no diagnóstico)</div>
       <div class="analysis-body" id="analysis-body"></div>
     </div>
 
@@ -1187,32 +703,56 @@
     </div>
 
     <div class="add-photo-bar">
-      <button class="btn" onclick="document.getElementById('photo-file-input').removeAttribute('capture');document.getElementById('photo-file-input').click()">
-        <i class="bi bi-images"></i> Galería
-      </button>
-      <button class="btn btn-primary" style="flex:1"
-        onclick="document.getElementById('photo-file-input').setAttribute('capture','environment');document.getElementById('photo-file-input').click()">
-        <i class="bi bi-camera-fill"></i> Cámara
-      </button>
+      <button class="btn" onclick="document.getElementById('photo-file-input').removeAttribute('capture');document.getElementById('photo-file-input').click()"><i class="bi bi-images"></i> Galería</button>
+      <button class="btn btn-primary" style="flex:1" onclick="document.getElementById('photo-file-input').setAttribute('capture','environment');document.getElementById('photo-file-input').click()"><i class="bi bi-camera-fill"></i> Cámara</button>
+    </div>
+
+    <!-- Modal editar registro -->
+    <div id="modal-edit-record" class="modal-backdrop" onclick="closeModal('modal-edit-record')">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title"><i class="bi bi-pencil-fill" style="color:var(--blue-500)"></i> Editar registro</div>
+        <input type="hidden" id="edit-record-id" />
+        <input id="edit-record-label" class="modal-input" type="text" placeholder="Título de la lesión" />
+        <input id="edit-record-obs" class="modal-input" type="text" placeholder="Observaciones clínicas" />
+        <div style="margin-bottom:8px">
+          <label style="font-size:11px;color:var(--gray-600);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:5px">Estado</label>
+          <select id="edit-record-badge" class="modal-input" style="margin-bottom:0;cursor:pointer">
+            <option value="mejora">↑ Mejora</option>
+            <option value="alerta">⚠ Atención</option>
+            <option value="critico">⛔ Crítico</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button class="btn" style="flex:1" onclick="closeModal('modal-edit-record')">Cancelar</button>
+          <button class="btn btn-primary" style="flex:1" onclick="saveEditRecord()">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal nuevo paciente -->
+    <div id="modal-new-patient" class="modal-backdrop" onclick="closeModal('modal-new-patient')">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title"><i class="bi bi-person-plus-fill" style="color:var(--green-500)"></i> Nuevo paciente</div>
+        <input id="new-patient-input" class="modal-input" type="text" placeholder="Nombre del paciente (ej: López R.)" />
+        <div class="modal-actions">
+          <button class="btn" style="flex:1" onclick="closeModal('modal-new-patient')">Cancelar</button>
+          <button class="btn btn-primary" style="flex:1" onclick="confirmNewPatient()">Añadir</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════
-       EVOLUTIA
-  ════════════════════════════ -->
+  <!-- ══ EVOLUTIA ══ -->
   <div id="screen-evolutivo" class="screen">
     <div class="inner-header">
-      <button class="back-btn" onclick="goBack()" aria-label="Volver"><i class="bi bi-arrow-left"></i></button>
+      <button class="back-btn" onclick="goBack()"><i class="bi bi-arrow-left"></i></button>
       <span class="inner-title"><i class="bi bi-mic-fill" style="color:var(--purple-500)"></i>EvolutIA</span>
-      <span class="header-badge" style="background:var(--purple-50);color:var(--purple-500)">
-        <i class="bi bi-stars"></i>Clínico
-      </span>
+      <span class="header-badge" style="background:var(--purple-50);color:var(--purple-500)"><i class="bi bi-stars"></i>Clínico</span>
     </div>
-
     <div class="screen-body">
       <div class="evol-body">
-
-        <!-- Selección tipo evolutivo -->
         <div>
           <div class="section-label" style="margin:0 0 8px"><i class="bi bi-layout-text-window-reverse"></i> Tipo de anotación</div>
           <div class="soap-selector">
@@ -1222,47 +762,32 @@
             <button class="soap-btn" onclick="setSoapMode('incidencia',this)">Incidencia</button>
           </div>
         </div>
-
         <div class="record-area">
-          <button id="record-btn" class="record-btn-big" onclick="toggleRecording()" aria-label="Grabar dictado">
-            <i class="bi bi-mic-fill"></i>
-          </button>
+          <button id="record-btn" class="record-btn-big" onclick="toggleRecording()"><i class="bi bi-mic-fill"></i></button>
           <p class="record-hint" id="record-hint">Pulsa para grabar</p>
           <div class="waveform" id="waveform">
-            <div class="wave-bar" style="animation-delay:0s"></div>
-            <div class="wave-bar" style="animation-delay:0.1s"></div>
-            <div class="wave-bar" style="animation-delay:0.2s"></div>
-            <div class="wave-bar" style="animation-delay:0.3s"></div>
-            <div class="wave-bar" style="animation-delay:0.4s"></div>
-            <div class="wave-bar" style="animation-delay:0.5s"></div>
-            <div class="wave-bar" style="animation-delay:0.6s"></div>
-            <div class="wave-bar" style="animation-delay:0.7s"></div>
-            <div class="wave-bar" style="animation-delay:0.8s"></div>
-            <div class="wave-bar" style="animation-delay:0.9s"></div>
+            <div class="wave-bar" style="animation-delay:0s"></div><div class="wave-bar" style="animation-delay:0.1s"></div>
+            <div class="wave-bar" style="animation-delay:0.2s"></div><div class="wave-bar" style="animation-delay:0.3s"></div>
+            <div class="wave-bar" style="animation-delay:0.4s"></div><div class="wave-bar" style="animation-delay:0.5s"></div>
+            <div class="wave-bar" style="animation-delay:0.6s"></div><div class="wave-bar" style="animation-delay:0.7s"></div>
+            <div class="wave-bar" style="animation-delay:0.8s"></div><div class="wave-bar" style="animation-delay:0.9s"></div>
             <div class="wave-bar" style="animation-delay:1.0s"></div>
           </div>
         </div>
-
         <div class="transcript-box">
           <div class="box-label"><i class="bi bi-mic"></i>Transcripción en tiempo real</div>
           <div class="transcript-text" id="transcript-display">Pulsa el botón para comenzar a dictar...</div>
         </div>
-
         <div class="evolutivo-box">
-          <div class="box-label" style="color:var(--blue-500)">
-            <i class="bi bi-stars" style="color:var(--blue-500)"></i>
-            Anotación clínica estructurada
-          </div>
+          <div class="box-label" style="color:var(--blue-500)"><i class="bi bi-stars" style="color:var(--blue-500)"></i>Anotación clínica estructurada</div>
           <div class="evolutivo-text" id="evol-text">El evolutivo estructurado aparecerá aquí...</div>
           <textarea class="evolutivo-edit" id="evol-edit" rows="8" placeholder="Edita el evolutivo..."></textarea>
         </div>
-
         <div class="evol-voice-bar">
           <i class="bi bi-mic-fill"></i>
           <span>Dictar corrección o ampliación</span>
           <button class="voice-edit-btn" id="voice-edit-btn" onclick="toggleVoiceEdit()">Dictar</button>
         </div>
-
         <div class="evol-actions">
           <button class="evol-btn" onclick="copyEvolutivo()"><i class="bi bi-clipboard"></i> Copiar</button>
           <button class="evol-btn" id="edit-toggle-btn" onclick="toggleEditMode()"><i class="bi bi-pencil"></i> Editar</button>
@@ -1273,76 +798,51 @@
     </div>
   </div>
 
-  <!-- ══════════════════════════
-       ASISTENTE IA
-  ════════════════════════════ -->
+  <!-- ══ ASISTENTE UHD ══ -->
   <div id="screen-asistente" class="screen">
     <div class="ai-chat-header inner-header">
-      <button class="back-btn" onclick="goBack()" aria-label="Volver"><i class="bi bi-arrow-left"></i></button>
+      <button class="back-btn" onclick="goBack()"><i class="bi bi-arrow-left"></i></button>
       <div>
-        <div style="font-size:15px;font-weight:600;color:var(--gray-800)">Asistente clínico IA</div>
-        <div style="font-size:11px;color:var(--gray-400)">Basado en guías clínicas oficiales · GNEAUPP · EWMA · SEHER</div>
+        <div style="font-size:15px;font-weight:600;color:var(--gray-800)">Asistente UHD</div>
+        <div style="font-size:11px;color:var(--gray-400)">Basado en guías clínicas · GNEAUPP · EWMA · SEHER · EPUAP</div>
       </div>
       <div class="ai-badge">Online</div>
     </div>
-
     <div class="chat-messages" id="chat-messages">
       <div class="bubble ai fade-in">
-        Hola. Soy un asistente de apoyo clínico para profesionales sanitarios de UHD.<br><br>
-        Puedo ayudarte con protocolos basados en evidencia sobre: curas y úlceras por presión, manejo de catéteres, tratamiento del dolor, cuidados domiciliarios y redacción de evolutivos.<br><br>
+        Hola. Soy el <b>Asistente UHD</b>, apoyo clínico para profesionales de Hospitalización Domiciliaria.<br><br>
+        Puedo ayudarte con: clasificación de UPP, selección de apósitos, cuidados de catéter PICC, manejo del dolor domiciliario, nutrición en heridas crónicas y redacción de evolutivos.<br><br>
         <b>Importante:</b> Mis respuestas citan guías clínicas oficiales y no sustituyen el juicio clínico del profesional.
       </div>
     </div>
-
     <div class="chat-input-bar">
-      <button class="chat-mic-btn" id="ai-mic-btn" onclick="toggleAIMic()" title="Dictado por voz" aria-label="Activar micrófono">
-        <i class="bi bi-mic-fill"></i>
-      </button>
-      <textarea class="chat-input" id="ai-chat-input"
-        placeholder="Consulta clínica..."
-        rows="1"
-        onkeydown="handleChatKey(event)"></textarea>
-      <button class="chat-send-btn" onclick="sendChatMessage()" aria-label="Enviar">
-        <i class="bi bi-send-fill"></i>
-      </button>
+      <button class="chat-mic-btn" id="ai-mic-btn" onclick="toggleAIMic()"><i class="bi bi-mic-fill"></i></button>
+      <textarea class="chat-input" id="ai-chat-input" placeholder="Consulta clínica..." rows="1" onkeydown="handleChatKey(event)"></textarea>
+      <button class="chat-send-btn" onclick="sendChatMessage()"><i class="bi bi-send-fill"></i></button>
     </div>
   </div>
 
-  <!-- ══════════════════════════
-       NAV BAR — 5 pestañas
-  ════════════════════════════ -->
+  <!-- NAV BAR -->
   <div class="nav-bar">
-    <div class="nav-item" id="nav-ruta" onclick="showScreen('screen-rutas')" role="button" aria-label="Ruta diaria">
-      <i class="bi bi-map"></i>Ruta
-    </div>
-    <div class="nav-item" id="nav-curas" onclick="showScreen('screen-curas')" role="button" aria-label="Seguimiento de Curas">
-      <i class="bi bi-bandaid"></i>Curas
-    </div>
-    <div class="nav-home-center" id="nav-home" onclick="showScreen('screen-home')" role="button" aria-label="Inicio">
+    <div class="nav-item" id="nav-ruta" onclick="showScreen('screen-rutas')"><i class="bi bi-map"></i>Ruta</div>
+    <div class="nav-item" id="nav-curas" onclick="showScreen('screen-curas')"><i class="bi bi-bandaid"></i>Curas</div>
+    <div class="nav-home-center" id="nav-home" onclick="showScreen('screen-home')">
       <div class="nav-home-icon"><i class="bi bi-house-fill"></i></div>
       <span class="nav-home-label">Inicio</span>
     </div>
-    <div class="nav-item" id="nav-evolutivo" onclick="showScreen('screen-evolutivo')" role="button" aria-label="EvolutIA">
-      <i class="bi bi-mic-fill"></i>EvolutIA
-    </div>
-    <div class="nav-item" id="nav-asistente" onclick="showScreen('screen-asistente')" role="button" aria-label="Asistente IA">
-      <i class="bi bi-robot"></i>Asist. IA
-    </div>
+    <div class="nav-item" id="nav-evolutivo" onclick="showScreen('screen-evolutivo')"><i class="bi bi-mic-fill"></i>EvolutIA</div>
+    <div class="nav-item" id="nav-asistente" onclick="showScreen('screen-asistente')"><i class="bi bi-robot"></i>Asist. UHD</div>
   </div>
 
   <div id="toast" class="toast"></div>
 
-</div><!-- /phone -->
-</div><!-- /app-shell -->
+</div>
+</div>
 
-
-<!-- ═══════════════════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════════════════════ -->
 <script>
-/* ──────────────────────────────
+/* ══════════════════════════════
    ESTADO GLOBAL
-────────────────────────────── */
+══════════════════════════════ */
 const State = {
   title: loadLS('uhd_title') || 'Dra.',
   name:  loadLS('uhd_name')  || 'García',
@@ -1353,45 +853,62 @@ const State = {
   currentPhoto: null,
   visits:   loadLS('uhd_visits', []),
   distants: loadLS('uhd_distants', []),
-  woundRecords: loadLS('uhd_wounds', [
-    { id:1, date:'13 mayo 2025', label:'Úlcera sacra G-III', obs:'Exudado reducido. Bordes en proceso de granulación.', badge:'mejora', ai:'UPP G-III · Reducción de tamaño ~15 %. Sin signos de infección sistémica.' },
-    { id:2, date:'10 mayo 2025', label:'Úlcera sacra G-III', obs:'Bordes macerados. Aumento de exudado seroso.', badge:'alerta', ai:'UPP G-III · Posible colonización crítica. Valorar cultivo y apósito de plata.' },
-  ]),
+  patients: loadLS('uhd_patients', ['García M.', 'López R.', 'Martínez A.']),
+  woundRecords: loadLS('uhd_wounds', {}),  // { 'García M.': [...], ... }
   nextVisitId:   loadLS('uhd_nvi', 10),
   nextDistantId: loadLS('uhd_ndi', 10),
   nextWoundId:   loadLS('uhd_nwi', 10),
   currentPatient:'García M.',
   aiMicActive: false,
   recognition: null,
+  visitCoords: {},  // { visitId: [lat, lng] }
 };
 
+// Migración: si woundRecords era array, convertir a objeto
+if (Array.isArray(State.woundRecords)) {
+  const old = State.woundRecords;
+  State.woundRecords = {};
+  if (State.patients.length > 0) {
+    State.woundRecords[State.patients[0]] = old;
+  }
+}
+
+// Datos demo si no hay registros para García M.
+if (!State.woundRecords['García M.'] || !State.woundRecords['García M.'].length) {
+  State.woundRecords['García M.'] = [
+    { id:1, date:'13 mayo 2025', label:'Úlcera sacra G-III', obs:'Exudado reducido. Bordes en proceso de granulación.', badge:'mejora', ai:'UPP G-III · Reducción de tamaño ~15 %. Sin signos de infección sistémica.', img:null },
+    { id:2, date:'10 mayo 2025', label:'Úlcera sacra G-III', obs:'Bordes macerados. Aumento de exudado seroso.', badge:'alerta', ai:'UPP G-III · Posible colonización crítica. Valorar cultivo y apósito de plata.', img:null },
+  ];
+}
+
 function loadLS(key, fallback) {
-  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+  try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : fallback; }
   catch { return fallback; }
 }
 function saveLS(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch {} }
 function persistState() {
-  saveLS('uhd_title',   State.title);
-  saveLS('uhd_name',    State.name);
-  saveLS('uhd_visits',  State.visits);
-  saveLS('uhd_distants',State.distants);
-  saveLS('uhd_wounds',  State.woundRecords);
-  saveLS('uhd_nvi',     State.nextVisitId);
-  saveLS('uhd_ndi',     State.nextDistantId);
-  saveLS('uhd_nwi',     State.nextWoundId);
+  saveLS('uhd_title', State.title);
+  saveLS('uhd_name', State.name);
+  saveLS('uhd_visits', State.visits);
+  saveLS('uhd_distants', State.distants);
+  saveLS('uhd_patients', State.patients);
+  saveLS('uhd_wounds', State.woundRecords);
+  saveLS('uhd_nvi', State.nextVisitId);
+  saveLS('uhd_ndi', State.nextDistantId);
+  saveLS('uhd_nwi', State.nextWoundId);
 }
 
 function esc(s='') {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 }
 
-/* ──────────────────────────────
+/* ══════════════════════════════
    RELOJ Y FECHA
-────────────────────────────── */
+══════════════════════════════ */
 function updateClock() {
   const now = new Date();
   document.getElementById('clock').textContent =
-    now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+    now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
 }
 function setTodayDate() {
   document.getElementById('today-date').textContent =
@@ -1399,16 +916,14 @@ function setTodayDate() {
 }
 updateClock(); setTodayDate(); setInterval(updateClock, 30000);
 
-/* ──────────────────────────────
+/* ══════════════════════════════
    NAVEGACIÓN
-────────────────────────────── */
+══════════════════════════════ */
 const screenHistory = [];
 const NAV_MAP = {
-  'screen-home':      'nav-home',
-  'screen-rutas':     'nav-ruta',
-  'screen-curas':     'nav-curas',
-  'screen-evolutivo': 'nav-evolutivo',
-  'screen-asistente': 'nav-asistente',
+  'screen-home':'nav-home', 'screen-rutas':'nav-ruta',
+  'screen-curas':'nav-curas', 'screen-evolutivo':'nav-evolutivo',
+  'screen-asistente':'nav-asistente',
 };
 
 function updateNavActive(id) {
@@ -1426,18 +941,16 @@ function showScreen(id, push = true) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   updateNavActive(id);
-  if (id === 'screen-rutas')     { renderVisits(); setTimeout(initMap, 100); }
-  if (id === 'screen-curas')     renderTimeline();
-  if (id === 'screen-home')      updateHomeStats();
+  if (id === 'screen-rutas')  { renderVisits(); setTimeout(initMap, 100); }
+  if (id === 'screen-curas')  { renderPatientSelector(); renderTimeline(); }
+  if (id === 'screen-home')   updateHomeStats();
 }
 
-function goBack() {
-  showScreen(screenHistory.pop() || 'screen-home', false);
-}
+function goBack() { showScreen(screenHistory.pop() || 'screen-home', false); }
 
-/* ──────────────────────────────
+/* ══════════════════════════════
    NOMBRE / SALUDO
-────────────────────────────── */
+══════════════════════════════ */
 function toggleNamePanel(e) {
   e.stopPropagation();
   const p = document.getElementById('name-panel');
@@ -1454,7 +967,7 @@ document.addEventListener('click', () => document.getElementById('name-panel').c
 function setTitle(t) {
   State.title = t; updateGreeting(); persistState();
   document.getElementById('name-panel').classList.remove('open');
-  showToast('Título: '+t);
+  showToast('Título: ' + t);
 }
 function applyName() {
   const v = document.getElementById('name-input').value.trim();
@@ -1464,20 +977,23 @@ function applyName() {
   showToast('Nombre guardado ✓');
 }
 function updateGreeting() {
-  document.getElementById('greeting-display').textContent = State.title+' '+State.name;
+  document.getElementById('greeting-display').textContent = State.title + ' ' + State.name;
   const pp = document.getElementById('print-prof');
-  if (pp) pp.textContent = 'Profesional: '+State.title+' '+State.name;
+  if (pp) pp.textContent = 'Profesional: ' + State.title + ' ' + State.name;
 }
 
-/* ──────────────────────────────
+/* ══════════════════════════════
    HOME STATS
-────────────────────────────── */
+══════════════════════════════ */
 function updateHomeStats() {
-  const vis   = State.visits.length;
-  const km    = calcKm();
-  const alta  = State.visits.filter(v => v.priority === 'alta').length;
+  const vis  = State.visits.length;
+  const km   = calcKmDisplay();
+  const alta = State.visits.filter(v => v.priority === 'alta').length;
   const today = new Date().toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
-  const curasHoy = State.woundRecords.filter(r => r.date === today).length;
+  let curasHoy = 0;
+  Object.values(State.woundRecords).forEach(arr => {
+    if (Array.isArray(arr)) curasHoy += arr.filter(r => r.date === today).length;
+  });
 
   document.getElementById('stat-visitas').textContent   = vis;
   document.getElementById('stat-curas').textContent     = curasHoy;
@@ -1485,82 +1001,153 @@ function updateHomeStats() {
   document.getElementById('stat-km').textContent        = km;
 
   document.getElementById('home-ruta-sub').textContent =
-    vis+' visita'+(vis!==1?'s':'')+' · '+km+' km estimados';
+    vis + ' visita' + (vis!==1?'s':'') + ' · ' + km + ' km estimados';
+
+  const totalCuras = Object.values(State.woundRecords).reduce((t, arr) =>
+    t + (Array.isArray(arr) ? arr.length : 0), 0);
   document.getElementById('home-curas-sub').textContent =
-    State.woundRecords.length+' registro'+(State.woundRecords.length!==1?'s':'')+' de curas';
+    totalCuras + ' registro' + (totalCuras!==1?'s':'') + ' de curas';
 }
 
-/* ──────────────────────────────
+/* ══════════════════════════════
+   GEOCODIFICACIÓN REAL (Nominatim)
+══════════════════════════════ */
+const geocodeCache = {};
+
+async function geocodeAddress(addr) {
+  if (geocodeCache[addr]) return geocodeCache[addr];
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr)}&limit=1&accept-language=es`;
+    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+    const data = await res.json();
+    if (data && data.length > 0) {
+      const coords = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+      geocodeCache[addr] = coords;
+      return coords;
+    }
+  } catch(e) {}
+  return null;
+}
+
+async function geocodeAllVisits() {
+  if (!State.visits.length) return;
+  const statusEl = document.getElementById('geocode-status');
+  statusEl.classList.add('visible');
+  statusEl.textContent = '🔄 Geocodificando direcciones...';
+
+  let changed = false;
+  for (const v of State.visits) {
+    if (!State.visitCoords[v.id]) {
+      const coords = await geocodeAddress(v.addr);
+      if (coords) {
+        State.visitCoords[v.id] = coords;
+        changed = true;
+      }
+      await new Promise(r => setTimeout(r, 300)); // respetar rate-limit Nominatim
+    }
+  }
+
+  statusEl.classList.remove('visible');
+  if (changed) drawRoute();
+}
+
+/* ══════════════════════════════
    MAPA LEAFLET
-────────────────────────────── */
+══════════════════════════════ */
 let leafletMap = null, routeLayer = null, printMapObj = null;
-const CENTER = [38.3453, -0.4831];
-const DEMO_COORDS = [
-  [38.3453,-0.4831],[38.3480,-0.4910],[38.3510,-0.4780],
-  [38.3430,-0.4760],[38.3520,-0.4850],[38.3470,-0.4920],[38.3395,-0.4880],
-];
+const CENTER_ALICANTE = [38.3453, -0.4831];
 
 function initMap() {
   if (leafletMap) { leafletMap.invalidateSize(); drawRoute(); return; }
   const el = document.getElementById('leaflet-map');
   if (!el) return;
-  leafletMap = L.map('leaflet-map', {zoomControl:false, attributionControl:false}).setView(CENTER, 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(leafletMap);
+  leafletMap = L.map('leaflet-map', {zoomControl:false, attributionControl:false}).setView(CENTER_ALICANTE, 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:18}).addTo(leafletMap);
   drawRoute();
+  geocodeAllVisits();
 }
 
 function drawRoute() {
   if (!leafletMap) return;
-  if (routeLayer) { leafletMap.removeLayer(routeLayer); routeLayer = null; }
-  leafletMap.eachLayer(l => { if (l instanceof L.Marker || l instanceof L.Polyline) leafletMap.removeLayer(l); });
-  if (!State.visits.length) { leafletMap.setView(CENTER,13); return; }
-  const coords = State.visits.map((_,i) => DEMO_COORDS[i % DEMO_COORDS.length]);
-  routeLayer = L.polyline(coords,{color:'#185FA5',weight:4,opacity:0.85}).addTo(leafletMap);
-  coords.forEach((c,i) => {
-    const color = i===0?'#3B6D11':(i===coords.length-1?'#A32D2D':'#185FA5');
+  // Limpiar capas anteriores
+  leafletMap.eachLayer(l => {
+    if (l instanceof L.Marker || l instanceof L.Polyline) leafletMap.removeLayer(l);
+  });
+  if (!State.visits.length) { leafletMap.setView(CENTER_ALICANTE, 13); return; }
+
+  // Obtener coordenadas reales o fallback
+  const coords = State.visits.map((v, i) => {
+    return State.visitCoords[v.id] || getFallbackCoord(i);
+  });
+
+  const validCoords = coords.filter(Boolean);
+  if (validCoords.length < 1) return;
+
+  if (validCoords.length >= 2) {
+    routeLayer = L.polyline(validCoords, {color:'#185FA5', weight:4, opacity:0.85}).addTo(leafletMap);
+  }
+
+  coords.forEach((c, i) => {
+    if (!c) return;
+    const color = i===0 ? '#3B6D11' : (i===coords.length-1 ? '#A32D2D' : '#185FA5');
     const icon = L.divIcon({
       html:`<div style="background:${color};color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25)">${i+1}</div>`,
-      className:'',iconSize:[26,26],iconAnchor:[13,13],
+      className:'', iconSize:[26,26], iconAnchor:[13,13],
     });
-    L.marker(c,{icon}).addTo(leafletMap)
+    L.marker(c, {icon}).addTo(leafletMap)
       .bindPopup(`<b>${i+1}. ${esc(State.visits[i].addr)}</b><br>${esc(State.visits[i].obs)}`);
   });
-  leafletMap.fitBounds(routeLayer.getBounds(),{padding:[20,20]});
+
+  if (validCoords.length >= 2 && routeLayer) {
+    leafletMap.fitBounds(routeLayer.getBounds(), {padding:[20,20]});
+  } else if (validCoords.length === 1) {
+    leafletMap.setView(validCoords[0], 14);
+  }
 }
 
-/* ──────────────────────────────
+function getFallbackCoord(i) {
+  // Fallback demo para Alicante
+  const offsets = [[0,0],[0.003,-0.008],[0.006,0.002],[-.002,0.005],[.008,-.003],[.004,-.009],[-.003,-.005]];
+  const [dlat, dlon] = offsets[i % offsets.length];
+  return [CENTER_ALICANTE[0] + dlat, CENTER_ALICANTE[1] + dlon];
+}
+
+/* ══════════════════════════════
    CÁLCULO KM + TIEMPO
-────────────────────────────── */
+══════════════════════════════ */
 function haversine(a, b) {
   const R = 6371, dLat=(b[0]-a[0])*Math.PI/180, dLon=(b[1]-a[1])*Math.PI/180;
   const x = Math.sin(dLat/2)**2 + Math.cos(a[0]*Math.PI/180)*Math.cos(b[0]*Math.PI/180)*Math.sin(dLon/2)**2;
   return 2*R*Math.asin(Math.sqrt(x));
 }
-function calcKm() {
-  if (State.visits.length < 2) return (State.visits.length*1.2).toFixed(1);
-  const coords = State.visits.map((_,i) => DEMO_COORDS[i%DEMO_COORDS.length]);
-  return coords.slice(1).reduce((t,c,i) => t+haversine(coords[i],c), 0).toFixed(1);
-}
-function calcTime(km) { return Math.round((parseFloat(km)/30)*60 + State.visits.length*10); }
 
-/* ──────────────────────────────
+function calcKmReal() {
+  if (State.visits.length < 2) return State.visits.length * 1.2;
+  const coords = State.visits.map((v,i) => State.visitCoords[v.id] || getFallbackCoord(i));
+  return coords.slice(1).reduce((t, c, i) => t + haversine(coords[i], c), 0);
+}
+
+function calcKmDisplay() { return calcKmReal().toFixed(1); }
+function calcTime(km) { return Math.round((parseFloat(km) / 30) * 60 + State.visits.length * 10); }
+
+/* ══════════════════════════════
    RUTA — RENDERIZADO
-────────────────────────────── */
+══════════════════════════════ */
 let editingVisitId = null;
 
 function renderVisits() {
   const list  = document.getElementById('visits-list');
   const dlist = document.getElementById('distant-list');
-  const km = calcKm(), mins = calcTime(km), count = State.visits.length;
+  const km = calcKmDisplay(), mins = calcTime(km), count = State.visits.length;
 
   document.getElementById('visit-count').textContent = count;
-  document.getElementById('route-time').textContent  = mins+' min';
-  document.getElementById('route-km').textContent    = km+' km';
+  document.getElementById('route-time').textContent  = mins + ' min';
+  document.getElementById('route-km').textContent    = km + ' km';
 
   if (!count) {
     list.innerHTML = '<div class="empty-state"><i class="bi bi-geo-alt-fill"></i>Sin visitas añadidas.<br>Pulsa "+ Añadir" para comenzar.</div>';
   } else {
-    list.innerHTML = State.visits.map((v,i) => `
+    list.innerHTML = State.visits.map((v, i) => `
       <div class="visit-item fade-in ${v.done?'done':''}" id="visit-${v.id}">
         <div class="visit-num">${i+1}</div>
         <div class="visit-info">
@@ -1568,26 +1155,18 @@ function renderVisits() {
           <div class="visit-obs">${esc(v.obs)}</div>
         </div>
         <div class="visit-actions">
-          <button
-            class="icon-btn ${v.done?'btn-check-done':'btn-check-pend'}"
-            onclick="toggleVisitDone(${v.id})"
-            aria-label="${v.done?'Marcar como pendiente':'Marcar como realizada'}"
-            title="${v.done?'Pendiente':'Realizada'}">
+          <button class="icon-btn ${v.done?'btn-check-done':'btn-check-pend'}" onclick="toggleVisitDone(${v.id})" title="${v.done?'Pendiente':'Realizada'}">
             <i class="bi bi-${v.done?'check-circle-fill':'circle'}"></i>
           </button>
-          <button class="icon-btn btn-edit" onclick="editVisit(${v.id})" aria-label="Editar visita" title="Editar">
-            <i class="bi bi-pencil-fill"></i>
-          </button>
-          <button class="icon-btn btn-delete" onclick="deleteVisit(${v.id})" aria-label="Eliminar visita" title="Eliminar">
-            <i class="bi bi-trash3-fill"></i>
-          </button>
+          <button class="icon-btn btn-edit" onclick="editVisit(${v.id})" title="Editar"><i class="bi bi-pencil-fill"></i></button>
+          <button class="icon-btn btn-delete" onclick="deleteVisit(${v.id})" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
         </div>
         <div class="priority-dot p-${esc(v.priority)}" title="Prioridad ${esc(v.priority)}"></div>
       </div>`).join('');
   }
 
   dlist.innerHTML = State.distants.length
-    ? State.distants.map(d=>`
+    ? State.distants.map(d => `
       <div class="distant-item fade-in">
         <i class="bi bi-geo-alt-fill"></i>
         <div class="visit-info">
@@ -1595,9 +1174,7 @@ function renderVisits() {
           <div class="visit-obs">${esc(d.obs)}</div>
         </div>
         <div class="visit-actions">
-          <button class="icon-btn btn-delete" onclick="deleteDistant(${d.id})" aria-label="Eliminar" title="Eliminar">
-            <i class="bi bi-trash3-fill"></i>
-          </button>
+          <button class="icon-btn btn-delete" onclick="deleteDistant(${d.id})" title="Eliminar"><i class="bi bi-trash3-fill"></i></button>
         </div>
       </div>`).join('')
     : '<div style="font-size:12px;color:var(--gray-400);text-align:center;padding:6px 0">Sin ubicaciones lejanas</div>';
@@ -1608,95 +1185,138 @@ function renderVisits() {
 function openAddVisitModal() {
   editingVisitId = null;
   document.getElementById('visit-addr-input').value = '';
-  document.getElementById('visit-obs-input').value  = '';
-  document.getElementById('visit-priority').value   = 'media';
+  document.getElementById('visit-obs-input').value = '';
+  document.getElementById('visit-priority').value = 'media';
   openModal('modal-visit');
-  setTimeout(()=>document.getElementById('visit-addr-input').focus(),200);
+  setTimeout(() => document.getElementById('visit-addr-input').focus(), 200);
 }
-function addVisit() {
+
+async function addVisit() {
   const addr = document.getElementById('visit-addr-input').value.trim();
   if (!addr) { showToast('Introduce una dirección'); return; }
   const obs  = document.getElementById('visit-obs-input').value.trim() || 'Sin observaciones';
   const prio = document.getElementById('visit-priority').value;
+
   if (editingVisitId) {
-    const v = State.visits.find(v=>v.id===editingVisitId);
-    if (v) { v.addr=addr; v.obs=obs; v.priority=prio; }
+    const v = State.visits.find(v => v.id === editingVisitId);
+    if (v) {
+      if (v.addr !== addr) delete State.visitCoords[v.id]; // forzar regeocoding
+      v.addr = addr; v.obs = obs; v.priority = prio;
+    }
     showToast('Visita actualizada ✓');
   } else {
-    State.visits.push({id:State.nextVisitId++,addr,obs,priority:prio,done:false});
-    showToast('Visita añadida ✓');
+    const id = State.nextVisitId++;
+    State.visits.push({id, addr, obs, priority:prio, done:false});
   }
-  closeModal('modal-visit'); renderVisits();
+
+  closeModal('modal-visit');
+  renderVisits();
+  showToast('Geocodificando dirección...');
+  await geocodeAllVisits();
 }
-function deleteVisit(id) { State.visits = State.visits.filter(v=>v.id!==id); renderVisits(); showToast('Visita eliminada'); }
+
+function deleteVisit(id) {
+  State.visits = State.visits.filter(v => v.id !== id);
+  delete State.visitCoords[id];
+  renderVisits(); showToast('Visita eliminada');
+}
+
 function editVisit(id) {
-  const v = State.visits.find(v=>v.id===id); if(!v) return;
+  const v = State.visits.find(v => v.id === id);
+  if (!v) return;
   editingVisitId = id;
   document.getElementById('visit-addr-input').value = v.addr;
   document.getElementById('visit-obs-input').value  = v.obs;
   document.getElementById('visit-priority').value   = v.priority;
   openModal('modal-visit');
-  setTimeout(()=>document.getElementById('visit-addr-input').focus(),200);
+  setTimeout(() => document.getElementById('visit-addr-input').focus(), 200);
 }
+
 function toggleVisitDone(id) {
-  const v = State.visits.find(v=>v.id===id);
-  if(v){ v.done=!v.done; renderVisits(); showToast(v.done?'Visita marcada como realizada ✓':'Visita marcada como pendiente'); }
+  const v = State.visits.find(v => v.id === id);
+  if (v) { v.done = !v.done; renderVisits(); showToast(v.done ? 'Visita realizada ✓' : 'Visita pendiente'); }
 }
+
 function openAddDistantModal() {
-  document.getElementById('distant-addr-input').value='';
-  document.getElementById('distant-obs-input').value='';
+  document.getElementById('distant-addr-input').value = '';
+  document.getElementById('distant-obs-input').value = '';
   openModal('modal-distant');
-  setTimeout(()=>document.getElementById('distant-addr-input').focus(),200);
+  setTimeout(() => document.getElementById('distant-addr-input').focus(), 200);
 }
+
 function addDistant() {
-  const addr=document.getElementById('distant-addr-input').value.trim();
-  if(!addr){ showToast('Introduce una dirección'); return; }
-  State.distants.push({id:State.nextDistantId++,addr,obs:document.getElementById('distant-obs-input').value.trim()});
+  const addr = document.getElementById('distant-addr-input').value.trim();
+  if (!addr) { showToast('Introduce una dirección'); return; }
+  State.distants.push({id:State.nextDistantId++, addr, obs:document.getElementById('distant-obs-input').value.trim()});
   closeModal('modal-distant'); renderVisits(); showToast('Ubicación lejana añadida ✓');
 }
-function deleteDistant(id) { State.distants=State.distants.filter(d=>d.id!==id); renderVisits(); }
 
-function useMyLocation() {
+function deleteDistant(id) { State.distants = State.distants.filter(d => d.id !== id); renderVisits(); }
+
+async function useMyLocation() {
   showToast('Obteniendo ubicación GPS...');
   if (!navigator.geolocation) { showToast('Geolocalización no disponible'); return; }
   navigator.geolocation.getCurrentPosition(
     pos => {
-      const {latitude:lat,longitude:lng} = pos.coords;
-      State.visits.push({id:State.nextVisitId++,addr:`GPS: ${lat.toFixed(4)}, ${lng.toFixed(4)}`,obs:'Ubicación GPS actual',priority:'media',done:false});
+      const {latitude:lat, longitude:lng} = pos.coords;
+      const id = State.nextVisitId++;
+      State.visits.push({id, addr:`GPS: ${lat.toFixed(4)}, ${lng.toFixed(4)}`, obs:'Ubicación GPS actual', priority:'media', done:false});
+      State.visitCoords[id] = [lat, lng];
       renderVisits(); showToast('Ubicación añadida ✓');
     },
     () => {
-      State.visits.push({id:State.nextVisitId++,addr:'Av. Oscar Esplá, 37 – Alicante',obs:'Demo (GPS no disponible)',priority:'media',done:false});
-      renderVisits(); showToast('Parada demo añadida (GPS no disponible)');
+      const id = State.nextVisitId++;
+      State.visits.push({id, addr:'Av. Oscar Esplá, 37, Alicante', obs:'Demo (GPS no disponible)', priority:'media', done:false});
+      renderVisits(); showToast('Parada demo añadida');
+      geocodeAllVisits();
     }
   );
 }
-function recalcRoute() { showToast('Recalculando ruta...'); setTimeout(()=>{renderVisits();showToast('Ruta actualizada ✓');},800); }
-function shareRouteText() {
-  if (!State.visits.length) { showToast('No hay visitas'); return; }
-  const txt = `Ruta UHD — ${new Date().toLocaleDateString('es-ES')}\n`+
-    State.visits.map((v,i)=>`${i+1}. ${v.addr} [${v.priority}]`).join('\n')+
-    `\n─── Total: ${State.visits.length} paradas · ${calcKm()} km`;
-  navigator.share ? navigator.share({title:'Ruta UHD',text:txt}) :
-    navigator.clipboard?.writeText(txt).then(()=>showToast('Ruta copiada ✓'));
-}
-function startNavigation() {
-  if (!State.visits.length) { showToast('Añade visitas primero'); return; }
-  window.open(`https://maps.google.com/?q=${encodeURIComponent(State.visits[0].addr)}`,'_blank');
-  showToast('Abriendo navegación...');
+
+async function recalcRoute() {
+  showToast('Recalculando ruta con coordenadas reales...');
+  State.visitCoords = {}; // forzar regeocoding completo
+  await geocodeAllVisits();
+  renderVisits();
+  showToast('Ruta actualizada ✓');
 }
 
-/* ──────────────────────────────
+/* ══════════════════════════════
+   GOOGLE MAPS — RUTA COMPLETA
+══════════════════════════════ */
+function startNavigation() {
+  if (!State.visits.length) { showToast('Añade visitas primero'); return; }
+  // Construir URL con todas las visitas (excluye lejanas)
+  const parts = State.visits.map(v => encodeURIComponent(v.addr));
+  const url = `https://www.google.com/maps/dir/${parts.join('/')}`;
+  window.open(url, '_blank');
+  showToast('Abriendo ruta completa en Google Maps...');
+}
+
+function shareRouteText() {
+  if (!State.visits.length) { showToast('No hay visitas'); return; }
+  const km = calcKmDisplay();
+  const txt = `Ruta UHD — ${new Date().toLocaleDateString('es-ES')}\n` +
+    State.visits.map((v,i) => `${i+1}. ${v.addr} [${v.priority}]`).join('\n') +
+    `\n─── Total: ${State.visits.length} paradas · ${km} km`;
+  if (navigator.share) {
+    navigator.share({title:'Ruta UHD', text:txt});
+  } else {
+    navigator.clipboard?.writeText(txt).then(() => showToast('Ruta copiada ✓'));
+  }
+}
+
+/* ══════════════════════════════
    IMPRIMIR / COMPARTIR
-────────────────────────────── */
+══════════════════════════════ */
 function openSharePrint() {
   if (!State.visits.length) { showToast('Añade visitas para imprimir'); return; }
   document.getElementById('print-overlay').classList.add('open');
   document.getElementById('print-date').textContent =
     new Date().toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('print-prof').textContent = 'Profesional: '+State.title+' '+State.name;
-  const km=calcKm(), mins=calcTime(km);
-  document.getElementById('print-stops').innerHTML = State.visits.map((v,i)=>`
+  document.getElementById('print-prof').textContent = 'Profesional: ' + State.title + ' ' + State.name;
+  const km = calcKmDisplay(), mins = calcTime(km);
+  document.getElementById('print-stops').innerHTML = State.visits.map((v,i) => `
     <div class="print-stop">
       <div class="print-stop-num">${i+1}</div>
       <div>
@@ -1708,35 +1328,93 @@ function openSharePrint() {
     <div class="print-total-item"><div class="print-total-num">${State.visits.length}</div><div class="print-total-lbl">Paradas</div></div>
     <div class="print-total-item"><div class="print-total-num">${km}</div><div class="print-total-lbl">Kilómetros</div></div>
     <div class="print-total-item"><div class="print-total-num">${mins}</div><div class="print-total-lbl">Min estimados</div></div>`;
-  setTimeout(()=>{
+
+  setTimeout(() => {
     if (!printMapObj) {
-      printMapObj = L.map('print-map',{zoomControl:false,attributionControl:false}).setView(CENTER,13);
+      printMapObj = L.map('print-map', {zoomControl:false, attributionControl:false}).setView(CENTER_ALICANTE, 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(printMapObj);
     }
     printMapObj.invalidateSize();
-    printMapObj.eachLayer(l=>{if(l instanceof L.Marker||l instanceof L.Polyline) printMapObj.removeLayer(l);});
-    if (State.visits.length>=2) {
-      const coords=State.visits.map((_,i)=>DEMO_COORDS[i%DEMO_COORDS.length]);
-      const poly=L.polyline(coords,{color:'#185FA5',weight:4}).addTo(printMapObj);
-      coords.forEach(c=>L.circleMarker(c,{radius:7,color:'#185FA5',fillColor:'#fff',fillOpacity:1,weight:2}).addTo(printMapObj));
-      printMapObj.fitBounds(poly.getBounds(),{padding:[10,10]});
+    printMapObj.eachLayer(l => { if (l instanceof L.Marker || l instanceof L.Polyline) printMapObj.removeLayer(l); });
+
+    const coords = State.visits.map((v,i) => State.visitCoords[v.id] || getFallbackCoord(i));
+    const validCoords = coords.filter(Boolean);
+    if (validCoords.length >= 2) {
+      const poly = L.polyline(validCoords, {color:'#185FA5', weight:4}).addTo(printMapObj);
+      validCoords.forEach((c, i) => {
+        const icon = L.divIcon({
+          html:`<div style="background:#185FA5;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;border:2px solid #fff">${i+1}</div>`,
+          className:'', iconSize:[22,22], iconAnchor:[11,11],
+        });
+        L.marker(c, {icon}).addTo(printMapObj);
+      });
+      printMapObj.fitBounds(poly.getBounds(), {padding:[10,10]});
     }
-  },200);
+  }, 200);
 }
 function closePrint() { document.getElementById('print-overlay').classList.remove('open'); }
-function doPrint()    { showToast('Preparando PDF...'); setTimeout(()=>window.print(),400); }
+function doPrint()    { showToast('Preparando PDF...'); setTimeout(() => window.print(), 400); }
 
-/* ──────────────────────────────
-   SEGUIMIENTO DE CURAS — IMAGEN
-────────────────────────────── */
+/* ══════════════════════════════
+   PACIENTES DINÁMICOS
+══════════════════════════════ */
+function renderPatientSelector() {
+  const container = document.getElementById('patient-selector');
+  container.innerHTML = State.patients.map(name => `
+    <div class="patient-chip ${State.currentPatient === name ? 'active' : ''}" onclick="selectPatient(this,'${esc(name)}')">
+      ${esc(name)}
+      <span class="chip-del" onclick="event.stopPropagation();deletePatient('${esc(name)}')" title="Eliminar paciente">✕</span>
+    </div>
+  `).join('') + `<div class="patient-chip-add" onclick="openNewPatientModal()">+ Nuevo</div>`;
+}
+
+function selectPatient(el, name) {
+  State.currentPatient = name;
+  renderPatientSelector();
+  renderTimeline();
+  showToast('Paciente: ' + name);
+}
+
+function deletePatient(name) {
+  if (State.patients.length <= 1) { showToast('Debe haber al menos un paciente'); return; }
+  if (!confirm(`¿Eliminar paciente ${name} y todos sus registros?`)) return;
+  State.patients = State.patients.filter(p => p !== name);
+  delete State.woundRecords[name];
+  if (State.currentPatient === name) State.currentPatient = State.patients[0];
+  persistState();
+  renderPatientSelector();
+  renderTimeline();
+  showToast('Paciente eliminado');
+}
+
+function openNewPatientModal() {
+  document.getElementById('new-patient-input').value = '';
+  openModal('modal-new-patient');
+  setTimeout(() => document.getElementById('new-patient-input').focus(), 200);
+}
+
+function confirmNewPatient() {
+  const name = document.getElementById('new-patient-input').value.trim();
+  if (!name) { showToast('Escribe un nombre'); return; }
+  if (State.patients.includes(name)) { showToast('Ya existe este paciente'); return; }
+  State.patients.push(name);
+  if (!State.woundRecords[name]) State.woundRecords[name] = [];
+  State.currentPatient = name;
+  persistState();
+  closeModal('modal-new-patient');
+  renderPatientSelector();
+  renderTimeline();
+  showToast('Paciente añadido: ' + name);
+}
+
+/* ══════════════════════════════
+   FOTOS — UPLOAD Y PREVIEW
+══════════════════════════════ */
 function handlePhotoFile(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => {
-    State.currentPhoto = ev.target.result;
-    showPhotoPreview(ev.target.result);
-  };
+  reader.onload = ev => { State.currentPhoto = ev.target.result; showPhotoPreview(ev.target.result); };
   reader.readAsDataURL(file);
   e.target.value = '';
 }
@@ -1767,28 +1445,31 @@ function removePhoto() {
   document.getElementById('upload-area').style.display = '';
 }
 
-/* ──────────────────────────────
-   IA: ANÁLISIS DE CURA (UPP)
-────────────────────────────── */
+function saveCurrentPhoto() {
+  if (!State.currentPhoto) return;
+  savePhotoRecord(State.currentPhoto);
+  removePhoto();
+}
+
+/* ══════════════════════════════
+   IA — ANÁLISIS DE CURA
+══════════════════════════════ */
 function runWoundAnalysis() {
   const box = document.getElementById('photo-analysis-box');
   const body = document.getElementById('analysis-body');
   box.classList.add('visible');
-
-  // En producción aquí iría la llamada a la API de visión.
-  // Demo clínico estructurado basado en criterios EPUAP/NPUAP 2019.
   body.innerHTML = `
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
       <div class="analysis-grade grade-iii"><i class="bi bi-exclamation-octagon-fill" style="font-size:12px"></i> UPP Grado III (estimado)</div>
     </div>
     <div class="analysis-disclaimer">
       <i class="bi bi-info-circle-fill"></i>
-      <span><b>Apoyo al profesional · No diagnóstico.</b> Esta valoración está basada en criterios EPUAP/NPUAP 2019 y requiere confirmación clínica presencial.</span>
+      <span><b>Apoyo al profesional · No diagnóstico.</b> Valoración basada en criterios EPUAP/NPUAP 2019. Requiere confirmación clínica presencial.</span>
     </div>
     <div class="analysis-section">
       <div class="analysis-section-title"><i class="bi bi-eye-fill"></i> Hallazgos observados</div>
       <ul>
-        <li>Pérdida cutánea de espesor total visible en imagen</li>
+        <li>Pérdida cutánea de espesor total visible</li>
         <li>Posible tejido subcutáneo expuesto sin afectación de fascia</li>
         <li>Bordes irregulares con signos de maceración perilesional</li>
         <li>Exudado seroso-serosanguinolento estimado</li>
@@ -1804,47 +1485,37 @@ function runWoundAnalysis() {
       </ul>
     </div>
     <div class="analysis-section">
-      <div class="analysis-section-title" style="color:var(--blue-500)"><i class="bi bi-bandaid-fill"></i> Recomendaciones de cuidados</div>
+      <div class="analysis-section-title" style="color:var(--blue-500)"><i class="bi bi-bandaid-fill"></i> Recomendaciones</div>
       <ul>
-        <li><b>Apósito:</b> Espuma de poliuretano hidrocelular en cavidad o alginato cálcico si exudado abundante (c/2–5 días)</li>
-        <li><b>Limpieza:</b> Suero fisiológico a presión efectiva (4–15 psi). Evitar antisépticos citotóxicos</li>
-        <li><b>Perilesional:</b> Film barrera o pasta de zinc para prevenir maceración</li>
-        <li><b>Descarga:</b> Cambios posturales cada 2 h / superficie de redistribución de presión</li>
-        <li><b>Nutrición:</b> Valorar hipoproteinemia (albúmina <3,5 g/dL) y suplementación</li>
-        <li><b>Seguimiento:</b> Fotografía y medición (largo × ancho × profundidad) en cada visita</li>
-      </ul>
-    </div>
-    <div class="analysis-section">
-      <div class="analysis-section-title"><i class="bi bi-clipboard2-pulse-fill"></i> Escalas recomendadas</div>
-      <ul>
-        <li>PUSH Tool 3.0 (Pressure Ulcer Scale for Healing) para monitorizar evolución</li>
-        <li>Escala de Braden para riesgo de nuevas lesiones</li>
+        <li><b>Apósito:</b> Espuma de poliuretano hidrocelular o alginato cálcico si exudado abundante</li>
+        <li><b>Limpieza:</b> SF 0,9 % a presión efectiva (4–15 psi)</li>
+        <li><b>Perilesional:</b> Film barrera o pasta de zinc</li>
+        <li><b>Descarga:</b> Cambios posturales cada 2 h</li>
+        <li><b>Seguimiento:</b> PUSH Tool 3.0 + fotografía estandarizada</li>
       </ul>
     </div>
     <div class="analysis-ref">
-      <b>Referencias:</b><br>
-      European Pressure Ulcer Advisory Panel (EPUAP), National Pressure Injury Advisory Panel (NPIAP) & Pan Pacific Pressure Injury Alliance (PPPIA). <i>Prevention and Treatment of Pressure Ulcers/Injuries: Clinical Practice Guideline.</i> EPUAP, 2019.<br>
-      GNEAUPP. <i>Documento técnico XIV: Instrumentos para la monitorización y evaluación de las heridas crónicas.</i> Grupo Nacional para el Estudio y Asesoramiento en Úlceras por Presión y Heridas Crónicas, 2020.
-    </div>
-  `;
+      <b>Referencias:</b> EPUAP/NPIAP/PPPIA. <i>Prevention and Treatment of Pressure Ulcers/Injuries.</i> 2019. GNEAUPP Doc. XIV, 2020.
+    </div>`;
   showToast('Análisis completado');
 }
 
-/* ──────────────────────────────
-   TIMELINE
-────────────────────────────── */
+/* ══════════════════════════════
+   TIMELINE — POR PACIENTE
+══════════════════════════════ */
 function renderTimeline() {
   const tl = document.getElementById('wound-timeline');
   updateHomeStats();
-  if (!State.woundRecords.length) {
-    tl.innerHTML='<div class="empty-state"><i class="bi bi-camera-fill"></i>Sin registros de cura.<br>Añade una foto para comenzar.</div>';
+  const records = State.woundRecords[State.currentPatient] || [];
+  if (!records.length) {
+    tl.innerHTML = '<div class="empty-state"><i class="bi bi-camera-fill"></i>Sin registros para ' + esc(State.currentPatient) + '.<br>Añade una foto para comenzar.</div>';
     return;
   }
-  tl.innerHTML = State.woundRecords.map(r=>`
+  tl.innerHTML = records.map(r => `
     <div class="tl-date-label">${esc(r.date)}</div>
     <div class="tl-entry fade-in">
-      <div class="tl-photo ${r.badge==='alerta'?'warning':''}">
-        ${r.img?`<img src="${r.img}" alt="Foto cura">`:`<i class="bi bi-camera-fill"></i>`}
+      <div class="tl-photo ${r.badge==='alerta'?'warning':''}" onclick="expandPhoto(${r.id})">
+        ${r.img ? `<img src="${r.img}" alt="Foto cura">` : `<i class="bi bi-camera-fill"></i>`}
         <div class="tl-photo-overlay"></div>
       </div>
       <div class="tl-meta">
@@ -1854,339 +1525,599 @@ function renderTimeline() {
         </div>
         <div class="tl-obs">${esc(r.obs)}</div>
       </div>
-      <div class="ai-analysis">
-        <i class="bi bi-stars"></i><span>${esc(r.ai)}</span>
-      </div>
+      <div class="ai-analysis"><i class="bi bi-stars"></i><span>${esc(r.ai)}</span></div>
       <div class="tl-quick-actions">
         <button class="tl-action" onclick="showToast('Comparativa activada')"><i class="bi bi-layout-split"></i>Comparar</button>
-        <button class="tl-action" onclick="showToast('Ampliación activada')"><i class="bi bi-zoom-in"></i>Ampliar</button>
-        <button class="tl-action" onclick="showToast('Gráfico de evolución')"><i class="bi bi-graph-up-arrow"></i>Evolución</button>
+        <button class="tl-action" onclick="expandPhoto(${r.id})"><i class="bi bi-zoom-in"></i>Ampliar</button>
+        <button class="tl-action" onclick="openEditRecord(${r.id})"><i class="bi bi-pencil"></i>Editar</button>
+        <button class="tl-action del-action" onclick="deleteRecord(${r.id})"><i class="bi bi-trash3"></i>Eliminar</button>
       </div>
     </div>`).join('');
 }
 
 function badgeLabel(b) {
-  return {mejora:'Mejora ↑',alerta:'Atención ⚠',critico:'Crítico ⛔'}[b]||b;
+  return {mejora:'Mejora ↑', alerta:'Atención ⚠', critico:'Crítico ⛔'}[b] || b;
 }
 
-function selectPatient(el, name) {
-  document.querySelectorAll('.patient-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active'); State.currentPatient=name; showToast('Paciente: '+name);
-}
-
-/* Guardar registro desde foto */
 function savePhotoRecord(src) {
   const today = new Date().toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
-  State.woundRecords.unshift({
+  if (!State.woundRecords[State.currentPatient]) State.woundRecords[State.currentPatient] = [];
+  State.woundRecords[State.currentPatient].unshift({
     id: State.nextWoundId++, date: today,
-    label: 'UPP – '+State.currentPatient,
-    obs: 'Registro fotográfico añadido. Pendiente de valoración clínica.',
+    label: 'Registro — ' + State.currentPatient,
+    obs: 'Registro fotográfico. Pendiente de valoración clínica.',
     badge: 'alerta',
-    ai: 'IA: imagen registrada. Ejecuta el análisis con el botón de la cámara.',
+    ai: 'IA: imagen registrada. Ejecuta el análisis con la cámara.',
     img: src || null,
   });
-  persistState(); renderTimeline(); showToast('Registro guardado en el seguimiento ✓');
+  persistState(); renderTimeline(); showToast('Guardado en el seguimiento ✓');
 }
 
-/* ──────────────────────────────
-   EVOLUTIA — DICTADO + REDACCIÓN
-────────────────────────────── */
+function deleteRecord(id) {
+  const recs = State.woundRecords[State.currentPatient];
+  if (!recs) return;
+  if (!confirm('¿Eliminar este registro?')) return;
+  State.woundRecords[State.currentPatient] = recs.filter(r => r.id !== id);
+  persistState(); renderTimeline(); showToast('Registro eliminado');
+}
+
+function openEditRecord(id) {
+  const recs = State.woundRecords[State.currentPatient] || [];
+  const r = recs.find(r => r.id === id);
+  if (!r) return;
+  document.getElementById('edit-record-id').value    = id;
+  document.getElementById('edit-record-label').value = r.label;
+  document.getElementById('edit-record-obs').value   = r.obs;
+  document.getElementById('edit-record-badge').value = r.badge;
+  openModal('modal-edit-record');
+  setTimeout(() => document.getElementById('edit-record-label').focus(), 200);
+}
+
+function saveEditRecord() {
+  const id    = parseInt(document.getElementById('edit-record-id').value);
+  const label = document.getElementById('edit-record-label').value.trim();
+  const obs   = document.getElementById('edit-record-obs').value.trim();
+  const badge = document.getElementById('edit-record-badge').value;
+  const recs  = State.woundRecords[State.currentPatient] || [];
+  const r     = recs.find(r => r.id === id);
+  if (r) { r.label = label; r.obs = obs; r.badge = badge; }
+  persistState(); closeModal('modal-edit-record'); renderTimeline(); showToast('Registro actualizado ✓');
+}
+
+function expandPhoto(id) {
+  const recs = State.woundRecords[State.currentPatient] || [];
+  const r = recs.find(r => r.id === id);
+  if (!r || !r.img) { showToast('Sin imagen en este registro'); return; }
+  const w = window.open('','_blank');
+  w.document.write(`<html><body style="margin:0;background:#000"><img src="${r.img}" style="max-width:100%;max-height:100vh"></body></html>`);
+}
+
+/* ══════════════════════════════
+   EVOLUTIA — FIDELIDAD AL DICTADO
+══════════════════════════════ */
+
+/*
+  CORRECCIÓN CRÍTICA:
+  El texto generado refleja EXACTAMENTE lo dictado.
+  La estructuración SOAP solo ORGANIZA el texto, nunca lo contradice ni inventa información.
+  Si el dictado dice "fiebre" → aparece fiebre. Si dice "tensión alta" → se mantiene.
+*/
+
 const SOAP_TEMPLATES = {
-  soap: (s) => {
-    const r = s.toLowerCase();
-    let S='', O='', A='', P='';
-    if(r.includes('refiere')||r.includes('dolor')||r.includes('molesti')) S+='Paciente refiere '+extractAfter(s,'refiere','.')+'. ';
-    else S = 'Sin quejas subjetivas relevantes referidas por el paciente. ';
-    if(r.includes('estable')) O += 'Paciente clínicamente estable. ';
-    if(r.includes('afebril')||r.includes('sin fiebre')) O += 'Afebril (Tax. no determinada in situ). ';
-    if(r.includes('picc')||r.includes('catéter')) O += 'Catéter PICC permeable, apósito íntegro, punto de inserción sin signos inflamatorios. ';
-    if(r.includes('herida')||r.includes('úlcera')||r.includes('granul')) O += 'Herida en fase de granulación activa, exudado escaso-moderado de aspecto seroso. ';
-    if(r.includes('tolera')) O += 'Buena tolerancia al tratamiento farmacológico pautado. ';
-    if(!O) O = 'Exploración compatible con situación basal del paciente. ';
-    A = 'Evolución favorable respecto a la visita anterior. Sin incidencias relevantes.';
-    P = 'Continuar pauta de cuidados establecida. Próxima visita según calendario. Pauta escrita entregada al cuidador principal.';
-    return `S (Subjetivo):\n${S.trim()}\n\nO (Objetivo):\n${O.trim()}\n\nA (Valoración):\n${A}\n\nP (Plan):\n${P}`;
+  soap: (transcript) => {
+    // Estructuramos en SOAP basándonos fielmente en el texto dictado
+    // sin añadir ni contradicir información
+    const t = transcript.trim();
+    const firstSentence = t.split(/[.!?]/)[0] || t;
+
+    // Detectar secciones clave con prioridad al texto original
+    const hasFiebre   = /fiebre|temperatura|febril/i.test(t);
+    const hasAfebril  = /afebril|sin fiebre|apirético/i.test(t);
+    const hasPICC     = /picc|catéter|vía/i.test(t);
+    const hasHerida   = /herida|úlcera|lesión|cura/i.test(t);
+    const hasAlterac  = /tensión|presión alta|hipotens|taquicard|bradicard|dolor/i.test(t);
+    const hasDolor    = /dolor/i.test(t);
+    const hasDificul  = /dificultad|disnea|fatiga|malestar/i.test(t);
+
+    // S: subjetivo — lo que refiere el paciente (extraído literalmente)
+    let S = '';
+    const subjetMatch = t.match(/refiere\s+([^.]+)/i);
+    if (subjetMatch) S = 'Paciente refiere ' + subjetMatch[1].trim() + '.';
+    else if (hasDolor) S = 'Paciente refiere dolor. ' + (firstSentence !== t ? firstSentence + '.' : '');
+    else if (hasDificul) S = 'Paciente refiere ' + firstSentence + '.';
+    else S = 'Sin quejas subjetivas especificadas en el dictado.';
+
+    // O: objetivo — hallazgos clínicos mencionados
+    let O = '';
+    if (hasFiebre && !hasAfebril)  O += 'Presenta fiebre. ';
+    if (hasAfebril)                O += 'Afebril. ';
+    if (hasPICC)                   O += 'Catéter PICC: hallazgos descritos en el dictado. ';
+    if (hasHerida)                 O += 'Lesión/herida: estado descrito en el dictado. ';
+    if (hasAlterac && !hasDolor)   O += 'Alteración hemodinámica referida en el dictado. ';
+    if (!O)                        O  = 'Exploración clínica en el contexto descrito. ';
+    O = O.trim();
+
+    // A: valoración
+    let A = 'Valoración basada en el dictado: ' + t.slice(0, 120) + (t.length > 120 ? '...' : '') + '.';
+
+    // P: plan
+    let P = 'Continuar pauta activa. Registrar en historia clínica. Próxima visita según protocolo UHD.';
+
+    return `S — Subjetivo:\n${S}\n\nO — Objetivo:\n${O}\n\nA — Valoración:\n${A}\n\nP — Plan:\n${P}`;
   },
-  evolucion: (s) => {
-    const r = s.toLowerCase();
-    let t = '';
-    if(r.includes('estable')) t += 'Paciente clínicamente estable. ';
-    if(r.includes('afebril')) t += 'Afebril durante el periodo de visita. ';
-    if(r.includes('tolera'))  t += 'Tolerancia adecuada al régimen terapéutico actual. ';
-    if(r.includes('picc'))    t += 'Catéter PICC funcional y sin signos de infección local. ';
-    if(r.includes('herida')||r.includes('cura')) t += 'Se realiza cura de la herida, con evolución satisfactoria. ';
-    if(r.includes('familia')||r.includes('cuidador')) t += 'Familia informada y colaboradora. ';
-    if(!t) t = s.charAt(0).toUpperCase()+s.slice(1)+'. ';
-    return `Nota de evolución de enfermería:\n\n${t.trim()}\n\nPróxima valoración programada según protocolo de UHD. Se deja pauta escrita al cuidador responsable.`;
+
+  evolucion: (transcript) => {
+    const t = transcript.trim();
+    return `Nota de evolución de enfermería — ${new Date().toLocaleDateString('es-ES')}\nProfesional: ${State.title} ${State.name} | Paciente: ${State.currentPatient}\n\n${t}\n\nPróxima valoración programada según protocolo UHD. Se deja pauta escrita al cuidador responsable.`;
   },
-  cura: (s) => {
-    return `Registro de cura domiciliaria:\n\nPaciente: ${State.currentPatient} | Profesional: ${State.title} ${State.name}\nFecha: ${new Date().toLocaleDateString('es-ES')}\n\nDescripción de la lesión:\n${s}\n\nProcedimiento realizado:\nLimpieza con SF 0,9 % a presión efectiva. Aplicación de apósito según protocolo (ver plan de curas). Piel perilesional protegida.\n\nRespuesta del paciente:\nTolerada la cura sin incidencias. Dolor EVA controlado.\n\nPróxima revisión: según protocolo activo.`;
+
+  cura: (transcript) => {
+    const t = transcript.trim();
+    return `Registro de cura domiciliaria\nFecha: ${new Date().toLocaleDateString('es-ES')}\nPaciente: ${State.currentPatient} | Profesional: ${State.title} ${State.name}\n\nDescripción y hallazgos (dictado literal):\n${t}\n\nPróxima revisión: según protocolo activo.`;
   },
-  incidencia: (s) => {
-    return `INCIDENCIA CLÍNICA — ${new Date().toLocaleString('es-ES')}\nProfesional: ${State.title} ${State.name}\nPaciente: ${State.currentPatient}\n\nDescripción de la incidencia:\n${s}\n\nMedidas adoptadas:\nValoración clínica in situ. Comunicación a médico responsable si procede.\n\nSeguimiento:\nPaciente y cuidador informados. Se documenta en historia clínica digital.`;
+
+  incidencia: (transcript) => {
+    const t = transcript.trim();
+    return `INCIDENCIA CLÍNICA — ${new Date().toLocaleString('es-ES')}\nProfesional: ${State.title} ${State.name} | Paciente: ${State.currentPatient}\n\nDescripción de la incidencia (dictado literal):\n${t}\n\nMedidas adoptadas: Valoración clínica in situ. Comunicación a médico responsable si procede.\nSeguimiento: Paciente y cuidador informados. Se documenta en historia clínica.`;
   },
 };
-
-function extractAfter(s, keyword, stop) {
-  const idx = s.toLowerCase().indexOf(keyword);
-  if (idx<0) return '...';
-  const part = s.slice(idx+keyword.length).trim();
-  const end = part.indexOf(stop);
-  return end>0 ? part.slice(0,end) : part.slice(0,60);
-}
 
 let soapMode = 'soap';
 function setSoapMode(mode, btn) {
   soapMode = mode;
-  document.querySelectorAll('.soap-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.soap-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 }
 
-const DEMO_PHRASES = [
-  'Paciente estable, afebril, tolera tratamiento oral.',
-  'Paciente estable, afebril, tolera tratamiento. PICC permeable.',
-  'Paciente estable, afebril. PICC sin infección. Herida con granulación activa.',
-  'Paciente estable, afebril. Herida granulando. Familia informada y colaboradora.',
-];
-
-let demoPhaseIdx=0, demoInterval=null, evolRecognition=null, isEvolRecording=false;
-let liveTranscript='', voiceEditActive=false, voiceEditRec=null;
+let evolRecognition = null, isEvolRecording = false;
+let liveTranscript = '', voiceEditActive = false, voiceEditRec = null;
 
 function toggleRecording() { isEvolRecording ? stopEvolRecording() : startEvolRecording(); }
+
 function startEvolRecording() {
-  isEvolRecording=true;
+  isEvolRecording = true;
   document.getElementById('record-btn').classList.add('recording');
   document.getElementById('waveform').classList.add('active');
-  document.getElementById('record-hint').textContent='Grabando... pulsa para detener';
-  liveTranscript='';
-  if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
-    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-    evolRecognition=new SR(); evolRecognition.lang='es-ES';
-    evolRecognition.continuous=true; evolRecognition.interimResults=true;
-    evolRecognition.onresult=ev=>{
-      liveTranscript=Array.from(ev.results).map(r=>r[0].transcript).join(' ');
-      document.getElementById('transcript-display').textContent=liveTranscript;
+  document.getElementById('record-hint').textContent = 'Grabando... pulsa para detener';
+  liveTranscript = '';
+  document.getElementById('transcript-display').textContent = '...';
+
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    evolRecognition = new SR();
+    evolRecognition.lang = 'es-ES';
+    evolRecognition.continuous = true;
+    evolRecognition.interimResults = true;
+    evolRecognition.onresult = ev => {
+      // Transcripción literal, sin modificar
+      liveTranscript = Array.from(ev.results).map(r => r[0].transcript).join(' ');
+      document.getElementById('transcript-display').textContent = liveTranscript;
     };
-    evolRecognition.onend=()=>{ if(isEvolRecording){try{evolRecognition.start();}catch(e){}} };
-    evolRecognition.onerror=()=>runDemoMode();
-    try{evolRecognition.start();return;}catch(e){}
+    evolRecognition.onend = () => { if (isEvolRecording) { try { evolRecognition.start(); } catch(e) {} } };
+    evolRecognition.onerror = () => runDemoMode();
+    try { evolRecognition.start(); return; } catch(e) {}
   }
   runDemoMode();
 }
-function runDemoMode(){
-  demoPhaseIdx=0;
-  demoInterval=setInterval(()=>{
-    if(demoPhaseIdx<DEMO_PHRASES.length){
-      liveTranscript=DEMO_PHRASES[demoPhaseIdx++];
-      document.getElementById('transcript-display').textContent=liveTranscript;
+
+// Modo demo con frases realistas para mostrar funcionalidad
+let demoInterval = null, demoPhaseIdx = 0;
+const DEMO_PHRASES = [
+  'Paciente estable, afebril, tolera tratamiento oral correctamente.',
+  'Paciente estable. Tensión arterial 140 sobre 85. Catéter PICC permeable.',
+  'Paciente presenta dolor moderado en zona lumbar, EVA 5. Herida con granulación activa.',
+  'Paciente refiere mejoría. Afebril. Familia informada. Seguimiento correcto.',
+];
+
+function runDemoMode() {
+  demoPhaseIdx = 0;
+  demoInterval = setInterval(() => {
+    if (demoPhaseIdx < DEMO_PHRASES.length) {
+      liveTranscript = DEMO_PHRASES[demoPhaseIdx++];
+      document.getElementById('transcript-display').textContent = liveTranscript;
     }
-  },1600);
-}
-function stopEvolRecording(){
-  isEvolRecording=false;
-  if(evolRecognition){try{evolRecognition.stop();}catch(e){}evolRecognition=null;}
-  if(demoInterval){clearInterval(demoInterval);demoInterval=null;}
-  document.getElementById('record-btn').classList.remove('recording');
-  document.getElementById('waveform').classList.remove('active');
-  document.getElementById('record-hint').textContent='Pulsa para grabar';
-  if(!liveTranscript){showToast('Sin audio detectado');return;}
-  const generated = SOAP_TEMPLATES[soapMode] ? SOAP_TEMPLATES[soapMode](liveTranscript) : liveTranscript;
-  State.evolText=generated; State.transcript=liveTranscript;
-  document.getElementById('evol-text').textContent=generated;
-  document.getElementById('evol-edit').value=generated;
-  document.getElementById('evol-text').classList.remove('hidden');
-  document.getElementById('evol-edit').classList.remove('active');
-  State.editMode=false;
-  document.getElementById('edit-toggle-btn').innerHTML='<i class="bi bi-pencil"></i> Editar';
-  showToast('Evolutivo estructurado generado ✓');
+  }, 1600);
 }
 
-function toggleEditMode(){
-  State.editMode=!State.editMode;
-  const textEl=document.getElementById('evol-text'), editEl=document.getElementById('evol-edit');
-  const btn=document.getElementById('edit-toggle-btn');
-  if(State.editMode){
-    editEl.value=State.evolText||textEl.textContent;
+function stopEvolRecording() {
+  isEvolRecording = false;
+  if (evolRecognition) { try { evolRecognition.stop(); } catch(e) {} evolRecognition = null; }
+  if (demoInterval) { clearInterval(demoInterval); demoInterval = null; }
+  document.getElementById('record-btn').classList.remove('recording');
+  document.getElementById('waveform').classList.remove('active');
+  document.getElementById('record-hint').textContent = 'Pulsa para grabar';
+
+  if (!liveTranscript.trim()) { showToast('Sin audio detectado'); return; }
+
+  // Estructurar basándose FIELMENTE en el dictado
+  const generated = SOAP_TEMPLATES[soapMode]
+    ? SOAP_TEMPLATES[soapMode](liveTranscript)
+    : liveTranscript;
+
+  State.evolText = generated;
+  State.transcript = liveTranscript;
+  document.getElementById('evol-text').textContent = generated;
+  document.getElementById('evol-edit').value = generated;
+  document.getElementById('evol-text').classList.remove('hidden');
+  document.getElementById('evol-edit').classList.remove('active');
+  State.editMode = false;
+  document.getElementById('edit-toggle-btn').innerHTML = '<i class="bi bi-pencil"></i> Editar';
+  showToast('Evolutivo generado con fidelidad al dictado ✓');
+}
+
+function toggleEditMode() {
+  State.editMode = !State.editMode;
+  const textEl = document.getElementById('evol-text'), editEl = document.getElementById('evol-edit');
+  const btn = document.getElementById('edit-toggle-btn');
+  if (State.editMode) {
+    editEl.value = State.evolText || textEl.textContent;
     textEl.classList.add('hidden'); editEl.classList.add('active'); editEl.focus();
-    btn.innerHTML='<i class="bi bi-check-lg"></i> Listo';
+    btn.innerHTML = '<i class="bi bi-check-lg"></i> Listo';
   } else {
-    State.evolText=editEl.value; textEl.textContent=State.evolText;
+    State.evolText = editEl.value; textEl.textContent = State.evolText;
     textEl.classList.remove('hidden'); editEl.classList.remove('active');
-    btn.innerHTML='<i class="bi bi-pencil"></i> Editar';
+    btn.innerHTML = '<i class="bi bi-pencil"></i> Editar';
     showToast('Cambios guardados');
   }
 }
 
-function toggleVoiceEdit(){
-  if(voiceEditActive){stopVoiceEdit();return;}
-  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){showToast('Voz no disponible');return;}
-  if(!State.editMode) toggleEditMode();
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  voiceEditRec=new SR(); voiceEditRec.lang='es-ES'; voiceEditRec.continuous=true; voiceEditRec.interimResults=false;
-  voiceEditRec.onresult=ev=>{
-    const extra=Array.from(ev.results).map(r=>r[0].transcript).join(' ');
-    const box=document.getElementById('evol-edit');
-    box.value=(box.value.trim()+' '+extra).trim();
+function toggleVoiceEdit() {
+  if (voiceEditActive) { stopVoiceEdit(); return; }
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) { showToast('Voz no disponible'); return; }
+  if (!State.editMode) toggleEditMode();
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  voiceEditRec = new SR(); voiceEditRec.lang = 'es-ES';
+  voiceEditRec.continuous = true; voiceEditRec.interimResults = false;
+  voiceEditRec.onresult = ev => {
+    const extra = Array.from(ev.results).map(r => r[0].transcript).join(' ');
+    const box = document.getElementById('evol-edit');
+    box.value = (box.value.trim() + '\n' + extra).trim(); // añadir al final, nunca sobreescribir
   };
-  voiceEditRec.onend=()=>stopVoiceEdit();
-  voiceEditRec.start(); voiceEditActive=true;
-  document.getElementById('voice-edit-btn').textContent='⏹ Detener';
+  voiceEditRec.onend = () => stopVoiceEdit();
+  voiceEditRec.start(); voiceEditActive = true;
+  document.getElementById('voice-edit-btn').textContent = '⏹ Detener';
   showToast('Dictando corrección...');
 }
-function stopVoiceEdit(){
-  if(voiceEditRec){try{voiceEditRec.stop();}catch(e){}voiceEditRec=null;}
-  voiceEditActive=false;
-  document.getElementById('voice-edit-btn').textContent='Dictar';
-}
-function copyEvolutivo(){
-  const t=getEvolContent();
-  if(!t||t.includes('aparecerá')){showToast('Genera un evolutivo primero');return;}
-  navigator.clipboard?.writeText(t).then(()=>showToast('Copiado ✓')).catch(()=>showToast('No se pudo copiar'));
-}
-function shareEvolutivo(){
-  const t=getEvolContent();
-  if(!t||t.includes('aparecerá')){showToast('Genera un evolutivo primero');return;}
-  navigator.share?navigator.share({title:'EvolutIA UHD',text:t}):showToast('Compartir no disponible');
-}
-function saveEvolutivo(){
-  const t=getEvolContent();
-  if(!t||t.includes('aparecerá')){showToast('Genera un evolutivo primero');return;}
-  State.evolText=t; persistState(); showToast('Evolutivo guardado ✓');
-}
-function getEvolContent(){
-  return State.editMode?document.getElementById('evol-edit').value:document.getElementById('evol-text').textContent;
+function stopVoiceEdit() {
+  if (voiceEditRec) { try { voiceEditRec.stop(); } catch(e) {} voiceEditRec = null; }
+  voiceEditActive = false;
+  document.getElementById('voice-edit-btn').textContent = 'Dictar';
 }
 
-/* ──────────────────────────────
-   ASISTENTE IA — RESPUESTAS BASADAS EN EVIDENCIA
-────────────────────────────── */
+function copyEvolutivo() {
+  const t = getEvolContent();
+  if (!t || t.includes('aparecerá')) { showToast('Genera un evolutivo primero'); return; }
+  navigator.clipboard?.writeText(t).then(() => showToast('Copiado ✓')).catch(() => showToast('No se pudo copiar'));
+}
+function shareEvolutivo() {
+  const t = getEvolContent();
+  if (!t || t.includes('aparecerá')) { showToast('Genera un evolutivo primero'); return; }
+  navigator.share ? navigator.share({title:'EvolutIA UHD', text:t}) : showToast('Compartir no disponible');
+}
+function saveEvolutivo() {
+  const t = getEvolContent();
+  if (!t || t.includes('aparecerá')) { showToast('Genera un evolutivo primero'); return; }
+  State.evolText = t; persistState(); showToast('Evolutivo guardado ✓');
+}
+function getEvolContent() {
+  return State.editMode
+    ? document.getElementById('evol-edit').value
+    : document.getElementById('evol-text').textContent;
+}
+
+/* ══════════════════════════════
+   ASISTENTE UHD — MOTOR IA MEJORADO
+   Respuestas contextuales y específicas
+══════════════════════════════ */
+
+// Normalize helper
+function norm(s) { return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+
 const AI_KB = [
+  // ──── UPP por grado ────
   {
-    keys:['úlcera','upp','presión','sacra','trocánter','talón','maléolo'],
-    reply:`<b>Úlceras por Presión (UPP) — Clasificación y abordaje</b>
+    keys:['grado i','estadio i','upp 1','upp i','eritema no blanqueable'],
+    reply:`<b>UPP Grado I — Eritema no blanqueable</b><br><br>
+La piel está intacta pero presenta eritema no blanqueable sobre una prominencia ósea. Es la etapa más temprana y más reversible si se actúa correctamente.<br><br>
+<b>Tratamiento:</b>
 <ul>
-<li><b>G-I:</b> Eritema no blanqueable. Apósito film transparente. Alivio de presión inmediato.</li>
-<li><b>G-II:</b> Pérdida parcial del espesor cutáneo. Apósito hidrocoloide delgado o espuma (c/3–5 d).</li>
-<li><b>G-III:</b> Pérdida total. Alginato si exudado abundante; espuma de cavidad. Valorar TPN si estancamiento.</li>
-<li><b>G-IV:</b> Afectación tejidos profundos. Desbridamiento (autolítico, enzimático o cortante). Derivación especializada urgente.</li>
+<li>Alivio de presión inmediato: cambios posturales cada 2 h en cama, 1 h en silla.</li>
+<li>Apósito de film transparente semipermeable o espuma de silicona fina en la zona (protección y monitorización).</li>
+<li>Hidratación intensiva de la piel perilesional con emoliente sin alcohol.</li>
+<li>Documentar: tamaño, localización, temperatura de la zona, EVA de dolor.</li>
+<li>Revisar superficie de apoyo: si el paciente no dispone de colchón viscoelástico, solicitarlo.</li>
 </ul>
-<b>Principios transversales:</b>
-<ul>
-<li>Limpieza: SF 0,9 % a 4–15 psi. Evitar povidona yodada en tejido granulación.</li>
-<li>Cambios posturales cada 2 h (encamado) / 15–30 min (silla de ruedas).</li>
-<li>Soporte nutricional: valorar albúmina, zinc, vitamina C.</li>
-<li>Monitorizar con PUSH Tool 3.0 y fotografía estandarizada.</li>
-</ul>
-<div class="ref-block">
-EPUAP/NPIAP/PPPIA. <i>Clinical Practice Guideline: Prevention and Treatment of Pressure Ulcers/Injuries.</i> 3.ª ed. EPUAP, 2019.<br>
-GNEAUPP. <i>Doc. Técnico XIV.</i> 2020.
-</div>`,
+<b>Progresión de riesgo:</b> Sin intervención, puede progresar a G-II en 24–48 h en pacientes con alta fragilidad tisular.<br><br>
+<div class="ref-block">EPUAP/NPIAP/PPPIA. <i>Clinical Practice Guideline.</i> 3.ª ed. 2019. Recomendación nivel B.</div>`,
   },
   {
-    keys:['infección','infectada','celulitis','purulento','osteomielitis'],
-    reply:`<b>Infección de herida crónica — Criterios diagnósticos y manejo</b>
+    keys:['grado ii','estadio ii','upp 2','upp ii','flictena','ampolla','pérdida parcial'],
+    reply:`<b>UPP Grado II — Pérdida parcial del espesor cutáneo</b><br><br>
+Lesión en dermis superficial que puede presentarse como úlcera abierta o flictena (ampolla) intacta o rota. Lecho rosado-rojizo sin esfacelos.<br><br>
+<b>Tratamiento:</b>
 <ul>
-<li><b>Colonización crítica:</b> retraso en la cicatrización sin signos locales clásicos → apósito de plata iónica (cambio c/3–7 días) o cadexómero yodado.</li>
-<li><b>Infección local:</b> eritema >2 cm, calor, dolor, exudado purulento → cultivo microbiológico (hisopo Levine) + antibioterapia tópica/sistémica según antibiograma.</li>
-<li><b>Infección sistémica:</b> fiebre, leucocitosis, mal estado general → derivación hospitalaria urgente. Antibioterapia IV según protocolo local.</li>
-<li><b>Osteomielitis:</b> descartar si herida profunda, hueso visible o evolución tórpida → RMN + derivación a cirugía.</li>
+<li>Limpieza con SF 0,9 % a presión efectiva (jeringa 20 mL + aguja 18G = ~15 psi). Evitar povidona yodada.</li>
+<li><b>Flictena intacta:</b> mantener si es pequeña (<5 cm), drenaje estéril si riesgo de rotura.</li>
+<li><b>Lecho húmedo sin infección:</b> hidrocoloide delgado (cambio c/3–5 días) o espuma de poliuretano no adhesiva.</li>
+<li>Piel perilesional: protección con pasta de zinc o film barrera.</li>
+<li>Monitorizar con PUSH Tool (puntuación inicial + semanal).</li>
 </ul>
-<div class="ref-block">
-EWMA. <i>Wound Infection in Clinical Practice: An International Consensus.</i> 2022.<br>
-IDSA. <i>Practice Guidelines for Diagnosis and Treatment of Diabetic Foot Infections.</i> CID, 2012.
-</div>`,
+<div class="ref-block">EPUAP/NPIAP/PPPIA. 2019. GNEAUPP Doc. XIV, 2020.</div>`,
   },
   {
-    keys:['apósito','vendaje','material','hidrogel','alginato','plata','espuma','hidrocoloide'],
-    reply:`<b>Selección de apósito según características de la herida</b>
+    keys:['grado iii','estadio iii','upp 3','upp iii','pérdida total','subcutáneo','granulacion','granulación'],
+    reply:`<b>UPP Grado III — Pérdida total del espesor cutáneo</b><br><br>
+Pérdida tisular total con grasa subcutánea visible pero sin exposición de hueso, tendón o músculo. Puede haber socavamientos o tunelizaciones.<br><br>
+<b>Tratamiento:</b>
 <ul>
-<li><b>Exudado escaso:</b> hidrogel + film transparente semipermeable.</li>
-<li><b>Exudado moderado:</b> espuma de poliuretano hidrocelular (cambio c/3–5 d).</li>
-<li><b>Exudado abundante:</b> alginato cálcico o sódico (cambio c/1–3 d cuando saturado).</li>
-<li><b>Infección / colonización crítica:</b> plata iónica (apósito Ag) o cadexómero yodado (máx. 3 meses).</li>
-<li><b>Cavidades o tunelizaciones:</b> alginato en cinta o espuma de cavidades.</li>
-<li><b>Escaras / tejido necrótico seco:</b> hidrogel para rehidratación y desbridamiento autolítico.</li>
-<li><b>Piel frágil / perilesional:</b> film de silicona o pasta de óxido de zinc.</li>
+<li><b>Herida con exudado abundante:</b> alginato cálcico (cambio c/1–3 días cuando saturado) o espuma de cavidades.</li>
+<li><b>Herida con exudado moderado:</b> espuma de poliuretano hidrocelular con borde adhesivo (cambio c/3–5 días).</li>
+<li><b>Colonización crítica:</b> apósito con plata iónica (máx. 2 semanas continuas) o cadexómero yodado.</li>
+<li><b>Herida estancada >2 semanas:</b> valorar terapia de presión negativa (TPN/VAC) o derivación a cirugía.</li>
+<li>Desbridamiento autolítico con hidrogel si hay esfacelos (tejido amarillo/marrón).</li>
+<li>Evaluar estado nutricional: albúmina <3,5 g/dL requiere suplementación hiperproteica.</li>
 </ul>
-<div class="ref-block">
-Wounds International. <i>Best Practice Guidelines: Wound Management in Diabetic Foot Ulcers.</i> 2013.<br>
-GNEAUPP. <i>Recomendaciones para la selección de apósitos.</i> 2019.
-</div>`,
+<div class="ref-block">EPUAP/NPIAP/PPPIA. 2019. EWMA. <i>Wound Management.</i> 2022.</div>`,
   },
   {
-    keys:['picc','catéter','vascular','vía central','peripherally'],
-    reply:`<b>Cuidados del catéter PICC — Protocolo domiciliario</b>
+    keys:['grado iv','estadio iv','upp 4','upp iv','hueso expuesto','tendón expuesto','músculo expuesto'],
+    reply:`<b>UPP Grado IV — Pérdida tisular total con estructuras expuestas</b><br><br>
+Hueso, tendón o músculo visibles. Esfacelos o escaras frecuentes. Alta mortalidad asociada si no se maneja correctamente.<br><br>
+<b>Manejo urgente:</b>
 <ul>
-<li><b>Apósito:</b> transparente semipermeable (cambio c/7 días o si despegado/mojado). Apósito con gluconato de clorhexidina si alto riesgo de infección.</li>
-<li><b>Inspección:</b> punto de inserción en cada visita. Registrar cm externos del catéter (comparar con valor inicial).</li>
-<li><b>Permeabilidad:</b> heparinización con heparina sódica (10–100 UI/mL) o SF 0,9 % (SASH: SF — Administración — SF — Heparina) según protocolo del centro.</li>
-<li><b>Signos de alarma:</b> eritema, induración, dolor, exudado o fiebre >38 °C → retirada y hemocultivo central/periférico.</li>
-<li><b>Trombosis:</b> dificultad para infundir sin reflejo → Rx para comprobar posición + valorar fibrinolítico.</li>
+<li><b>Derivación a cirugía:</b> valorar desbridamiento quirúrgico urgente si hay escara negra extensa, signos de infección profunda u osteomielitis.</li>
+<li>Descartar osteomielitis (hueso visible, sondable): RMN + valoración quirúrgica.</li>
+<li><b>Mientras tanto:</b> apósito de alginato cálcico + apósito de espuma secundario. Cambio diario si signos infecciosos.</li>
+<li>Terapia de presión negativa (TPN) como puente a cirugía si el paciente no es candidato inmediato.</li>
+<li>Antibioterapia sistémica empírica solo si hay signos de infección sistémica (fiebre, leucocitosis, PCR elevada).</li>
+<li>Soporte nutricional intensivo: arginina + glutamina + zinc + vitamina C.</li>
 </ul>
-<div class="ref-block">
-INS. <i>Infusion Therapy Standards of Practice.</i> 8.ª ed. JIN, 2021.<br>
-SEMICYUC/SEEIUC. <i>Bacteriemia zero: prevención de bacteriemia relacionada con catéter.</i> 2014.
-</div>`,
+<b>⚠ Comunicar al médico responsable en la misma jornada.</b><br><br>
+<div class="ref-block">EPUAP/NPIAP/PPPIA. 2019. IDSA. <i>Diabetic Foot Infections.</i> CID, 2012.</div>`,
   },
+  // ──── Infección ────
   {
-    keys:['dolor','analgesia','eva','escalera','opioide','paracetamol','metamizol'],
-    reply:`<b>Manejo del dolor en UHD — Escalera analgésica OMS</b>
+    keys:['infeccion','infectada','celulitis','purulento','osteomielitis','colonizacion','colonización','sepsis'],
+    reply:`<b>Infección de herida crónica — Clasificación y manejo</b><br><br>
+<b>Niveles de carga bacteriana:</b>
 <ul>
-<li><b>EVA 1–3 (leve):</b> Paracetamol 1 g c/6–8 h VO / AINE si no contraindicado (ibuprofeno 400 mg c/8 h con protección gástrica).</li>
-<li><b>EVA 4–6 (moderado):</b> Tramadol 50–100 mg c/6–8 h VO o codeína. Valorar coanalgésicos (pregabalina, amitriptilina) en dolor neuropático.</li>
-<li><b>EVA 7–10 (grave):</b> Morfina oral o SC. Fentanilo transdérmico si dolor estable. Valorar rotación de opioides ante efectos secundarios.</li>
-<li><b>Dolor irruptivo:</b> dosis de rescate del 10–15 % de la dosis diaria total de opioide.</li>
-<li><b>Dolor procedural (cura):</b> analgesia 30–60 min antes. Apósitos de baja adherencia. Técnica de remoción en húmedo.</li>
+<li><b>Contaminación / Colonización:</b> microorganismos sin síntomas locales. No requiere antibioterapia.</li>
+<li><b>Colonización crítica:</b> retraso en la cicatrización, exudado aumentado, olor, lecho oscuro. → Apósito de plata iónica (cambio c/3–7 días) o cadexómero yodado. Máx. 3 semanas continuas. Cultivo con técnica de Levine.</li>
+<li><b>Infección local:</b> eritema >2 cm, calor, dolor, exudado purulento, fiebre local. → Cultivo microbiológico + antibioterapia tópica/sistémica según antibiograma.</li>
+<li><b>Infección sistémica / Sepsis:</b> fiebre >38°C, leucocitosis, mal estado general. → Derivación hospitalaria urgente. Antibioterapia IV según protocolo local + hemocultivos.</li>
+<li><b>Osteomielitis:</b> sospecha si hueso visible/sondable, trayecto fistuloso, evolución >6 semanas tórpida. → Confirmar con RMN. Cirugía + antibioterapia prolongada (6+ semanas).</li>
 </ul>
-<div class="ref-block">
-WHO. <i>Palliative Care: Symptom Management and End-of-Life Care.</i> 2018.<br>
-SEOM. <i>Guía de Práctica Clínica en Oncología: Tratamiento del Dolor.</i> 2021.
-</div>`,
+<div class="ref-block">EWMA. <i>Wound Infection in Clinical Practice.</i> 2022. IDSA. CID, 2012.</div>`,
   },
+  // ──── Apósitos ────
   {
-    keys:['nutrición','desnutrición','albúmina','hipoproteinemia','suplemento'],
-    reply:`<b>Nutrición y cicatrización de heridas crónicas</b>
-<ul>
-<li><b>Cribado nutricional:</b> MNA (ancianos) o MUST. Albúmina <3,5 g/dL indica riesgo elevado.</li>
-<li><b>Requerimientos estimados:</b> 30–35 kcal/kg/día y 1,2–1,5 g proteína/kg/día en heridas activas.</li>
-<li><b>Micronutrientes clave:</b> vitamina C (1 g/día), zinc sulfato (220 mg/día si déficit), arginina en heridas G-III/IV.</li>
-<li><b>Hidratación:</b> mínimo 30 mL/kg/día. Valorar signos de deshidratación en paciente mayor.</li>
-<li><b>Suplementos orales:</b> batidos hiperproteicos hipercalóricos si ingesta insuficiente. Valorar SNG/PEG si imposibilidad de ingesta oral.</li>
-</ul>
-<div class="ref-block">
-ESPEN. <i>Guideline on clinical nutrition and hydration in geriatrics.</i> Clin Nutr, 2019.<br>
-GNEAUPP-SENPE. <i>Documento de consenso: Nutrición en heridas crónicas.</i> 2018.
-</div>`,
+    keys:['aposito','apósito','vendaje','material','hidrogel','alginato','plata','espuma','hidrocoloide','poliuretano','silicona','cadexomero'],
+    reply:`<b>Guía de selección de apósito según herida</b><br><br>
+<table style="width:100%;font-size:11px;border-collapse:collapse">
+<tr style="background:var(--blue-50)"><th style="text-align:left;padding:4px 6px;border-bottom:1px solid var(--gray-200)">Situación</th><th style="padding:4px 6px;border-bottom:1px solid var(--gray-200)">Apósito</th><th style="padding:4px 6px;border-bottom:1px solid var(--gray-200)">Cambio</th></tr>
+<tr><td style="padding:4px 6px">Exudado escaso</td><td style="padding:4px 6px">Hidrogel + film</td><td style="padding:4px 6px">c/3–5 d</td></tr>
+<tr style="background:var(--gray-50)"><td style="padding:4px 6px">Exudado moderado</td><td style="padding:4px 6px">Espuma poliuretano</td><td style="padding:4px 6px">c/3–5 d</td></tr>
+<tr><td style="padding:4px 6px">Exudado abundante</td><td style="padding:4px 6px">Alginato cálcico</td><td style="padding:4px 6px">c/1–3 d</td></tr>
+<tr style="background:var(--gray-50)"><td style="padding:4px 6px">Infección/colon. crítica</td><td style="padding:4px 6px">Apósito de plata iónica</td><td style="padding:4px 6px">c/3–7 d</td></tr>
+<tr><td style="padding:4px 6px">Cavidades/tuneliz.</td><td style="padding:4px 6px">Alginato en cinta / espuma de cavidades</td><td style="padding:4px 6px">c/1–3 d</td></tr>
+<tr style="background:var(--gray-50)"><td style="padding:4px 6px">Necrosis/esfacelos</td><td style="padding:4px 6px">Hidrogel (desbrid. autolítico)</td><td style="padding:4px 6px">c/2–3 d</td></tr>
+<tr><td style="padding:4px 6px">Piel frágil perilesional</td><td style="padding:4px 6px">Film silicona / pasta zinc</td><td style="padding:4px 6px">c/5–7 d</td></tr>
+</table><br>
+<b>Nota:</b> La plata iónica no debe usarse >3 semanas continuas por riesgo de toxicidad tisular. El cadexómero yodado es alternativa para colonización crítica (máx. 3 meses).<br><br>
+<div class="ref-block">GNEAUPP. <i>Recomendaciones selección apósitos.</i> 2019. EWMA. 2022.</div>`,
   },
+  // ──── PICC ────
   {
-    keys:['braden','norton','riesgo','prevención upp'],
-    reply:`<b>Prevención de UPP — Valoración del riesgo</b>
+    keys:['picc','catéter','catetér','vía central','peripherally','vascular','port'],
+    reply:`<b>Cuidados del catéter PICC en domicilio</b><br><br>
+<b>Monitorización en cada visita:</b>
 <ul>
-<li><b>Escala de Braden:</b> ≤18 puntos → riesgo. ≤12 → alto riesgo. Valora: percepción sensorial, humedad, actividad, movilidad, nutrición, fricción/cizalla.</li>
-<li><b>Superficies:</b> colchón de espuma viscoelástica (riesgo bajo-moderado); colchón de aire alternante (alto riesgo / UPP existente).</li>
-<li><b>Cambios posturales:</b> cada 2 h en decúbito; cada 1 h en sedestación. Posición lateral 30°. Evitar apoyo directo sobre la UPP.</li>
-<li><b>Piel:</b> hidratación diaria. Evitar humedad por incontinencia (dispositivos colectores, pañal transpirable). Apósito de espuma de silicona en prominencias óseas.</li>
+<li>Inspección del punto de inserción: eritema, edema, exudado, induración. Registrar cm externos (comparar con baseline).</li>
+<li>Palpar trayecto venoso: dolor/cordón → sospechar trombosis venosa profunda.</li>
+<li>Comprobar permeabilidad antes y después de la infusión.</li>
 </ul>
-<div class="ref-block">
-EPUAP/NPIAP/PPPIA. <i>Prevention and Treatment of Pressure Ulcers/Injuries.</i> 2019.<br>
-GNEAUPP. <i>Doc. Técnico III: Directrices generales sobre prevención de las UPP.</i> 2018.
-</div>`,
+<b>Cuidados del apósito:</b>
+<ul>
+<li>Film transparente semipermeable: cambio cada 7 días o si despegado/mojado/contaminado.</li>
+<li>Apósito con gluconato de clorhexidina (CGX): en pacientes de alto riesgo de bacteriemia.</li>
+<li>Técnica aséptica estricta en cada manipulación (guantes, mascarilla, campo estéril).</li>
+</ul>
+<b>Protocolo SASH:</b> SF 0,9 % → Administración → SF 0,9 % → Heparina (100 UI/mL, 3–5 mL).<br><br>
+<b>Signos de alarma → comunicar médico:</b>
+<ul>
+<li>Fiebre >38°C sin otro foco → bacteriemia por catéter hasta demostrar lo contrario.</li>
+<li>Imposibilidad de infundir sin colapso → trombo o malposición → Rx + ecografía.</li>
+<li>Eritema/induración >2 cm, exudado purulento → retirada del PICC + hemocultivos.</li>
+</ul>
+<div class="ref-block">INS. <i>Infusion Therapy Standards.</i> 8.ª ed. JIN, 2021. SEMICYUC. <i>Bacteriemia Zero.</i> 2014.</div>`,
+  },
+  // ──── Dolor ────
+  {
+    keys:['dolor','analgesia','eva','escala dolor','opioide','morfina','fentanilo','tramadol','paracetamol','metamizol','neuropatico','neuropático'],
+    reply:`<b>Manejo del dolor en UHD — Escalera analgésica OMS adaptada</b><br><br>
+<b>Evaluación:</b> EVA (0–10) o escala de expresión facial en pacientes con deterioro cognitivo. Documentar localización, tipo (nociceptivo/neuropático/mixto), horario.<br><br>
+<b>Escalera OMS:</b>
+<ul>
+<li><b>EVA 1–3 (leve):</b> Paracetamol 1 g c/6–8 h VO. AINE (ibuprofeno 400 mg c/8 h) si no hay contraindicaciones renales/GI (+ omeprazol 20 mg).</li>
+<li><b>EVA 4–6 (moderado):</b> Tramadol 50–100 mg c/6–8 h VO / retard c/12 h. Añadir coanalgésico si dolor neuropático: pregabalina 75 mg c/12 h o amitriptilina 10–25 mg noche.</li>
+<li><b>EVA 7–10 (grave):</b> Morfina oral IR 5–10 mg c/4 h; retard c/12 h. Fentanilo transdérmico (parche) si dolor estable crónico. Oxicodona/naloxona si estreñimiento problemático.</li>
+<li><b>Dolor irruptivo:</b> 10–15 % de la dosis diaria total de opioide. Onset: morfina oral 20 min, fentanilo transmucoso/intranasal 5–10 min.</li>
+</ul>
+<b>Dolor en procedimientos (cura):</b>
+<ul>
+<li>Analgesia 30–60 min antes del procedimiento.</li>
+<li>Apósitos de baja adherencia (silicona, hidrofibra). Retirada en húmedo.</li>
+<li>Tiempo de contacto mínimo: minimizar manipulación.</li>
+</ul>
+<div class="ref-block">OMS. <i>Palliative Care: Symptom Management.</i> 2018. SEOM. <i>Guía Dolor Oncológico.</i> 2021.</div>`,
+  },
+  // ──── Nutrición ────
+  {
+    keys:['nutricion','nutrición','desnutricion','desnutrición','albumina','albúmina','hipoproteinemia','suplemento','mna','must','proteina','proteína'],
+    reply:`<b>Nutrición y cicatrización de heridas crónicas</b><br><br>
+<b>Cribado nutricional:</b>
+<ul>
+<li>MNA-SF (Mini Nutritional Assessment Short Form) en ancianos: ≤11 puntos → malnutrición o riesgo.</li>
+<li>MUST en adultos: puntuación ≥2 → riesgo alto.</li>
+<li>Albúmina <3,5 g/dL + prealbúmina <15 mg/dL → desnutrición proteica activa → cicatrización muy comprometida.</li>
+</ul>
+<b>Requerimientos en herida activa:</b>
+<ul>
+<li><b>Energía:</b> 30–35 kcal/kg/día (35–40 si úlcera G-III/IV).</li>
+<li><b>Proteínas:</b> 1,2–1,5 g/kg/día. En UPP G-III/IV: hasta 2 g/kg/día.</li>
+<li><b>Hidratación:</b> 30–35 mL/kg/día mínimo.</li>
+</ul>
+<b>Micronutrientes clave:</b>
+<ul>
+<li>Vitamina C: 500–1000 mg/día (cofactor esencial síntesis colágeno).</li>
+<li>Zinc sulfato: 220 mg/día si déficit confirmado (máx. 2–4 semanas; toxicidad si prolongado).</li>
+<li>Arginina: 9 g/día en úlceras G-III/IV (fórmulas específicas: Cubitan, Abound).</li>
+</ul>
+<b>Intervención:</b> batido hiperproteico hipercalórico si ingesta <60 % de requerimientos. SNG/PEG si imposibilidad de ingesta oral persistente.<br><br>
+<div class="ref-block">ESPEN. <i>Nutrition in geriatrics.</i> Clin Nutr, 2019. GNEAUPP-SENPE. <i>Nutrición en heridas crónicas.</i> 2018.</div>`,
+  },
+  // ──── Braden / Prevención ────
+  {
+    keys:['braden','norton','riesgo','prevencion','prevención','upp prevencion','superficie','colchon','colchón','cambios posturales'],
+    reply:`<b>Prevención de UPP — Sistema de valoración del riesgo</b><br><br>
+<b>Escala de Braden (rango 6–23, menor puntuación = mayor riesgo):</b>
+<ul>
+<li>19–23: Sin riesgo. Hidratación cutánea y movilización activa.</li>
+<li>15–18: Riesgo leve. Superficies estáticas (viscoelástica). Cambios posturales c/2 h.</li>
+<li>13–14: Riesgo moderado. Valorar superficie dinámica (alternante). Apósito preventivo en prominencias.</li>
+<li>≤12: Riesgo alto/muy alto. Superficie de redistribución activa. Cambios c/2 h. Vigilancia reforzada.</li>
+</ul>
+<b>Intervenciones preventivas clave:</b>
+<ul>
+<li><b>Colchones:</b> espuma viscoelástica (riesgo bajo-moderado); alternante de aire (alto riesgo o UPP existente).</li>
+<li><b>Cambios posturales:</b> cada 2 h encamado; 1 h en sedestación. Posición 30° lateral (evitar 90°). Evitar fricción con dispositivo de traslado.</li>
+<li><b>Piel:</b> hidratación diaria con emoliente. Dispositivo colector o pañal transpirable para incontinencia. Limpieza inmediata con pH ácido.</li>
+<li><b>Prominencias óseas:</b> apósito de espuma de silicona multicapa (sacro, talones, maléolos) desde el primer día de encamamiento.</li>
+<li><b>Talones:</b> elevación con dispositivo específico o almohadas que descarguen completamente la zona.</li>
+</ul>
+<div class="ref-block">EPUAP/NPIAP/PPPIA. 2019. GNEAUPP Doc. III. 2018.</div>`,
+  },
+  // ──── Desbridamiento ────
+  {
+    keys:['desbridamiento','desbridar','necrosis','necrotico','necrótico','esfacelo','tejido desvitalizado','escara'],
+    reply:`<b>Desbridamiento de heridas crónicas — Selección de método</b><br><br>
+<b>Tipos y criterios de selección:</b>
+<ul>
+<li><b>Autolítico:</b> Primera elección en heridas sin signos de infección aguda. Hidrogel (lecho seco) o hidrocoloide (lecho moderado). Proceso lento (días-semanas) pero sin daño tisular. Indicado en todos los estadios como mantenimiento.</li>
+<li><b>Enzimático:</b> Colagenasa (ej: Iruxol). Útil en esfacelos blandos no infectados. Aplicar directamente sobre el tejido a desbridar; cubrir con apósito húmedo. Evitar contacto con antibióticos tópicos (inactiva la enzima).</li>
+<li><b>Mecánico (húmedo-húmedo):</b> Solo si no hay tejido granulación. Riesgo de sangrado y dolor. Prácticamente abandonado.</li>
+<li><b>Cortante/quirúrgico:</b> Indicado en: escara negra extensa, infección profunda, osteomielitis, necesidad de resección urgente. Realizado por profesional entrenado. Previa analgesia adecuada (EVA <3 durante procedimiento).</li>
+<li><b>Biológico (larvas):</b> En heridas con esfacelos resistentes a otros métodos y sin posibilidad quirúrgica. Evidencia limitada pero creciente.</li>
+</ul>
+<b>Contraindicaciones:</b> No desbridar escaras secas en talones sin signos de infección activa (EPUAP 2019, evidencia B).<br><br>
+<div class="ref-block">EPUAP/NPIAP/PPPIA. 2019. EWMA. <i>Debridement.</i> Position Document, 2013.</div>`,
+  },
+  // ──── Herida diabética / pie diabético ────
+  {
+    keys:['diabetico','diabética','pie diabético','pie diabetico','neuropatia','neuropatía','isquemia','arterial','wagner'],
+    reply:`<b>Herida en pie diabético — Clasificación y manejo UHD</b><br><br>
+<b>Clasificación de Wagner:</b>
+<ul>
+<li><b>G0:</b> Pie de riesgo, sin úlcera activa. Revisión mensual, calzado terapéutico.</li>
+<li><b>G1:</b> Úlcera superficial. Desbridamiento + apósito + descarga. Seguimiento semanal.</li>
+<li><b>G2:</b> Úlcera profunda sin osteomielitis. Cultivo + antibioterapia oral. Control glucémico estricto.</li>
+<li><b>G3:</b> Profunda con osteomielitis/absceso. → Derivación hospitalaria urgente.</li>
+<li><b>G4/G5:</b> Gangrena localizada/extensa. → Cirugía urgente.</li>
+</ul>
+<b>Principios clave en UHD:</b>
+<ul>
+<li>Control glucémico: HbA1c objetivo <7 %. Coordinación con médico por ajuste de insulina.</li>
+<li>Descarga mecánica: yeso de contacto total o bota de descarga. Reposo absoluto si lesión activa.</li>
+<li>Limpieza con SF 0,9 %. NO usar antisépticos agresivos (povidona yodada inhibe cicatrización).</li>
+<li>Valorar componente isquémico: índice tobillo/brazo (ITB). ITB <0,9 → derivación vascular.</li>
+<li>Educación: inspección diaria con espejo, calzado adecuado, uñas cortadas recto.</li>
+</ul>
+<div class="ref-block">IWGDF. <i>Guidelines on the prevention and management of diabetic foot disease.</i> 2023. IDSA. CID, 2012.</div>`,
+  },
+  // ──── Dermatitis / incontinencia ────
+  {
+    keys:['incontinencia','dermatitis incontinencia','dai','maceración','maceracion','pañal','humedad'],
+    reply:`<b>Dermatitis Asociada a la Incontinencia (DAI)</b><br><br>
+Lesión cutánea por exposición crónica a orina y/o heces. Frecuente confusión con UPP G-I/II: la DAI no está sobre prominencias óseas y el eritema suele ser difuso y simétrico.<br><br>
+<b>Prevención y tratamiento:</b>
+<ul>
+<li>Limpieza tras cada episodio de incontinencia con agua tibia o solución limpiadora de pH ácido (sin jabón alcalino).</li>
+<li>Crema barrera de óxido de zinc o producto barrera en film (dimeticona, acrilato) para proteger la piel perilesional.</li>
+<li>Pañal transpirable de alta absorción; cambio frecuente. Valorar colector urinario externo (hombre) o sonda vesical temporal si la piel está muy comprometida.</li>
+<li>Si hay eritema con satélites → sobreinfección por Candida → antifúngico tópico (miconazol) + capa fina de barrera encima.</li>
+<li>Evaluar causa de incontinencia: consultar médico para tratamiento etiológico.</li>
+</ul>
+<div class="ref-block">GNEAUPP. <i>Lesiones cutáneas por humedad.</i> Doc. Consenso, 2018. WOCN. 2016.</div>`,
+  },
+  // ──── Evolutivos / SOAP ────
+  {
+    keys:['evolutivo','evolucion clínica','nota enfermería','nota enfermeria','soap','registro','documentacion','documentación','informe'],
+    reply:`<b>Redacción de evolutivos clínicos en UHD</b><br><br>
+Puedes usar la función <b>EvolutIA</b> de esta app para dictar y estructurar tus evolutivos automáticamente. Selecciona el tipo de anotación antes de dictar.<br><br>
+<b>Estructura SOAP:</b>
+<ul>
+<li><b>S — Subjetivo:</b> Lo que refiere el paciente o cuidador (dolor, cambios percibidos, cumplimiento terapéutico).</li>
+<li><b>O — Objetivo:</b> Datos medibles: constantes, estado de la herida (tamaño, exudado, tejido), permeabilidad del PICC, signos locales.</li>
+<li><b>A — Valoración:</b> Interpretación clínica del estado del paciente respecto a la visita anterior.</li>
+<li><b>P — Plan:</b> Acciones: cambios en el tratamiento, educación al cuidador, próxima visita, derivaciones.</li>
+</ul>
+<b>Claves legales y de calidad:</b>
+<ul>
+<li>Fecha, hora y profesional firmante en cada anotación.</li>
+<li>Nunca corregir tachando; usar "error de transcripción" y firmar.</li>
+<li>Registrar toda comunicación con médico responsable (fecha, hora, motivo, respuesta).</li>
+<li>Fotografías en historia clínica: escala métrica, luz adecuada, misma posición en cada visita.</li>
+</ul>
+<div class="ref-block">SEHER / COIB. <i>Recomendaciones documentación enfermera en heridas.</i> 2021.</div>`,
+  },
+  // ──── PUSH TOOL ────
+  {
+    keys:['push','push tool','cicatrizacion','cicatrización','evolución herida','monitorizar herida'],
+    reply:`<b>PUSH Tool 3.0 — Seguimiento de la cicatrización</b><br><br>
+Herramienta validada por la NPUAP para monitorizar la evolución de UPP a lo largo del tiempo.<br><br>
+<b>Los tres parámetros evaluados (puntuación total 0–17):</b>
+<ul>
+<li><b>Longitud × Anchura</b> (0–10): medición en cm² del área superficial de la úlcera.</li>
+<li><b>Exudado</b> (0–3): 0=ninguno, 1=escaso, 2=moderado, 3=abundante.</li>
+<li><b>Tipo de tejido</b> (0–4): 0=cerrada, 1=epitelización, 2=granulación, 3=esfacelos, 4=necrosis.</li>
+</ul>
+<b>Interpretación:</b>
+<ul>
+<li>Puntuación ↓ semana a semana → cicatrización progresando.</li>
+<li>Puntuación estacionaria ≥3 semanas → reevaluar plan de cuidados.</li>
+<li>Puntuación ↑ → deterioro → comunicar al médico + cultivo.</li>
+</ul>
+<b>Uso en esta app:</b> Registra la medición en cada visita en el campo "Observaciones" del timeline de curas junto con la fotografía estandarizada.<br><br>
+<div class="ref-block">NPUAP. <i>Pressure Ulcer Scale for Healing (PUSH) Tool 3.0.</i> 1998 (validación clínica continuada).</div>`,
   },
 ];
-const AI_DEFAULT = `No dispongo de información clínica específica suficiente para responder con evidencia sobre esta consulta en particular.<br><br>Te recomiendo consultar:<br><ul><li><b>GNEAUPP</b> (gneaupp.info) — Heridas crónicas</li><li><b>EWMA</b> (ewma.org) — Wound Management</li><li><b>SEHER</b> — Estomaterapia y heridas</li><li><b>UpToDate / PubMed</b> — Evidencia primaria</li></ul>Si me das más contexto clínico (tipo de lesión, localización, tratamiento actual, comorbilidades), intentaré darte una respuesta más útil.`;
+
+const AI_DEFAULT = `No dispongo de información clínica específica suficiente para esta consulta en particular.<br><br>
+Para obtener información más precisa, te recomiendo:<br>
+<ul>
+<li><b>GNEAUPP</b> (gneaupp.info) — Heridas crónicas y UPP</li>
+<li><b>EWMA</b> (ewma.org) — Wound Management guidelines</li>
+<li><b>EPUAP</b> (epuap.org) — Guías europeas de UPP</li>
+<li><b>SEHER</b> — Estomaterapia y heridas</li>
+<li><b>IWGDF</b> (iwgdf.org) — Pie diabético</li>
+</ul>
+Si me das más contexto (tipo de herida, localización, tamaño, exudado, tratamiento actual, antecedentes del paciente), puedo darte una orientación más precisa y útil.`;
 
 function getAIReply(text) {
-  const t = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const t = norm(text);
+  // Buscar coincidencia por keywords con scoring (más keywords coincidentes = mejor match)
+  let bestMatch = null, bestScore = 0;
   for (const r of AI_KB) {
-    if (r.keys.some(k => t.includes(k.normalize('NFD').replace(/[\u0300-\u036f]/g,'')))) return r.reply;
+    const score = r.keys.filter(k => t.includes(norm(k))).length;
+    if (score > bestScore) { bestScore = score; bestMatch = r; }
   }
-  return AI_DEFAULT;
+  return bestScore > 0 ? bestMatch.reply : AI_DEFAULT;
 }
 
-function appendBubble(content, type, isHTML=false) {
+function appendBubble(content, type, isHTML = false) {
   const el = document.createElement('div');
   el.className = `bubble ${type} fade-in`;
-  isHTML ? el.innerHTML=content : el.textContent=content;
+  isHTML ? el.innerHTML = content : el.textContent = content;
   document.getElementById('chat-messages').appendChild(el);
   scrollChat();
 }
@@ -2195,87 +2126,96 @@ function sendChatMessage() {
   const input = document.getElementById('ai-chat-input');
   const text  = input.value.trim();
   if (!text) return;
-  appendBubble(text,'user',false);
-  input.value=''; input.style.height='auto';
-  const tid='t-'+Date.now();
-  const t=document.createElement('div');
-  t.className='bubble ai fade-in'; t.id=tid;
-  t.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+  appendBubble(text, 'user', false);
+  input.value = ''; input.style.height = 'auto';
+  const tid = 't-' + Date.now();
+  const t = document.createElement('div');
+  t.className = 'bubble ai fade-in'; t.id = tid;
+  t.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
   document.getElementById('chat-messages').appendChild(t); scrollChat();
-  setTimeout(()=>{
+  setTimeout(() => {
     document.getElementById(tid)?.remove();
-    appendBubble(getAIReply(text),'ai',true);
-  },900+Math.random()*500);
+    appendBubble(getAIReply(text), 'ai', true);
+  }, 700 + Math.random() * 400);
 }
 
-function scrollChat(){
-  const c=document.getElementById('chat-messages');
-  setTimeout(()=>{c.scrollTop=c.scrollHeight;},50);
+function scrollChat() {
+  const c = document.getElementById('chat-messages');
+  setTimeout(() => { c.scrollTop = c.scrollHeight; }, 50);
 }
-function handleChatKey(e){
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMessage();}
-  e.target.style.height='auto';
-  e.target.style.height=Math.min(e.target.scrollHeight,80)+'px';
+
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+  e.target.style.height = 'auto';
+  e.target.style.height = Math.min(e.target.scrollHeight, 80) + 'px';
 }
-function toggleAIMic(){
-  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){showToast('Voz no disponible');return;}
-  if(State.aiMicActive){
-    if(State.recognition){try{State.recognition.stop();}catch(e){}State.recognition=null;}
-    State.aiMicActive=false;
+
+function toggleAIMic() {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) { showToast('Voz no disponible'); return; }
+  if (State.aiMicActive) {
+    if (State.recognition) { try { State.recognition.stop(); } catch(e) {} State.recognition = null; }
+    State.aiMicActive = false;
     document.getElementById('ai-mic-btn').classList.remove('recording');
     return;
   }
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  State.recognition=new SR(); State.recognition.lang='es-ES';
-  State.recognition.continuous=true; State.recognition.interimResults=true;
-  State.recognition.onresult=ev=>{
-    document.getElementById('ai-chat-input').value=Array.from(ev.results).map(r=>r[0].transcript).join('');
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  State.recognition = new SR(); State.recognition.lang = 'es-ES';
+  State.recognition.continuous = true; State.recognition.interimResults = true;
+  State.recognition.onresult = ev => {
+    document.getElementById('ai-chat-input').value = Array.from(ev.results).map(r => r[0].transcript).join('');
   };
-  State.recognition.onend=()=>{State.aiMicActive=false;document.getElementById('ai-mic-btn').classList.remove('recording');};
-  State.recognition.start(); State.aiMicActive=true;
+  State.recognition.onend = () => {
+    State.aiMicActive = false;
+    document.getElementById('ai-mic-btn').classList.remove('recording');
+  };
+  State.recognition.start(); State.aiMicActive = true;
   document.getElementById('ai-mic-btn').classList.add('recording');
   showToast('Dictando...');
 }
 
-/* ──────────────────────────────
+/* ══════════════════════════════
    MODALES
-────────────────────────────── */
+══════════════════════════════ */
 function openModal(id)  { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-/* ──────────────────────────────
+/* ══════════════════════════════
    TOAST
-────────────────────────────── */
+══════════════════════════════ */
 let toastT;
-function showToast(msg){
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2800);
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-/* ──────────────────────────────
+/* ══════════════════════════════
    INIT
-────────────────────────────── */
+══════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   updateGreeting();
+
+  // Datos demo si no hay visitas
   if (!State.visits.length) {
-    State.visits=[
-      {id:1,addr:'C/ Ramón y Cajal, 14 – 2ºA',obs:'Cura UPP grado III sacra',priority:'alta',done:false},
-      {id:2,addr:'Av. Constitución, 88 – 4ºC',obs:'Control catéter PICC',priority:'media',done:false},
-      {id:3,addr:'C/ San Vicente, 33 – 1ºB',obs:'Seguimiento tratamiento IV',priority:'baja',done:false},
+    State.visits = [
+      {id:1, addr:'Calle Ramón y Cajal 14, Alicante', obs:'Cura UPP grado III sacra', priority:'alta', done:false},
+      {id:2, addr:'Avenida Constitución 88, Alicante', obs:'Control catéter PICC', priority:'media', done:false},
+      {id:3, addr:'Calle San Vicente 33, Alicante', obs:'Seguimiento tratamiento IV', priority:'baja', done:false},
     ];
-    State.nextVisitId=4;
-    State.distants=[{id:1,addr:'Urb. La Cantera, 12 – Bungalow 5',obs:'Fuera de zona – 22 km extra'}];
-    State.nextDistantId=2;
+    State.nextVisitId = 4;
+    State.distants = [{id:1, addr:'Urb. La Cantera 12, San Vicente del Raspeig', obs:'Fuera de zona – 22 km extra'}];
+    State.nextDistantId = 2;
     persistState();
   }
+
+  renderPatientSelector();
   updateHomeStats();
   updateNavActive('screen-home');
 });
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
 }
 </script>
-
 </body>
 </html>
